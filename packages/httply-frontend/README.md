@@ -1,4 +1,4 @@
-# How we scaffolded this project
+# How to scaffolded a vite + tailwind + typescript + scss project
 
 This project was created using the following commands:
 
