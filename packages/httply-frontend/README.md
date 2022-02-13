@@ -1,4 +1,6 @@
-# How to scaffolded a vite + tailwind + typescript + scss project
+# How to scaffolded a svelte + tailwind + typescript + scss project 
+
+The aim of this structure is to have a base skeleton for a project with svelte (and TS and SCSS and Tailwind) + HMR and fast builds.
 
 This project was created using the following commands:
 
