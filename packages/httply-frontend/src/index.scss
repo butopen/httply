@@ -1,7 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "node_modules/@butopen/design-system/src/index";
 
+:root {
+  --bo-theme-color: #65ec36;
+}
+
+.main-color {
+  color: var(--bo-theme-color)
+}
 
 @import "css/_fonts";
 
@@ -9,3 +17,13 @@
 html, body {
   font-family: 'Open Sans';
 }
+
+.bo-header {
+  a {
+    @apply opacity-90 hover:opacity-100 text-gray-600 hover:text-bop uppercase text-sm mr-1;
+  }
+}
+
+
+
+.cm-editor { height: 450px; }
