@@ -1,4 +1,5 @@
 <script lang="ts">
+
     import {devtoolStore, updateActiveTab} from "../stores/devtool.store";
 </script>
 

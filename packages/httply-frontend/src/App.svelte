@@ -3,6 +3,7 @@
     import HttpTextArea from "./components/http-text-area.svelte"
     import DevtoolTabs from "./components/devtool-tabs.svelte"
     import DevtoolRequest from "./components/devtool-request.svelte"
+    import Httply from "./components/httply-logo.svelte"
     import {updateHttpInput} from "./stores/input.store";
 
     (window as any).svelteLogStores = true
@@ -16,7 +17,7 @@
                   stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <div class="logo-text">
-            <b>http</b>ly
+           <Httply />
         </div>
         <div class="ml-auto">
             <a href="https://github.com/butopen/httply">github</a>
@@ -30,12 +31,19 @@
     </div>
 </div>
 
+<p class="text-gray-500 text-sm px-2 my-4 max-w-xl text-center mx-auto">
+    Use case #1: <b>you open a ticket to describe a bad request</b> 
+    <br />
+    The <Httply /> way → Paste the request here and use the <Httply /> link instead: 
+    a complete overview of the request, the response, 
+    headers, cookies
+</p>
 <div>
-<span class="text-gray-400 text-xs">Copy a network request (<b>Copy as fetch</b>) and paste it below</span>
-<a 
-        class="text-blue-300 hover:text-blue-400 cursor-pointer text-xs hover:underline"
-        on:click={e => updateHttpInput(`fetch("https://httply.com/example")`)}
->Try with an example</a>    
+    <span class="text-gray-400 text-xs">Copy a network request (<b>Copy as fetch</b>) and paste it below</span>
+    <a
+            class="text-blue-300 hover:text-blue-400 cursor-pointer text-xs hover:underline"
+            on:click={e => updateHttpInput(`fetch("https://httply.com/example")`)}
+    >Try with an example</a>
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 items-start">
@@ -43,7 +51,6 @@
     <DevtoolTabs></DevtoolTabs>
     <DevtoolRequest></DevtoolRequest>
 </div>
-
 
 
 <style lang="scss">
