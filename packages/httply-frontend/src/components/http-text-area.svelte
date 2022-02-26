@@ -1,46 +1,54 @@
 <script lang="ts">
     import {EditorState, EditorView, basicSetup} from "@codemirror/basic-setup"
     import {javascript} from "@codemirror/lang-javascript"
-    import {afterUpdate, onMount} from "svelte";
-    import {inputStore} from "../stores/input.store";
+    import {afterUpdate, onDestroy, onMount} from "svelte";
+    import {inputStore, updateHttpInput} from "../stores/input.store";
 
-    let textareaContainer:HTMLDivElement
+    let textareaContainer: HTMLDivElement
 
-    let lastContent:string
-    
+    let lastContent: string
+
     let cmView
-    
-    let cmState = EditorState.create({extensions: [basicSetup, javascript()]})
 
     function recreateView() {
         cmView = new EditorView({
-            state: cmState,
+            state: EditorState.create({extensions: [basicSetup, javascript()]}),
             parent: textareaContainer
         })
         updateCMView(lastContent)
     }
 
+    const onKeyDown = (e: KeyboardEvent) => {
+        if (e.key == "v" && e.ctrlKey) {
+            updateHttpInput(cmView.state.doc.toString())
+        }
+    }
+
     onMount(() => {
         recreateView();
-        inputStore.set($inputStore)
+        document.addEventListener("keyup", onKeyDown)
+    })
+
+    onDestroy(() => {
+        document.removeEventListener("keyup", onKeyDown)
     })
 
     afterUpdate(() => {
         cmView.destroy()
         recreateView()
+        cmView.focus()
     })
 
     function updateCMView(content: string) {
         if (cmView) {
-            let transaction = cmState.update({changes: {from: 0, to: cmState.doc.length, insert: content}})
+            let transaction = cmView.state.update({changes: {from: 0, to: cmView.state.doc.length, insert: content}})
             cmView.dispatch(transaction)
-            cmState = transaction.state
         }
     }
 
-    inputStore.subscribe( content => {
-        lastContent = content
-        updateCMView(content);
+    inputStore.subscribe(content => {
+        lastContent = content.httpInput
+        updateCMView(content.httpInput);
     })
 
 </script>
@@ -50,13 +58,10 @@
 </div>
 
 <style lang="scss">
-    
-    .http-paste-textarea-container {
-      @apply w-full border border-gray-200
-    }
 
-    
+  .http-paste-textarea-container {
+    @apply w-full border border-gray-200
+  }
 
-    
-    
+
 </style>
