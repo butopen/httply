@@ -1,6 +1,11 @@
 <script lang="ts">
     import "./index.scss";
     import HttpTextArea from "./components/http-text-area.svelte"
+    import DevtoolTabs from "./components/devtool-tabs.svelte"
+    import DevtoolRequest from "./components/devtool-request.svelte"
+    import {updateHttpInput} from "./stores/input.store";
+
+    (window as any).svelteLogStores = true
 </script>
 
 <div class="bo-header shadow">
@@ -25,10 +30,18 @@
     </div>
 </div>
 
-<span>Copy a network request (<b>Copy as fetch</b>) and paste it below</span>
-<div class="grid grid-cols-1 md:grid-cols-2">
+<div>
+<span class="text-gray-400 text-xs">Copy a network request (<b>Copy as fetch</b>) and paste it below</span>
+<a 
+        class="text-blue-300 hover:text-blue-400 cursor-pointer text-xs hover:underline"
+        on:click={e => updateHttpInput(`fetch("https://httply.com/example")`)}
+>Try with an example</a>    
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 items-start">
     <HttpTextArea></HttpTextArea>
-    <div class="w-64"></div>
+    <DevtoolTabs></DevtoolTabs>
+    <DevtoolRequest></DevtoolRequest>
 </div>
 
 
