@@ -1,9 +1,8 @@
 <script lang="ts">
     import "./index.scss";
     import HttpTextArea from "./components/http-text-area.svelte"
-    import DevtoolTabs from "./components/devtool-tabs.svelte"
-    import DevtoolRequest from "./components/devtool-request.svelte"
     import Httply from "./components/httply-logo.svelte"
+    import Devtool from "./components/devtool.svelte"
     import {updateHttpInput} from "./stores/input.store";
 
     (window as any).svelteLogStores = true
@@ -48,8 +47,7 @@
 
 <div class="grid grid-cols-1 md:grid-cols-2 items-start">
     <HttpTextArea></HttpTextArea>
-    <DevtoolTabs></DevtoolTabs>
-    <DevtoolRequest></DevtoolRequest>
+    <Devtool></Devtool>
 </div>
 
 
