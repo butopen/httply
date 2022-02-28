@@ -8,7 +8,7 @@ build({
   target: "es2020",
   entryPoints: ["./src/index.ts"],
   outfile: "./dist/worker.mjs",
-  sourcemap: false,
+  sourcemap: true,
   charset: "utf8",
   minify: process.env.NODE_ENV === "production" ? true : false
 }).catch(err => {
