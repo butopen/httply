@@ -38,4 +38,9 @@
     svg {
       @apply inline-block
     }
+    
+    svg.button {
+      @apply cursor-pointer opacity-60 hover:opacity-100
+    }
+    
 </style>

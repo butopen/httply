@@ -2,7 +2,8 @@ export type HttplyMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "HEAD" 
 export type HttplyRequest = {
     url: string,
     options: {
-        method: HttplyMethod
+        method: HttplyMethod,
+        referrer?:string
     }
 }
 
