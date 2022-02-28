@@ -13,11 +13,11 @@
 </script>
 
 <div>
-    <DevtoolSection open={open} section="General">
+    <DevtoolSection open={open} section={section}>
         <div class="hl-devtool-kv">
             {#each Object.entries(data) as [key, value]}
                 <div class="kv-row">
-                    <b>{key}</b>: {value}
+                    <span class="hl-key">{key}:</span> <span class="hl-value">{value}</span>
                 </div>
             {/each}
         </div>
@@ -27,8 +27,11 @@
 <style lang="scss">
   .kv-row {
     @apply text-xs ml-6 text-gray-700;
-    b {
-      @apply text-gray-500
+    .hl-key {
+      @apply text-gray-600 font-bold
+    }
+    .hl-value {
+      @apply text-gray-900
     }
   }
 </style>

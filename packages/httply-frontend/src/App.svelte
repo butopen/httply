@@ -3,9 +3,13 @@
     import HttpTextArea from "./components/http-text-area.svelte"
     import Httply from "./components/httply-logo.svelte"
     import Devtool from "./components/devtool.svelte"
-    import {updateHttpInput} from "./stores/input.store";
+    import {updateHttpDomain, updateHttpInput} from "./stores/input.store";
 
     (window as any).svelteLogStores = true
+    function onClick(){
+        updateHttpInput(`fetch("https://httply.com/example")`)
+        updateHttpDomain(`https://httply.com`)
+    };
 </script>
 
 <div class="bo-header shadow">
@@ -36,7 +40,7 @@
     <span class="text-gray-400 text-xs">Copy a network request (<b>Copy as fetch</b>) and paste it below</span>
     <a
             class="text-blue-300 hover:text-blue-400 cursor-pointer text-xs hover:underline"
-            on:click={e => updateHttpInput(`fetch("https://httply.com/example")`)}
+            on:click={onClick}
     >Try with an example</a>
 </div>
 

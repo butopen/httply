@@ -1,12 +1,22 @@
-
-
 export async function playRequest(url: string, options) {
-    let result
+    let result = {headers: {}, body: ""}
     try {
-        result = await fetch(url, options)
+        const resp = await fetch(url, options)
+        let text = await resp.text()
+        try {
+            const json = JSON.parse(text)
+            text = json
+        } catch (e) {
+        }
+        resp.headers.forEach((hv, h) => {
+            result.headers[h] = hv
+        })
     } catch (e) {
-        console.log("e: ",e)
-
+        const resp = await fetch("https://httply.com/api/",
+            {method: "POST", body: JSON.stringify({url, options})})
+        const json = await resp.json() 
+        result.headers = json.response.headers
+        result.body = json.response.response
     }
     return result
 }
