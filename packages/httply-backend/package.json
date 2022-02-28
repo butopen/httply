@@ -9,6 +9,7 @@
     "test": "jest",
     "format": "prettier --write '**/*.{ts,mjs,js,html,css,json,md}'",
     "dev": "miniflare --watch --debug --port 8787",
+    "dev:cf": "wrangler dev",
     "publish": "cross-env NODE_ENV=production wrangler publish"
   },
   "license": "MIT",

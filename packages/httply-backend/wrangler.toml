@@ -4,7 +4,7 @@ account_id = "0cd0aefc922e599aca749b95ca0af3db"
 workers_dev = true
 
 zone_id="6c9369f6801d3900d2e84158df93d827"
-route="*httply.com/api*"
+route="*httply.com/*"
 
 [build]
 command = "npm run build"
