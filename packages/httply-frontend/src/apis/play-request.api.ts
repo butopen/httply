@@ -3,9 +3,10 @@ export async function playRequest(url: string, options) {
     try {
         const resp = await fetch(url, options)
         let text = await resp.text()
+        result.body = text
         try {
             const json = JSON.parse(text)
-            text = json
+            result.body = json
         } catch (e) {
         }
         resp.headers.forEach((hv, h) => {
