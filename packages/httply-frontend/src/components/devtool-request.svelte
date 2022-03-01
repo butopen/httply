@@ -1,29 +1,27 @@
 <script lang="ts">
 
     import {inputStore} from "../stores/input.store";
-    import {updateResponse, viewStore} from "../stores/view.store";
-    import DevtoolKvSection from "./devtool-key-value-section.svelte"
+    import {viewStore} from "../stores/view.store";
+    import DevtoolSection from "./devtool-section.svelte"
+    import JsonViewer from "./json-viewer/json-viewer.svelte"
     import Icon from "../shared/components/icon.svelte"
-    import {playRequest} from "../apis/play-request.api";
-
-    async function play() {
-        const {url, options} = $inputStore.request
-        const response = await playRequest(url, options)
-        updateResponse(response)
-    };
-
+    import {play} from "../actions/play.action";
 </script>
 
 {#if $inputStore.request}
     <div>
-        <Icon class="button" on:click={play} name="play"></Icon>
+        <Icon class="button" on:click={e => play($inputStore.request)} name="play" ></Icon>
     </div>
-    <DevtoolKvSection open={$viewStore.request.general.open} section="General" data={$viewStore.request.general.data}>
-    </DevtoolKvSection>
+    <DevtoolSection open={$viewStore.sectionExpanded.General} section="General">
+        <JsonViewer json={$viewStore.request.information}></JsonViewer>
+    </DevtoolSection>
     {#if $viewStore.response}
-        <DevtoolKvSection open={$viewStore.response.open} section="Response Headers"
-                          data={$viewStore.response.data.headers}>
-        </DevtoolKvSection>
+        <DevtoolSection open={$viewStore.sectionExpanded.ResponseHeaders} section="Response Headers">
+            <JsonViewer json={$viewStore.response.headers}></JsonViewer>
+        </DevtoolSection>
+        <DevtoolSection section="Response" open={$viewStore.sectionExpanded.Response}>
+            <JsonViewer json={$viewStore.response.body}></JsonViewer>
+        </DevtoolSection>
     {/if}
 {/if}
 
