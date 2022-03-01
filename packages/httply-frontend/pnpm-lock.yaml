@@ -12,6 +12,7 @@ specifiers:
   autoprefixer: ^10.4.2
   jest: ^27.5.1
   postcss-load-config: ^3.1.1
+  prettier: ^2.5.1
   sass: ^1.49.7
   svelte: ^3.44.0
   svelte-check: ^2.2.7
@@ -37,6 +38,7 @@ devDependencies:
   autoprefixer: 10.4.2
   jest: 27.5.1
   postcss-load-config: 3.1.1
+  prettier: 2.5.1
   sass: 1.49.7
   svelte: 3.46.4
   svelte-check: 2.4.3_6628b91cc751e97dded45d11747a3391
@@ -3155,6 +3157,12 @@ packages:
   /prelude-ls/1.1.2:
     resolution: {integrity: sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=}
     engines: {node: '>= 0.8.0'}
+    dev: true
+
+  /prettier/2.5.1:
+    resolution: {integrity: sha512-vBZcPRUR5MZJwoyi3ZoyQlc1rXeEck8KgeC9AwwOn+exuxLxq5toTRDTSaVrXHxelDMHy9zlicw8u66yxoSUFg==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
     dev: true
 
   /pretty-format/26.6.2:

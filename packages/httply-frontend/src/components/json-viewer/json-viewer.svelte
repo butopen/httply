@@ -122,7 +122,7 @@
     transition: transform 150ms ease-in-out;
   }
 
-  .json-viewer-value.object.collapsed,.json-viewer-value.array.collapsed {
+  .json-viewer-value.object.collapsed, .json-viewer-value.array.collapsed {
     @apply whitespace-nowrap text-gray-400 truncate max-w-md
   }
 
