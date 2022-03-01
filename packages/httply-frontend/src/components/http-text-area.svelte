@@ -4,6 +4,7 @@
     import {afterUpdate, onDestroy, onMount} from "svelte";
     import {inputStore, updateHttpInput} from "../stores/input.store";
 
+    
     let textareaContainer: HTMLDivElement
 
     let lastContent: string
@@ -50,6 +51,12 @@
         lastContent = content.httpInput
         updateCMView(content.httpInput);
     })
+
+
+    export function selectAll(){
+        cmView.focus()
+        cmView.dispatch({selection: {anchor: 0, head: cmView.state.doc.length}})
+    }
 
 </script>
 
