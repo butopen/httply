@@ -8,14 +8,14 @@
 }
 
 .main-color {
-  color: var(--bo-theme-color)
+  color: var(--bo-theme-color);
 }
 
 @import "css/_fonts";
 
-
-html, body {
-  font-family: 'Open Sans';
+html,
+body {
+  font-family: "Open Sans";
 }
 
 .bo-header {
@@ -23,7 +23,6 @@ html, body {
     @apply opacity-90 hover:opacity-100 text-gray-600 hover:text-bop uppercase text-sm mr-1;
   }
 }
-
 
 .http-paste-textarea-container .cm-editor {
   height: 150px;
@@ -36,5 +35,5 @@ html, body {
 }
 
 i {
-  @apply italic
+  @apply italic;
 }

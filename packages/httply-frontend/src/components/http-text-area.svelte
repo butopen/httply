@@ -1,10 +1,10 @@
 <script lang="ts">
-    import {EditorState, EditorView, basicSetup} from "@codemirror/basic-setup"
+    import {basicSetup, EditorState, EditorView} from "@codemirror/basic-setup"
     import {javascript} from "@codemirror/lang-javascript"
     import {afterUpdate, onDestroy, onMount} from "svelte";
     import {inputStore, updateHttpInput} from "../stores/input.store";
 
-    
+
     let textareaContainer: HTMLDivElement
 
     let lastContent: string

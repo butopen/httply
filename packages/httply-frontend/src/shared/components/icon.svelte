@@ -28,7 +28,7 @@
 </script>
 
 
-<svg on:click class={(clazz || '') + defaultClasses } 
+<svg on:click class={(clazz || '') + defaultClasses }
      stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d={hlIcons[name]} stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
