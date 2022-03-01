@@ -122,12 +122,13 @@
     transition: transform 150ms ease-in-out;
   }
 
-  .json-viewer-value.object.collapsed {
-    @apply whitespace-nowrap text-gray-400 truncate max-w-sm
+  .json-viewer-value.object.collapsed,.json-viewer-value.array.collapsed {
+    @apply whitespace-nowrap text-gray-400 truncate max-w-md
   }
 
   li.expanded > .json-viewer-row.object:before, li.expanded > .json-viewer-row.array:before {
-    transform: rotate(90deg);
+    transform-origin: 50% 50%;
+    transform: translate(0, -4px) rotate(90deg);
   }
 
 </style>
