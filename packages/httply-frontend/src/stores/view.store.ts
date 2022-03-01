@@ -1,4 +1,4 @@
-import {loggedWritable} from "../shared/store.util";
+import { loggedWritable } from "../shared/store.util";
 
 export interface ViewState {
   sectionExpanded: {
@@ -27,24 +27,24 @@ const sections = {
   Payload: false,
 };
 export const viewStore = loggedWritable<ViewState>({
-  request: {information: {}},
+  request: { information: {} },
   sectionExpanded: sections,
 });
 
 export function updateHttpRequest(
-    key: keyof ViewState["request"]["information"],
-    value: string
+  key: keyof ViewState["request"]["information"],
+  value: string
 ) {
   viewStore.update((s) => {
-    const information = {...s.request.information, [key]: value};
-    s.request = {...s.request, information};
+    const information = { ...s.request.information, [key]: value };
+    s.request = { ...s.request, information };
     return s;
   });
 }
 
 export function updateSection(
-    key: keyof ViewState['sectionExpanded'],
-    open: boolean
+  key: keyof ViewState["sectionExpanded"],
+  open: boolean
 ) {
   viewStore.update((s) => {
     s.sectionExpanded[key] = open;
@@ -53,6 +53,6 @@ export function updateSection(
 }
 
 export function updateResponse(response: ViewState["response"]) {
-  viewStore.update({response: response});
+  viewStore.update({ response: response });
   updateSection("Response", true);
 }
