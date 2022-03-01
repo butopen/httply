@@ -1,26 +1,52 @@
 import {loggedWritable} from "../shared/store.util";
 
 export interface ViewState {
+    sectionExpanded: {
+        General: boolean
+        ResponseHeaders: boolean
+        Response: boolean
+        Payload: boolean
+    }
     request: {
-        general: {
-            open: boolean,
-            data: { [key: string]: string }
+        information: {
+            Url?:string
+            Domain?:string
+            Referrer?:string
         }
-    },
+    }
     response?: {
-        open: boolean,
-        data: {
-            headers: { [h: string]: string }
-            body: any
-        }
+        headers: { [h: string]: string }
+        body: any
     }
 }
 
+const sections = {
+    General:  true,
+    ResponseHeaders:  false,
+    Response:  false,
+    Payload:  false
+}
 export const viewStore = loggedWritable<ViewState>({
-    request: {general: {open: true, data: {}}}
+    request: {information: {}}, sectionExpanded:sections
 })
 
-export function updateResponse(response: ViewState["response"]["data"]) {
-    viewStore.update({response: {open: false, data: response}})
+export function updateHttpRequest(key: keyof ViewState["request"]["information"], value:string) {
+    viewStore.update(s => {
+        const information = {...s.request.information, [key]: value}
+        s.request = {...s.request, information}
+        return s
+    })
+}
+
+export function updateSection(key: keyof ViewState["sectionExpanded"], open: boolean) {
+    viewStore.update(s => {
+        s.sectionExpanded[key] = open
+        return s
+    })
+}
+
+export function updateResponse(response: ViewState["response"]) {
+    viewStore.update({response: response})
+    updateSection("Response", true)
 }
 
