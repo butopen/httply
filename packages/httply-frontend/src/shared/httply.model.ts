@@ -19,4 +19,5 @@ export type HttplyRequest = {
 export interface HttplyInput {
   httpInput: string;
   request?: HttplyRequest;
+  focused: boolean;
 }

@@ -20,7 +20,7 @@ body {
 
 .bo-header {
   a {
-    @apply opacity-90 hover:opacity-100 text-gray-600 hover:text-bop uppercase text-sm mr-1;
+    @apply mr-1 text-sm uppercase text-gray-600 opacity-90 hover:text-bop hover:opacity-100;
   }
 }
 

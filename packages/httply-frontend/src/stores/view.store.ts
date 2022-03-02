@@ -3,9 +3,11 @@ import { loggedWritable } from "../shared/store.util";
 export interface ViewState {
   sectionExpanded: {
     General: boolean;
+    RequestHeaders: boolean;
     ResponseHeaders: boolean;
+    Request: boolean;
     Response: boolean;
-    Payload: boolean;
+    Authorization: boolean;
   };
   request: {
     information: {
@@ -22,9 +24,11 @@ export interface ViewState {
 
 const sections = {
   General: true,
+  Request: false,
+  RequestHeaders: false,
   ResponseHeaders: false,
   Response: false,
-  Payload: false,
+  Authorization: false,
 };
 export const viewStore = loggedWritable<ViewState>({
   request: { information: {} },

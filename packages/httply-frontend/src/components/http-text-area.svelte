@@ -1,74 +1,95 @@
 <script lang="ts">
-    import {basicSetup, EditorState, EditorView} from "@codemirror/basic-setup"
-    import {javascript} from "@codemirror/lang-javascript"
+    import {basicSetup, EditorState, EditorView} from "@codemirror/basic-setup";
+    import {javascript} from "@codemirror/lang-javascript";
     import {afterUpdate, onDestroy, onMount} from "svelte";
-    import {inputStore, updateHttpInput} from "../stores/input.store";
+    import {
+        inputStore,
+        updateEditorFocused,
+        updateHttpInput,
+    } from "../stores/input.store";
 
+    let textareaContainer: HTMLDivElement;
 
-    let textareaContainer: HTMLDivElement
+    let lastContent: string;
 
-    let lastContent: string
+    let cmView;
 
-    let cmView
+    export function blur() {
+        if (cmView) cmView.dom.blur();
+    }
+
+    function onFocus(e: FocusEvent) {
+        updateEditorFocused(true);
+    }
+
+    function onBlur(e: FocusEvent) {
+        updateEditorFocused(false);
+    }
 
     function recreateView() {
         cmView = new EditorView({
-            state: EditorState.create({extensions: [basicSetup, javascript()]}),
-            parent: textareaContainer
-        })
-        updateCMView(lastContent)
+            state: EditorState.create({
+                extensions: [
+                    basicSetup,
+                    javascript(),
+                    EditorView.domEventHandlers({
+                        focus: (e) => onFocus(e),
+                        blur: (e) => onBlur(e),
+                    }),
+                ],
+            }),
+            parent: textareaContainer,
+        });
+        updateCMView(lastContent);
     }
 
     const onKeyDown = (e: KeyboardEvent) => {
         if (e.key == "v" && e.ctrlKey) {
-            updateHttpInput(cmView.state.doc.toString())
+            updateHttpInput(cmView.state.doc.toString());
         }
-    }
+    };
 
     onMount(() => {
         recreateView();
-        document.addEventListener("keyup", onKeyDown)
-    })
+        document.addEventListener("keyup", onKeyDown);
+    });
 
     onDestroy(() => {
-        document.removeEventListener("keyup", onKeyDown)
-    })
+        document.removeEventListener("keyup", onKeyDown);
+    });
 
     afterUpdate(() => {
-        cmView.destroy()
-        recreateView()
-        cmView.focus()
-    })
+        cmView.destroy();
+        recreateView();
+        cmView.focus();
+    });
 
     function updateCMView(content: string) {
         if (cmView) {
-            let transaction = cmView.state.update({changes: {from: 0, to: cmView.state.doc.length, insert: content}})
-            cmView.dispatch(transaction)
+            let transaction = cmView.state.update({
+                changes: {from: 0, to: cmView.state.doc.length, insert: content},
+            });
+            cmView.dispatch(transaction);
         }
     }
 
-    inputStore.subscribe(content => {
-        lastContent = content.httpInput
+    inputStore.subscribe((content) => {
+        lastContent = content.httpInput;
         updateCMView(content.httpInput);
-    })
+    });
 
-
-    export function selectAll(){
-        cmView.focus()
-        cmView.dispatch({selection: {anchor: 0, head: cmView.state.doc.length}})
+    export function selectAll() {
+        cmView.focus();
+        cmView.dispatch({
+            selection: {anchor: 0, head: cmView.state.doc.length},
+        });
     }
-
 </script>
 
-<div class="http-paste-textarea-container" bind:this={textareaContainer}>
-
-</div>
+<div class="http-paste-textarea-container" bind:this={textareaContainer}/>
 
 <style lang="scss">
-
   .http-paste-textarea-container {
-    @apply w-full border border-gray-200
+    @apply w-full border border-gray-200;
   }
-
-
 </style>
