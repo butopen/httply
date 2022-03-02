@@ -1,22 +1,3 @@
-<style lang="scss">
-  :root {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-      'Open Sans', 'Helvetica Neue', sans-serif;
-  }
-
-  .logo {
-    @apply inline-block h-8 w-8 text-gray-400;
-  }
-
-  .logo-text {
-    @apply inline-block h-8 text-2xl italic leading-8 text-gray-400;
-  }
-
-  .request-ready {
-    @apply grid grid-cols-1 items-start md:grid-cols-2;
-  }
-</style>
-
 <script lang="ts">
   import './index.scss';
   import HttpTextArea from './components/http-text-area.svelte';
@@ -131,3 +112,22 @@
     <Devtool />
   {/if}
 </div>
+
+<style lang="scss">
+  :root {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+      'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  .logo {
+    @apply inline-block h-8 w-8 text-gray-400;
+  }
+
+  .logo-text {
+    @apply inline-block h-8 text-2xl italic leading-8 text-gray-400;
+  }
+
+  .request-ready {
+    @apply grid grid-cols-1 items-start md:grid-cols-2;
+  }
+</style>
