@@ -1,4 +1,4 @@
-import {loggedWritable} from '../shared/store.util';
+import { loggedWritable } from '../shared/store.util';
 
 export interface DevtoolStore {
   tabs: string[];

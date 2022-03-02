@@ -4,6 +4,6 @@
 </script>
 
 <div>
-  <DevtoolTabs/>
-  <DevtoolRequest/>
+  <DevtoolTabs />
+  <DevtoolRequest />
 </div>

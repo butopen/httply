@@ -1,13 +1,3 @@
-<style lang="scss">
-  svg {
-    @apply inline-block;
-  }
-
-  svg.button {
-    @apply cursor-pointer opacity-60 hover:opacity-100;
-  }
-</style>
-
 <script lang="ts">
   import type { HttplyIcon } from './icons';
   import { hlIcons } from './icons';
@@ -42,3 +32,13 @@
 >
   <path d={hlIcons[name]} stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
 </svg>
+
+<style lang="scss">
+  svg {
+    @apply inline-block;
+  }
+
+  svg.button {
+    @apply cursor-pointer opacity-60 hover:opacity-100;
+  }
+</style>

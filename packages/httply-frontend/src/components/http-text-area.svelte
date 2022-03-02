@@ -1,9 +1,3 @@
-<style lang="scss">
-  .http-paste-textarea-container {
-    @apply w-full border border-gray-200;
-  }
-</style>
-
 <script lang="ts">
   import { basicSetup, EditorState, EditorView } from '@codemirror/basic-setup';
   import { javascript } from '@codemirror/lang-javascript';
@@ -89,3 +83,9 @@
 </script>
 
 <div class="http-paste-textarea-container" bind:this={textareaContainer} />
+
+<style lang="scss">
+  .http-paste-textarea-container {
+    @apply w-full border border-gray-200;
+  }
+</style>

@@ -1,16 +1,3 @@
-<style lang="scss">
-  .hl-section-header {
-    @apply h-6 text-xs leading-6 text-zinc-500;
-    > * {
-      @apply cursor-pointer;
-    }
-  }
-
-  .hl-section-content {
-    @apply bg-white;
-  }
-</style>
-
 <script lang="ts">
   import Icon from '../shared/components/icon.svelte';
 
@@ -38,3 +25,16 @@
     </div>
   {/if}
 </div>
+
+<style lang="scss">
+  .hl-section-header {
+    @apply h-6 text-xs leading-6 text-zinc-500;
+    > * {
+      @apply cursor-pointer;
+    }
+  }
+
+  .hl-section-content {
+    @apply bg-white;
+  }
+</style>

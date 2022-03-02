@@ -1,3 +1,19 @@
+<script lang="ts">
+  import { devtoolStore, updateActiveTab } from '../stores/devtool.store';
+</script>
+
+<div class="hl-tabs">
+  {#each $devtoolStore.tabs as tab}
+    <div
+      class="hl-tab"
+      class:active={$devtoolStore.activeTab == tab}
+      on:click={(e) => updateActiveTab(tab)}
+    >
+      {tab}
+    </div>
+  {/each}
+</div>
+
 <style lang="scss">
   .hl-tabs {
     @apply flex select-none items-center border-b-2 border-zinc-100 bg-zinc-100;
@@ -11,19 +27,3 @@
     }
   }
 </style>
-
-<script lang="ts">
-  import {devtoolStore, updateActiveTab} from '../stores/devtool.store';
-</script>
-
-<div class="hl-tabs">
-  {#each $devtoolStore.tabs as tab}
-    <div
-            class="hl-tab"
-            class:active={$devtoolStore.activeTab == tab}
-            on:click={(e) => updateActiveTab(tab)}
-    >
-      {tab}
-    </div>
-  {/each}
-</div>
