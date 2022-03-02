@@ -1,5 +1,5 @@
-import {loggedWritable} from "../shared/store.util";
-import type {HttplyRequest} from "../shared/httply.model";
+import {loggedWritable} from '../shared/store.util';
+import type {HttplyRequest} from '../shared/httply.model';
 
 export interface ViewState {
   sectionExpanded: {
@@ -31,36 +31,35 @@ const sections = {
   RequestHeaders: false,
   ResponseHeaders: false,
   Response: false,
-  Authorization: false,
+  Authorization: false
 };
 export const viewStore = loggedWritable<ViewState>({
   request: {information: {}},
-  sectionExpanded: sections,
+  sectionExpanded: sections
 });
 
 export function updateViewResetDevtool() {
-  viewStore.update(s => {
+  viewStore.update((s) => {
     return {
       request: {information: {}},
-      sectionExpanded: sections,
-    }
-  })
+      sectionExpanded: sections
+    };
+  });
 }
 
 export function updateWithNewRequest(request: HttplyRequest) {
-  updateViewResetDevtool()
-  if (request.options.headers)
-    updateHttpRequestHeaders(request.options.headers)
-  updateHttpRequestInformation("Url", request.url);
-  updateHttpRequestInformation("Method", request.options.method);
+  updateViewResetDevtool();
+  if (request.options.headers) updateHttpRequestHeaders(request.options.headers);
+  updateHttpRequestInformation('Url', request.url);
+  updateHttpRequestInformation('Method', request.options.method);
   try {
     const referer =
         request.options.referrer ||
         (request.options.headers &&
             (request.options.headers.referer || request.options.headers.Referer));
     if (referer) {
-      updateHttpRequestInformation("Referrer", referer);
-      updateHttpRequestInformation("Domain", referer);
+      updateHttpRequestInformation('Referrer', referer);
+      updateHttpRequestInformation('Domain', referer);
     }
   } catch (e) {
   }
@@ -74,7 +73,7 @@ export function updateHttpRequestHeaders(headers: { [h: string]: string }) {
 }
 
 export function updateHttpRequestInformation(
-    key: keyof ViewState["request"]["information"],
+    key: keyof ViewState['request']['information'],
     value: string
 ) {
   viewStore.update((s) => {
@@ -84,17 +83,14 @@ export function updateHttpRequestInformation(
   });
 }
 
-export function updateSection(
-  key: keyof ViewState["sectionExpanded"],
-  open: boolean
-) {
+export function updateSection(key: keyof ViewState['sectionExpanded'], open: boolean) {
   viewStore.update((s) => {
     s.sectionExpanded[key] = open;
     return s;
   });
 }
 
-export function updateResponse(response: ViewState["response"]) {
-  viewStore.update({ response: response });
-  updateSection("Response", true);
+export function updateResponse(response: ViewState['response']) {
+  viewStore.update({response: response});
+  updateSection('Response', true);
 }

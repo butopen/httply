@@ -1,18 +1,37 @@
+<style lang="scss">
+  :root {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+    'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  .logo {
+    @apply inline-block h-8 w-8 text-gray-400;
+  }
+
+  .logo-text {
+    @apply inline-block h-8 text-2xl italic leading-8 text-gray-400;
+  }
+
+  .request-ready {
+    @apply grid grid-cols-1 items-start md:grid-cols-2;
+  }
+</style>
+
 <script lang="ts">
-    import "./index.scss";
-    import HttpTextArea from "./components/http-text-area.svelte";
-    import Httply from "./components/httply-logo.svelte";
-    import Devtool from "./components/devtool.svelte";
-    import Notification from "./components/notification/notification.svelte";
-    import {inputStore, updateHttpInput} from "./stores/input.store";
-    import {viewStore} from "./stores/view.store";
+    import './index.scss';
+    import HttpTextArea from './components/http-text-area.svelte';
+    import Httply from './components/httply-logo.svelte';
+    import Devtool from './components/devtool.svelte';
+    import Notification from './components/notification/notification.svelte';
+    import {inputStore, updateHttpInput} from './stores/input.store';
+    import {viewStore} from './stores/view.store';
     import {
         notificationStore,
-        updateNotification,
-    } from "./components/notification/notification.store";
-    import {onDestroy, onMount} from "svelte";
-    import {pasteHotkey} from "./shared/paste-hotkey.util";
-    import {play} from "./actions/play.action";
+        updateNotification
+    } from './components/notification/notification.store';
+    import {onDestroy, onMount} from 'svelte';
+    import {pasteHotkey} from './shared/paste-hotkey.util';
+    import {play} from './actions/play.action';
 
     (window as any).svelteLogStores = true;
 
@@ -32,36 +51,37 @@
     }
 
     document.onvisibilitychange = function () {
-        if (document.visibilityState === "visible") {
+        if (document.visibilityState === 'visible') {
             updateInputArea();
         }
     };
 
-    window.addEventListener("focus", updateInputArea);
+    window.addEventListener('focus', updateInputArea);
 
     function onClick() {
         updateHttpInput(`fetch("https://httply.com/example")`);
-        updateNotification(`Press <b>space</b> to send the request. <br><small>Or use the play ▶ button</small>`);
+        updateNotification(
+            `Press <b>space</b> to send the request. <br><small>Or use the play ▶ button</small>`
+        );
         httpTextArea.blur();
     }
 
     const onKeyDown = (e: KeyboardEvent) => {
-        if (e.key == "v" && e.ctrlKey) {
+        if (e.key == 'v' && e.ctrlKey) {
             updateNotification(`Press <b>space</b> to send the request`);
             httpTextArea.blur();
         }
-        if (e.key == " ") {
-            if ($notificationStore.show || !$inputStore.focused)
-                play($inputStore.request);
+        if (e.key == ' ') {
+            if ($notificationStore.show || !$inputStore.focused) play($inputStore.request);
         }
     };
 
     onMount(() => {
-        document.addEventListener("keyup", onKeyDown);
+        document.addEventListener('keyup', onKeyDown);
     });
 
     onDestroy(() => {
-        document.removeEventListener("keyup", onKeyDown);
+        document.removeEventListener('keyup', onKeyDown);
     });
 </script>
 
@@ -111,22 +131,3 @@
         <Devtool/>
     {/if}
 </div>
-
-<style lang="scss">
-  :root {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  }
-
-  .logo {
-    @apply inline-block h-8 w-8 text-gray-400;
-  }
-
-  .logo-text {
-    @apply inline-block h-8 text-2xl italic leading-8 text-gray-400;
-  }
-
-  .request-ready {
-    @apply grid grid-cols-1 items-start md:grid-cols-2;
-  }
-</style>

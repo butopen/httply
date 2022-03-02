@@ -1,16 +1,16 @@
-import { loggedWritable } from "../shared/store.util";
-import { fetchParser } from "../shared/fetch-parser";
-import type {HttplyInput} from "../shared/httply.model";
+import {loggedWritable} from '../shared/store.util';
+import {fetchParser} from '../shared/fetch-parser';
+import type {HttplyInput} from '../shared/httply.model';
 import {
   updateHttpRequestHeaders,
   updateHttpRequestInformation,
   updateViewResetDevtool,
   updateWithNewRequest
-} from "./view.store";
+} from './view.store';
 
 export const inputStore = loggedWritable<HttplyInput>({
-  httpInput: "",
-  focused: false,
+  httpInput: '',
+  focused: false
 });
 
 export function updateEditorFocused(focused: boolean) {
@@ -19,6 +19,6 @@ export function updateEditorFocused(focused: boolean) {
 
 export function updateHttpInput(httpInput: string) {
   const request = fetchParser(httpInput);
-  updateWithNewRequest(request)
+  updateWithNewRequest(request);
   inputStore.update({httpInput, request});
 }

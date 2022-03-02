@@ -3,11 +3,11 @@ export function pasteHotkey() {
     macosPlatforms = /(macintosh|macintel|macppc|mac68k|macos)/i,
     windowsPlatforms = /(win32|win64|windows|wince)/i;
 
-  let hotkey = "";
+  let hotkey = '';
   if (macosPlatforms.test(userAgent)) {
-    hotkey = "CMD+V";
+      hotkey = 'CMD+V';
   } else if (windowsPlatforms.test(userAgent)) {
-    hotkey = "CTRL+V";
+      hotkey = 'CTRL+V';
   }
   return hotkey;
 }

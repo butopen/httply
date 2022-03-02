@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "node_modules/@butopen/design-system/src/index";
+@import 'node_modules/@butopen/design-system/src/index';
 
 :root {
   --bo-theme-color: #65ec36;
@@ -11,11 +11,11 @@
   color: var(--bo-theme-color);
 }
 
-@import "css/_fonts";
+@import 'css/_fonts';
 
 html,
 body {
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
 }
 
 .bo-header {

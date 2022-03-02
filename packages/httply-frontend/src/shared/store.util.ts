@@ -1,4 +1,4 @@
-import { Writable, writable } from "svelte/store";
+import {Writable, writable} from 'svelte/store';
 
 type EnhancedWritable<X> = Writable<X> & {
   update: (action: Partial<X> | ((prevStore: X) => Partial<X>)) => void;
@@ -13,29 +13,26 @@ export function loggedWritable<T>(initialStore: T) {
 
 function isFunction(functionToCheck) {
   var getType = {};
-  return (
-    functionToCheck &&
-    getType.toString.call(functionToCheck) === "[object Function]"
-  );
+    return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 }
 
 function isNode(o) {
-  return typeof Node === "object"
-    ? o instanceof Node
-    : o &&
-        typeof o === "object" &&
-        typeof o.nodeType === "number" &&
-        typeof o.nodeName === "string";
+    return typeof Node === 'object'
+        ? o instanceof Node
+        : o &&
+        typeof o === 'object' &&
+        typeof o.nodeType === 'number' &&
+        typeof o.nodeName === 'string';
 }
 
 function isElement(o) {
-  return typeof HTMLElement === "object"
-    ? o instanceof HTMLElement //DOM2
-    : o &&
-        typeof o === "object" &&
+    return typeof HTMLElement === 'object'
+        ? o instanceof HTMLElement //DOM2
+        : o &&
+        typeof o === 'object' &&
         o !== null &&
         o.nodeType === 1 &&
-        typeof o.nodeName === "string";
+        typeof o.nodeName === 'string';
 }
 
 function serializer(replacer?, cycleReplacer?) {
@@ -44,10 +41,8 @@ function serializer(replacer?, cycleReplacer?) {
 
   if (cycleReplacer == null)
     cycleReplacer = function (key, value) {
-      if (stack[0] === value) return "[Circular ~]";
-      return (
-        "[Circular ~." + keys.slice(0, stack.indexOf(value)).join(".") + "]"
-      );
+        if (stack[0] === value) return '[Circular ~]';
+        return '[Circular ~.' + keys.slice(0, stack.indexOf(value)).join('.') + ']';
     };
 
   return function (key, value) {
@@ -71,25 +66,22 @@ const stores = new WeakMap();
 
 function update<T>(store: Writable<T>, newPartialStore: Partial<T>);
 function update<T>(store: Writable<T>, action: (prevStore: T) => Partial<T>);
-function update<T>(
-  store: Writable<T>,
-  action: Partial<T> | ((prevStore: T) => Partial<T>)
-) {
-  const prevStore = stores.get(store);
+function update<T>(store: Writable<T>, action: Partial<T> | ((prevStore: T) => Partial<T>)) {
+    const prevStore = stores.get(store);
 
-  let ps;
-  if (logActions()) ps = JSON.parse(JSON.stringify(prevStore, serializer()));
-  const result = isFunction(action)
-    ? (action as (prevStore: T) => Partial<T>)(prevStore)
-    : (action as Partial<T>);
-  const ns = {
-    ...prevStore,
-    ...result,
+    let ps;
+    if (logActions()) ps = JSON.parse(JSON.stringify(prevStore, serializer()));
+    const result = isFunction(action)
+        ? (action as (prevStore: T) => Partial<T>)(prevStore)
+        : (action as Partial<T>);
+    const ns = {
+        ...prevStore,
+        ...result
   };
   if (logActions()) {
     const err = new Error();
-    const stack = err.stack;
-    const functionName = stack.split("at ")[3].split(" ")[0];
+      const stack = err.stack;
+      const functionName = stack.split('at ')[3].split(' ')[0];
     log(functionName, result, ps, ns);
   }
   store.set(ns);
@@ -106,15 +98,10 @@ export function createStore<T>(initialStore: T) {
   return { store: prevStore, writable: writableStore, update };
 }
 
-function log<T>(
-  functionName: string,
-  newPartial: Partial<T>,
-  prevState: T,
-  nextState: T
-) {
-  console.groupCollapsed(functionName, newPartial);
-  console.log("PREV STATE", prevState);
-  console.log("NEXT STATE", nextState);
-  (console as any).trace();
-  console.groupEnd();
+function log<T>(functionName: string, newPartial: Partial<T>, prevState: T, nextState: T) {
+    console.groupCollapsed(functionName, newPartial);
+    console.log('PREV STATE', prevState);
+    console.log('NEXT STATE', nextState);
+    (console as any).trace();
+    console.groupEnd();
 }

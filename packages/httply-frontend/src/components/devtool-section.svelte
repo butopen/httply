@@ -1,5 +1,18 @@
+<style lang="scss">
+  .hl-section-header {
+    @apply h-6 text-xs leading-6 text-zinc-500;
+    > * {
+      @apply cursor-pointer;
+    }
+  }
+
+  .hl-section-content {
+    @apply bg-white;
+  }
+</style>
+
 <script lang="ts">
-    import Icon from "../shared/components/icon.svelte";
+    import Icon from '../shared/components/icon.svelte';
 
     export let open: boolean;
     export let section: string;
@@ -10,11 +23,7 @@
 </script>
 
 <div>
-    <div
-            class="hl-section-header cursor-pointer"
-            class:bg-gray-100={!open}
-            on:click={toggle}
-    >
+    <div class="hl-section-header cursor-pointer" class:bg-gray-100={!open} on:click={toggle}>
         {#if open}
             <Icon class="h-4 w-4" name="down"/>
         {/if}
@@ -29,16 +38,3 @@
         </div>
     {/if}
 </div>
-
-<style lang="scss">
-  .hl-section-header {
-    @apply h-6 text-xs leading-6 text-zinc-500;
-    > * {
-      @apply cursor-pointer;
-    }
-  }
-
-  .hl-section-content {
-    @apply bg-white;
-  }
-</style>
