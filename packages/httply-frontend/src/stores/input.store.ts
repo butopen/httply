@@ -5,7 +5,12 @@ import { updateHttpRequest } from "./view.store";
 
 export const inputStore = loggedWritable<HttplyInput>({
   httpInput: "",
+  focused: false,
 });
+
+export function updateEditorFocused(focused: boolean) {
+  inputStore.update({ focused });
+}
 
 export function updateHttpInput(httpInput: string) {
   const request = fetchParser(httpInput);

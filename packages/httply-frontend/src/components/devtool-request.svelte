@@ -1,35 +1,41 @@
 <script lang="ts">
-
     import {inputStore} from "../stores/input.store";
     import {viewStore} from "../stores/view.store";
-    import DevtoolSection from "./devtool-section.svelte"
-    import JsonViewer from "./json-viewer/json-viewer.svelte"
-    import Icon from "../shared/components/icon.svelte"
+    import DevtoolSection from "./devtool-section.svelte";
+    import JsonViewer from "./json-viewer/json-viewer.svelte";
+    import Icon from "../shared/components/icon.svelte";
     import {play} from "../actions/play.action";
 </script>
 
 {#if $inputStore.request}
     <div>
-        <Icon class="button" on:click={e => play($inputStore.request)} name="play" ></Icon>
+        <Icon
+                class="button"
+                on:click={(e) => play($inputStore.request)}
+                name="play"
+        />
     </div>
     <DevtoolSection open={$viewStore.sectionExpanded.General} section="General">
-        <JsonViewer json={$viewStore.request.information}></JsonViewer>
+        <JsonViewer json={$viewStore.request.information}/>
     </DevtoolSection>
     {#if $viewStore.response}
-        <DevtoolSection open={$viewStore.sectionExpanded.ResponseHeaders} section="Response Headers">
-            <JsonViewer json={$viewStore.response.headers}></JsonViewer>
+        <DevtoolSection
+                open={$viewStore.sectionExpanded.ResponseHeaders}
+                section="Response Headers"
+        >
+            <JsonViewer json={$viewStore.response.headers}/>
         </DevtoolSection>
-        <DevtoolSection section="Response" open={$viewStore.sectionExpanded.Response}>
-            <JsonViewer json={$viewStore.response.body}></JsonViewer>
+        <DevtoolSection
+                section="Response"
+                open={$viewStore.sectionExpanded.Response}
+        >
+            <JsonViewer json={$viewStore.response.body}/>
         </DevtoolSection>
     {/if}
 {/if}
 
-
 <style lang="scss">
-
   .hl-devtool-request {
-    @apply bg-gray-50
+    @apply bg-gray-50;
   }
-
 </style>
