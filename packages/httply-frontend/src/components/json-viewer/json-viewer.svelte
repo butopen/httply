@@ -30,8 +30,7 @@
           <span class="json-viewer-key">{r.key}</span>
           <span class="json-viewer-ddots">:</span>
           {#if !r.expanded}
-            <span title={r.tooltip} class="json-viewer-value collapsed {r.jsonType}">{r.value}</span
-            >
+            <span title={r.tooltip} class="json-viewer-value collapsed {r.jsonType}">{r.value}</span>
           {/if}
         </div>
         {#if r.expanded}

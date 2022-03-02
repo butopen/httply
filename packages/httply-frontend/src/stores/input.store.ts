@@ -1,12 +1,7 @@
 import { loggedWritable } from '../shared/store.util';
 import { fetchParser } from '../shared/fetch-parser';
 import type { HttplyInput } from '../shared/httply.model';
-import {
-  updateHttpRequestHeaders,
-  updateHttpRequestInformation,
-  updateViewResetDevtool,
-  updateWithNewRequest
-} from './view.store';
+import { updateHttpRequestHeaders, updateHttpRequestInformation, updateViewResetDevtool, updateWithNewRequest } from './view.store';
 
 export const inputStore = loggedWritable<HttplyInput>({
   httpInput: '',

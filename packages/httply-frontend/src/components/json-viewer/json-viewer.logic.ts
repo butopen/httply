@@ -1,16 +1,7 @@
 import type { Json } from '../../shared/json.model';
 
 export interface RenderedJsonRow {
-  jsonType:
-    | string
-    | 'undefined'
-    | 'object'
-    | 'boolean'
-    | 'number'
-    | 'string'
-    | 'function'
-    | 'symbol'
-    | 'bigint';
+  jsonType: string | 'undefined' | 'object' | 'boolean' | 'number' | 'string' | 'function' | 'symbol' | 'bigint';
   expanded: boolean;
   key: string;
   value: string;

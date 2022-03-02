@@ -1,13 +1,4 @@
-export type HttplyMethod =
-  | 'GET'
-  | 'POST'
-  | 'PUT'
-  | 'PATCH'
-  | 'DELETE'
-  | 'HEAD'
-  | 'CONNECT'
-  | 'OPTIONS'
-  | 'TRACE';
+export type HttplyMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'CONNECT' | 'OPTIONS' | 'TRACE';
 export type HttplyRequest = {
   url: string;
   options: {

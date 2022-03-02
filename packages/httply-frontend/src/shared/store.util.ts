@@ -6,8 +6,7 @@ type EnhancedWritable<X> = Writable<X> & {
 
 export function loggedWritable<T>(initialStore: T) {
   const { writable, update } = createStore<T>(initialStore);
-  writable.update = (newState: Partial<T> | ((prevStore: T) => Partial<T>)) =>
-    update(writable, newState as any);
+  writable.update = (newState: Partial<T> | ((prevStore: T) => Partial<T>)) => update(writable, newState as any);
   return writable as EnhancedWritable<T>;
 }
 
@@ -19,20 +18,13 @@ function isFunction(functionToCheck) {
 function isNode(o) {
   return typeof Node === 'object'
     ? o instanceof Node
-    : o &&
-        typeof o === 'object' &&
-        typeof o.nodeType === 'number' &&
-        typeof o.nodeName === 'string';
+    : o && typeof o === 'object' && typeof o.nodeType === 'number' && typeof o.nodeName === 'string';
 }
 
 function isElement(o) {
   return typeof HTMLElement === 'object'
     ? o instanceof HTMLElement //DOM2
-    : o &&
-        typeof o === 'object' &&
-        o !== null &&
-        o.nodeType === 1 &&
-        typeof o.nodeName === 'string';
+    : o && typeof o === 'object' && o !== null && o.nodeType === 1 && typeof o.nodeName === 'string';
 }
 
 function serializer(replacer?, cycleReplacer?) {
@@ -71,9 +63,7 @@ function update<T>(store: Writable<T>, action: Partial<T> | ((prevStore: T) => P
 
   let ps;
   if (logActions()) ps = JSON.parse(JSON.stringify(prevStore, serializer()));
-  const result = isFunction(action)
-    ? (action as (prevStore: T) => Partial<T>)(prevStore)
-    : (action as Partial<T>);
+  const result = isFunction(action) ? (action as (prevStore: T) => Partial<T>)(prevStore) : (action as Partial<T>);
   const ns = {
     ...prevStore,
     ...result
