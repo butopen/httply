@@ -41,7 +41,7 @@
 
     function onClick() {
         updateHttpInput(`fetch("https://httply.com/example")`);
-        updateNotification(`Press <b>space</b> to send the request`);
+        updateNotification(`Press <b>space</b> to send the request. <br><small>Or use the play ▶ button</small>`);
         httpTextArea.blur();
     }
 
