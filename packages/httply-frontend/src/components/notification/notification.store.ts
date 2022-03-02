@@ -1,4 +1,4 @@
-import { loggedWritable } from "../../shared/store.util";
+import {loggedWritable} from '../../shared/store.util';
 
 export interface Notifications {
   message: string;
@@ -7,16 +7,16 @@ export interface Notifications {
 }
 
 export const notificationStore = loggedWritable<Notifications>({
-  message: "",
-  show: false,
-  valideUpTo: 0,
+    message: '',
+    show: false,
+    valideUpTo: 0
 });
 
 export function updateNotification(message, timeMs = 4000) {
   notificationStore.update({
     message,
     show: true,
-    valideUpTo: new Date().getTime() + timeMs,
+      valideUpTo: new Date().getTime() + timeMs
   });
 }
 

@@ -1,21 +1,21 @@
-import type { Json } from "../../shared/json.model";
+import type {Json} from '../../shared/json.model';
 
 export interface RenderedJsonRow {
-  jsonType:
-    | string
-    | "undefined"
-    | "object"
-    | "boolean"
-    | "number"
-    | "string"
-    | "function"
-    | "symbol"
-    | "bigint";
-  expanded: boolean;
-  key: string;
-  value: string;
-  tooltip: string | null;
-  json: Json;
+    jsonType:
+        | string
+        | 'undefined'
+        | 'object'
+        | 'boolean'
+        | 'number'
+        | 'string'
+        | 'function'
+        | 'symbol'
+        | 'bigint';
+    expanded: boolean;
+    key: string;
+    value: string;
+    tooltip: string | null;
+    json: Json;
 }
 
 export class JsonViewerLogic {
@@ -30,7 +30,7 @@ export class JsonViewerLogic {
         tooltip: this.renderTooltip(jsonValue),
         value: this.renderValue(jsonValue),
         expanded: false,
-        jsonType,
+          jsonType
       };
       return r;
     });
@@ -40,7 +40,7 @@ export class JsonViewerLogic {
   private renderValue(json: Json) {
     if (this.isPrimitive(json)) return json as any;
     else {
-      let prefix = "";
+        let prefix = '';
       if (Array.isArray(json)) prefix = `Array(${json.length}) `;
       return prefix + JSON.stringify(json);
     }
@@ -54,7 +54,7 @@ export class JsonViewerLogic {
   }
 
   private jsonType(obj) {
-    return obj === null ? "null" : Array.isArray(obj) ? "array" : typeof obj;
+      return obj === null ? 'null' : Array.isArray(obj) ? 'array' : typeof obj;
   }
 
   private isPrimitive(obj) {
@@ -64,15 +64,12 @@ export class JsonViewerLogic {
   private value(value: any) {
     if (!value) return value;
     let json;
-    if (
-      value.constructor === [].constructor ||
-      value.constructor === {}.constructor
-    ) {
-      return value;
-    }
+      if (value.constructor === [].constructor || value.constructor === {}.constructor) {
+          return value;
+      }
 
     try {
-      json = JSON.parse(atob(value.split(".")[1]));
+        json = JSON.parse(atob(value.split('.')[1]));
     } catch (e) {}
     if (!json) {
       try {

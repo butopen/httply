@@ -1,12 +1,14 @@
+<style lang="scss">
+  .http-paste-textarea-container {
+    @apply w-full border border-gray-200;
+  }
+</style>
+
 <script lang="ts">
-    import {basicSetup, EditorState, EditorView} from "@codemirror/basic-setup";
-    import {javascript} from "@codemirror/lang-javascript";
-    import {afterUpdate, onDestroy, onMount} from "svelte";
-    import {
-        inputStore,
-        updateEditorFocused,
-        updateHttpInput,
-    } from "../stores/input.store";
+    import {basicSetup, EditorState, EditorView} from '@codemirror/basic-setup';
+    import {javascript} from '@codemirror/lang-javascript';
+    import {afterUpdate, onDestroy, onMount} from 'svelte';
+    import {inputStore, updateEditorFocused, updateHttpInput} from '../stores/input.store';
 
     let textareaContainer: HTMLDivElement;
 
@@ -34,28 +36,28 @@
                     javascript(),
                     EditorView.domEventHandlers({
                         focus: (e) => onFocus(e),
-                        blur: (e) => onBlur(e),
-                    }),
-                ],
+                        blur: (e) => onBlur(e)
+                    })
+                ]
             }),
-            parent: textareaContainer,
+            parent: textareaContainer
         });
         updateCMView(lastContent);
     }
 
     const onKeyDown = (e: KeyboardEvent) => {
-        if (e.key == "v" && e.ctrlKey) {
+        if (e.key == 'v' && e.ctrlKey) {
             updateHttpInput(cmView.state.doc.toString());
         }
     };
 
     onMount(() => {
         recreateView();
-        document.addEventListener("keyup", onKeyDown);
+        document.addEventListener('keyup', onKeyDown);
     });
 
     onDestroy(() => {
-        document.removeEventListener("keyup", onKeyDown);
+        document.removeEventListener('keyup', onKeyDown);
     });
 
     afterUpdate(() => {
@@ -67,7 +69,7 @@
     function updateCMView(content: string) {
         if (cmView) {
             let transaction = cmView.state.update({
-                changes: {from: 0, to: cmView.state.doc.length, insert: content},
+                changes: {from: 0, to: cmView.state.doc.length, insert: content}
             });
             cmView.dispatch(transaction);
         }
@@ -81,15 +83,9 @@
     export function selectAll() {
         cmView.focus();
         cmView.dispatch({
-            selection: {anchor: 0, head: cmView.state.doc.length},
+            selection: {anchor: 0, head: cmView.state.doc.length}
         });
     }
 </script>
 
 <div class="http-paste-textarea-container" bind:this={textareaContainer}/>
-
-<style lang="scss">
-  .http-paste-textarea-container {
-    @apply w-full border border-gray-200;
-  }
-</style>

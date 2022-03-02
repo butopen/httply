@@ -1,4 +1,4 @@
-import { loggedWritable } from "../shared/store.util";
+import {loggedWritable} from '../shared/store.util';
 
 export interface DevtoolStore {
   tabs: string[];
@@ -6,8 +6,8 @@ export interface DevtoolStore {
 }
 
 export const devtoolStore = loggedWritable<DevtoolStore>({
-  tabs: ["Request"],
-  activeTab: "Request",
+  tabs: ['Request'],
+  activeTab: 'Request'
 });
 
 export function updateActiveTab(tab: string) {
