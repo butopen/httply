@@ -18,6 +18,12 @@
     <DevtoolSection open={$viewStore.sectionExpanded.General} section="General">
         <JsonViewer json={$viewStore.request.information}/>
     </DevtoolSection>
+    {#if $viewStore.request.headers}
+        <DevtoolSection open={$viewStore.sectionExpanded.RequestHeaders} section="Request Headers">
+            <JsonViewer json={$viewStore.request.headers}/>
+        </DevtoolSection>
+
+    {/if}
     {#if $viewStore.response}
         <DevtoolSection
                 open={$viewStore.sectionExpanded.ResponseHeaders}
