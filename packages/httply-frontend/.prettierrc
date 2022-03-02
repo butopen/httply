@@ -3,7 +3,7 @@
   "singleQuote": true,
   "tabWidth": 2,
   "trailingComma": "none",
-  "printWidth": 100,
+  "printWidth": 150,
   "plugins": [
     "./node_modules/prettier-plugin-tailwindcss"
   ],
@@ -13,7 +13,7 @@
       "options": {
         "parser": "svelte",
         "svelteSortOrder": "options-scripts-markup-styles",
-        "svelteBracketNewLine": true
+        "svelteBracketNewLine": false
       }
     }
   ]

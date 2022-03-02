@@ -4,11 +4,7 @@
 
 <div class="hl-tabs">
   {#each $devtoolStore.tabs as tab}
-    <div
-      class="hl-tab"
-      class:active={$devtoolStore.activeTab == tab}
-      on:click={(e) => updateActiveTab(tab)}
-    >
+    <div class="hl-tab" class:active={$devtoolStore.activeTab == tab} on:click={(e) => updateActiveTab(tab)}>
       {tab}
     </div>
   {/each}

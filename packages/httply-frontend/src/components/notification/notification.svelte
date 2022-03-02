@@ -7,8 +7,7 @@
 
   onMount(() => {
     interval = setInterval(() => {
-      if ($notificationStore.show && new Date().getTime() > $notificationStore.valideUpTo)
-        updateHideNotification();
+      if ($notificationStore.show && new Date().getTime() > $notificationStore.valideUpTo) updateHideNotification();
     }, 50);
   });
 

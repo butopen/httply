@@ -6,10 +6,7 @@
   import Notification from './components/notification/notification.svelte';
   import { inputStore, updateHttpInput } from './stores/input.store';
   import { viewStore } from './stores/view.store';
-  import {
-    notificationStore,
-    updateNotification
-  } from './components/notification/notification.store';
+  import { notificationStore, updateNotification } from './components/notification/notification.store';
   import { onDestroy, onMount } from 'svelte';
   import { pasteHotkey } from './shared/paste-hotkey.util';
   import { play } from './actions/play.action';
@@ -41,9 +38,7 @@
 
   function onClick() {
     updateHttpInput(`fetch("https://httply.com/example")`);
-    updateNotification(
-      `Press <b>space</b> to send the request. <br><small>Or use the play ▶ button</small>`
-    );
+    updateNotification(`Press <b>space</b> to send the request. <br><small>Or use the play ▶ button</small>`);
     httpTextArea.blur();
   }
 
@@ -84,10 +79,7 @@
   </div>
 </div>
 
-<p
-  class="my-4 mx-auto max-w-xl px-2 text-center text-sm text-gray-500"
-  class:opacity-10={$notificationStore.show}
->
+<p class="my-4 mx-auto max-w-xl px-2 text-center text-sm text-gray-500" class:opacity-10={$notificationStore.show}>
   Use case #1: <b>you open a ticket to describe a bad request</b>
   <br />
   The
@@ -97,13 +89,8 @@
   link instead: a complete overview of the request, the response, headers, cookies
 </p>
 <div class="mx-8 mt-12 leading-tight md:mt-2">
-  <span class="text-xs text-gray-400"
-    >Copy a network request (<b>Copy as Node.js fetch</b>) and paste it below</span
-  >
-  <a
-    class="cursor-pointer text-xs text-blue-300 hover:text-blue-400 hover:underline"
-    on:click={onClick}>Try with an example</a
-  >
+  <span class="text-xs text-gray-400">Copy a network request (<b>Copy as Node.js fetch</b>) and paste it below</span>
+  <a class="cursor-pointer text-xs text-blue-300 hover:text-blue-400 hover:underline" on:click={onClick}>Try with an example</a>
 </div>
 
 <div class="ml-auto" class:request-ready={$viewStore.request.information.Url}>
@@ -115,8 +102,7 @@
 
 <style lang="scss">
   :root {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-      'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
   .logo {
