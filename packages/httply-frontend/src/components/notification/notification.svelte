@@ -5,26 +5,26 @@
 </style>
 
 <script lang="ts">
-    import {notificationStore, updateHideNotification} from './notification.store';
-    import {fly} from 'svelte/transition';
-    import {onDestroy, onMount} from 'svelte';
+  import { notificationStore, updateHideNotification } from './notification.store';
+  import { fly } from 'svelte/transition';
+  import { onDestroy, onMount } from 'svelte';
 
-    let interval;
+  let interval;
 
-    onMount(() => {
-        interval = setInterval(() => {
-            if ($notificationStore.show && new Date().getTime() > $notificationStore.valideUpTo)
-                updateHideNotification();
-        }, 50);
-    });
+  onMount(() => {
+    interval = setInterval(() => {
+      if ($notificationStore.show && new Date().getTime() > $notificationStore.valideUpTo)
+        updateHideNotification();
+    }, 50);
+  });
 
-    onDestroy(() => {
-        clearInterval(interval);
-    });
+  onDestroy(() => {
+    clearInterval(interval);
+  });
 </script>
 
 {#if $notificationStore.show}
-    <div class="hl-notification" transition:fly={{ y: 50, duration: 300 }}>
-        {@html $notificationStore.message}
-    </div>
+  <div class="hl-notification" transition:fly={{ y: 50, duration: 300 }}>
+    {@html $notificationStore.message}
+  </div>
 {/if}
