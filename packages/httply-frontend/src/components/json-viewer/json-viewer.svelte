@@ -28,13 +28,15 @@
       <li class:expanded={r.expanded}>
         <div on:click={(e) => onToggle(e, r)} class="json-viewer-row {r.jsonType}">
           <span class="json-viewer-key">{r.key}</span>
-          <span class="json-viewer-ddots">:</span>
+          {#if r.key}
+            <span class="json-viewer-ddots">:</span>
+          {/if}
           {#if !r.expanded}
             <span title={r.tooltip} class="json-viewer-value collapsed {r.jsonType}">{r.value}</span>
           {/if}
         </div>
         {#if r.expanded}
-          <svelte:self isMaster={false} json={r.json} parent={r.key} />
+          <svelte:self isMaster={false} json={r.json} />
         {/if}
       </li>
     {/each}
@@ -55,7 +57,7 @@
   }
 
   ul:not(.master) {
-    @apply border-l border-gray-100;
+    @apply ml-1.5 border-l border-gray-100;
   }
 
   ul:not(.master):hover {
@@ -68,7 +70,7 @@
   }
 
   .json-viewer-row {
-    @apply inline-flex h-4 leading-4;
+    @apply inline-flex h-4 whitespace-nowrap leading-4;
   }
 
   .json-viewer-key {
@@ -81,7 +83,7 @@
   }
 
   .json-viewer-value {
-    @apply ml-2 inline-block;
+    @apply ml-2 inline-block w-full truncate;
   }
 
   .json-viewer-value.string {
@@ -106,19 +108,18 @@
     content: '"';
   }
 
-  .json-viewer-row:before {
-    content: '';
-    @apply m-0.5 inline-block h-4 w-4;
-  }
-
   .json-viewer-row.object,
   .json-viewer-row.array {
     @apply cursor-pointer;
   }
 
+  .json-viewer-row:not(.object, .array) {
+    @apply ml-4;
+  }
+
   .json-viewer-row.object:before,
   .json-viewer-row.array:before {
-    content: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M10,4 L14,7 L10,10 z"/></svg>');
+    content: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M10,6 L14,9 L10,12 z"/></svg>');
     opacity: 50%;
     transition: transform 150ms ease-in-out;
   }

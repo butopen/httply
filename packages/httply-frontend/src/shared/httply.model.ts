@@ -1,10 +1,11 @@
 export type HttplyMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'CONNECT' | 'OPTIONS' | 'TRACE';
 export type HttplyRequest = {
   url: string;
+  timestamp: number;
   options: {
     method: HttplyMethod;
     referrer?: string;
-    headers:
+    headers?:
       | {
           referer?: string;
           Referer?: string;

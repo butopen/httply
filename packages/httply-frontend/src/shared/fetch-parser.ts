@@ -5,9 +5,11 @@ function fetchExtractor(url, options) {
 }
 
 export function fetchParser(requestText: string): HttplyRequest {
+  const timestamp = new Date().getTime();
   if (requestText.startsWith('http')) {
     return {
       url: requestText,
+      timestamp,
       options: {
         method: 'GET'
       }
@@ -17,7 +19,7 @@ export function fetchParser(requestText: string): HttplyRequest {
     try {
       let { url, options } = new Function('fetch', `return ${requestText}`)(fetchExtractor);
       if (!options) options = { method: 'GET' };
-      return { url, options };
+      return { url, options, timestamp };
     } catch (e) {
       console.error(e);
     }

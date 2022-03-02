@@ -1,5 +1,6 @@
 import { loggedWritable } from '../shared/store.util';
 import type { HttplyRequest } from '../shared/httply.model';
+import { formatDate } from '../shared/time';
 
 export interface ViewState {
   sectionExpanded: {
@@ -15,6 +16,8 @@ export interface ViewState {
       Url?: string;
       Method?: string;
       Domain?: string;
+      'Request Timestamp'?: string;
+      'Response Timestamp'?: string;
       Referrer?: string;
     };
     headers?: { [h: string]: string };
@@ -59,6 +62,7 @@ export function updateWithNewRequest(request: HttplyRequest) {
       updateHttpRequestInformation('Domain', referer);
     }
   } catch (e) {}
+  updateHttpRequestInformation('Request Timestamp', formatDate(request.timestamp));
 }
 
 export function updateHttpRequestHeaders(headers: { [h: string]: string }) {
@@ -85,5 +89,6 @@ export function updateSection(key: keyof ViewState['sectionExpanded'], open: boo
 
 export function updateResponse(response: ViewState['response']) {
   viewStore.update({ response: response });
+  updateHttpRequestInformation('Response Timestamp', formatDate(new Date()));
   updateSection('Response', true);
 }

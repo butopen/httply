@@ -9,11 +9,13 @@ export interface RenderedJsonRow {
   json: Json;
 }
 
+const BLANK = '';
+
 export class JsonViewerLogic {
   toRenderedValues(json: Json) {
     let keys = Object.keys(json as any);
     let keyRows = keys.map((k, i) => {
-      let jsonValue = this.value(json[k]);
+      let jsonValue = this.value(json[k], k);
       let jsonType = this.jsonType(jsonValue);
       let r: RenderedJsonRow = {
         key: k,
@@ -52,15 +54,17 @@ export class JsonViewerLogic {
     return obj !== Object(obj);
   }
 
-  private value(value: any) {
+  private value(value: any, key: string) {
     if (!value) return value;
     let json;
+    if (key == BLANK) return value;
     if (value.constructor === [].constructor || value.constructor === {}.constructor) {
       return value;
     }
 
     try {
       json = JSON.parse(atob(value.split('.')[1]));
+      json = { [BLANK]: value, ...json };
     } catch (e) {}
     if (!json) {
       try {
