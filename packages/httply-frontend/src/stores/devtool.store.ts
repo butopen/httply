@@ -6,7 +6,7 @@ export interface DevtoolStore {
 }
 
 export const devtoolStore = loggedWritable<DevtoolStore>({
-  tabs: ["Request", "Headers", "Payload", "Response", "Cookies"],
+  tabs: ["Request"],
   activeTab: "Request",
 });
 

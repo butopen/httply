@@ -12,6 +12,7 @@ export interface ViewState {
   request: {
     information: {
       Url?: string;
+      Method?: string;
       Domain?: string;
       Referrer?: string;
     };
