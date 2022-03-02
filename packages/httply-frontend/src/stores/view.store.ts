@@ -1,4 +1,5 @@
-import { loggedWritable } from "../shared/store.util";
+import {loggedWritable} from "../shared/store.util";
+import type {HttplyRequest} from "../shared/httply.model";
 
 export interface ViewState {
   sectionExpanded: {
@@ -16,6 +17,7 @@ export interface ViewState {
       Domain?: string;
       Referrer?: string;
     };
+    headers?: { [h: string]: string };
   };
   response?: {
     headers: { [h: string]: string };
@@ -32,17 +34,52 @@ const sections = {
   Authorization: false,
 };
 export const viewStore = loggedWritable<ViewState>({
-  request: { information: {} },
+  request: {information: {}},
   sectionExpanded: sections,
 });
 
-export function updateHttpRequest(
-  key: keyof ViewState["request"]["information"],
-  value: string
+export function updateViewResetDevtool() {
+  viewStore.update(s => {
+    return {
+      request: {information: {}},
+      sectionExpanded: sections,
+    }
+  })
+}
+
+export function updateWithNewRequest(request: HttplyRequest) {
+  updateViewResetDevtool()
+  if (request.options.headers)
+    updateHttpRequestHeaders(request.options.headers)
+  updateHttpRequestInformation("Url", request.url);
+  updateHttpRequestInformation("Method", request.options.method);
+  try {
+    const referer =
+        request.options.referrer ||
+        (request.options.headers &&
+            (request.options.headers.referer || request.options.headers.Referer));
+    if (referer) {
+      updateHttpRequestInformation("Referrer", referer);
+      updateHttpRequestInformation("Domain", referer);
+    }
+  } catch (e) {
+  }
+}
+
+export function updateHttpRequestHeaders(headers: { [h: string]: string }) {
+  viewStore.update((s) => {
+    s.request = {...s.request, headers};
+    return s;
+  });
+}
+
+export function updateHttpRequestInformation(
+    key: keyof ViewState["request"]["information"],
+    value: string
 ) {
   viewStore.update((s) => {
-    const information = { ...s.request.information, [key]: value };
-    s.request = { ...s.request, information };
+    const information = {...s.request.information, [key]: value};
+    s.request = {...s.request, information};
     return s;
   });
 }
