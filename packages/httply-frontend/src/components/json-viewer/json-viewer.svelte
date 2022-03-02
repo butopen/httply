@@ -93,45 +93,45 @@
 </style>
 
 <script lang="ts">
-    import type {Json} from '../../shared/json.model';
-    import {JsonViewerLogic, RenderedJsonRow} from './json-viewer.logic';
+  import type { Json } from '../../shared/json.model';
+  import { JsonViewerLogic, RenderedJsonRow } from './json-viewer.logic';
 
-    export let json: Json = {};
-    export let isMaster: boolean = true;
+  export let json: Json = {};
+  export let isMaster: boolean = true;
 
-    const jsonViewer = new JsonViewerLogic();
+  const jsonViewer = new JsonViewerLogic();
 
-    let rendered: RenderedJsonRow[] = [];
+  let rendered: RenderedJsonRow[] = [];
 
-    $: {
-        rendered = jsonViewer.toRenderedValues(json);
+  $: {
+    rendered = jsonViewer.toRenderedValues(json);
+  }
+
+  function onToggle(e: MouseEvent, r: RenderedJsonRow) {
+    e.stopPropagation();
+    if (['object', 'array'].includes(r.jsonType)) {
+      r.expanded = !r.expanded;
     }
-
-    function onToggle(e: MouseEvent, r: RenderedJsonRow) {
-        e.stopPropagation();
-        if (['object', 'array'].includes(r.jsonType)) {
-            r.expanded = !r.expanded;
-        }
-        rendered = [...rendered];
-    }
+    rendered = [...rendered];
+  }
 </script>
 
 <div class="hl-json-viewer">
-    <ul class:master={isMaster}>
-        {#each rendered as r}
-            <li class:expanded={r.expanded}>
-                <div on:click={(e) => onToggle(e, r)} class="json-viewer-row {r.jsonType}">
-                    <span class="json-viewer-key">{r.key}</span>
-                    <span class="json-viewer-ddots">:</span>
-                    {#if !r.expanded}
+  <ul class:master={isMaster}>
+    {#each rendered as r}
+      <li class:expanded={r.expanded}>
+        <div on:click={(e) => onToggle(e, r)} class="json-viewer-row {r.jsonType}">
+          <span class="json-viewer-key">{r.key}</span>
+          <span class="json-viewer-ddots">:</span>
+          {#if !r.expanded}
             <span title={r.tooltip} class="json-viewer-value collapsed {r.jsonType}">{r.value}</span
             >
-                    {/if}
-                </div>
-                {#if r.expanded}
-                    <svelte:self isMaster={false} json={r.json} parent={r.key}/>
-                {/if}
-            </li>
-        {/each}
-    </ul>
+          {/if}
+        </div>
+        {#if r.expanded}
+          <svelte:self isMaster={false} json={r.json} parent={r.key} />
+        {/if}
+      </li>
+    {/each}
+  </ul>
 </div>

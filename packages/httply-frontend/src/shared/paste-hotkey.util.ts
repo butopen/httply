@@ -5,9 +5,9 @@ export function pasteHotkey() {
 
   let hotkey = '';
   if (macosPlatforms.test(userAgent)) {
-      hotkey = 'CMD+V';
+    hotkey = 'CMD+V';
   } else if (windowsPlatforms.test(userAgent)) {
-      hotkey = 'CTRL+V';
+    hotkey = 'CTRL+V';
   }
   return hotkey;
 }

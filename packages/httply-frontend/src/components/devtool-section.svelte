@@ -12,29 +12,29 @@
 </style>
 
 <script lang="ts">
-    import Icon from '../shared/components/icon.svelte';
+  import Icon from '../shared/components/icon.svelte';
 
-    export let open: boolean;
-    export let section: string;
+  export let open: boolean;
+  export let section: string;
 
-    function toggle() {
-        open = !open;
-    }
+  function toggle() {
+    open = !open;
+  }
 </script>
 
 <div>
-    <div class="hl-section-header cursor-pointer" class:bg-gray-100={!open} on:click={toggle}>
-        {#if open}
-            <Icon class="h-4 w-4" name="down"/>
-        {/if}
-        {#if !open}
-            <Icon class="h-4 w-4" name="right"/>
-        {/if}
-        {section}
-    </div>
+  <div class="hl-section-header cursor-pointer" class:bg-gray-100={!open} on:click={toggle}>
     {#if open}
-        <div class="hl-section-content">
-            <slot/>
-        </div>
+      <Icon class="h-4 w-4" name="down" />
     {/if}
+    {#if !open}
+      <Icon class="h-4 w-4" name="right" />
+    {/if}
+    {section}
+  </div>
+  {#if open}
+    <div class="hl-section-content">
+      <slot />
+    </div>
+  {/if}
 </div>
