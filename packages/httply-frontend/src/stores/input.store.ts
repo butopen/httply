@@ -15,10 +15,15 @@ export function updateEditorFocused(focused: boolean) {
 export function updateHttpInput(httpInput: string) {
   const request = fetchParser(httpInput);
   updateHttpRequest("Url", request.url);
+  updateHttpRequest("Method", request.options.method);
   try {
-    if (request.options.referrer) {
-      updateHttpRequest("Referrer", request.options.referrer);
-      updateHttpRequest("Domain", request.options.referrer);
+    const referer =
+      request.options.referrer ||
+      (request.options.headers &&
+        (request.options.headers.referer || request.options.headers.Referer));
+    if (referer) {
+      updateHttpRequest("Referrer", referer);
+      updateHttpRequest("Domain", referer);
     }
   } catch (e) {}
   inputStore.update({ httpInput, request });
