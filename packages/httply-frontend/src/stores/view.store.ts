@@ -1,6 +1,6 @@
-import { loggedWritable } from '../shared/store.util';
-import type { HttplyRequest } from '../shared/httply.model';
-import { formatDate } from '../shared/time';
+import {loggedWritable} from '../shared/store.util';
+import type {HttplyRequest} from '@butopen/httply-model';
+import {formatDate} from '../shared/time';
 
 export interface ViewState {
   sectionExpanded: {
