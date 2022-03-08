@@ -1,4 +1,4 @@
-import type {HttplyRequest} from '@butopen/httply-model';
+import type { HttplyRequest } from '@butopen/httply-model';
 
 export interface HttplyInput {
   httpInput: string;

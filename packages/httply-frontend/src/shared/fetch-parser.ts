@@ -1,4 +1,4 @@
-import type {HttplyRequest} from '@butopen/httply-model';
+import type { HttplyRequest } from '@butopen/httply-model';
 
 function fetchExtractor(url, options) {
   return { url, options };

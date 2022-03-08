@@ -1,6 +1,6 @@
 import { playRequest } from '../apis/play-request.api';
-import {updateResponse} from '../stores/view.store';
-import type {HttplyRequest} from '@butopen/httply-model';
+import { updateResponse } from '../stores/view.store';
+import type { HttplyRequest } from '@butopen/httply-model';
 
 export async function play(request: HttplyRequest) {
   const { url, options } = request;
