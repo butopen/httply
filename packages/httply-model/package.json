@@ -1,0 +1,11 @@
+{
+  "name": "@butopen/httply-model",
+  "version": "1.0.2",
+  "description": "Model for the butopen httply project",
+  "types": "./src/httply.model.ts",
+  "private": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
