@@ -4,4 +4,5 @@ export interface HttplyInput {
   httpInput: string;
   request?: HttplyRequest;
   focused: boolean;
+  autoplay: boolean;
 }

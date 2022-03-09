@@ -5,11 +5,18 @@
   import JsonViewer from './json-viewer/json-viewer.svelte';
   import Icon from '../shared/components/icon.svelte';
   import { play } from '../actions/play.action';
+  import { disableAutoplay, enableAutoplay } from '../stores/settings.storage';
 </script>
 
 {#if $inputStore.request}
   <div>
-    <Icon class="button" on:click={(e) => play($inputStore.request)} name="play" />
+    <Icon class="button" on:click={(e) => play($inputStore.request)} name="play" tooltip="Send request" />
+    {#if $inputStore.autoplay}
+      <Icon class="button" on:click={(e) => disableAutoplay()} name="autoflash" tooltip="Disable auto send request" />
+    {/if}
+    {#if !$inputStore.autoplay}
+      <Icon class="button" on:click={(e) => enableAutoplay()} name="flash" tooltip="Enable auto send request" />
+    {/if}
   </div>
   <DevtoolSection open={$viewStore.sectionExpanded.General} section="General">
     <JsonViewer json={$viewStore.request.information} />
