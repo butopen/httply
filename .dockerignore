@@ -1,0 +1,8 @@
+node_modules
+packages/httply-backend/node_modules
+packages/httply-backend/dist
+dist
+deploy
+static
+.idea
+*.blz
