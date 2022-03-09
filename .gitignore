@@ -2,6 +2,5 @@
 *.css.map
 *.sass.map
 *.scss.map
-dist
 node_modules
 packages/httply-frontend/public
