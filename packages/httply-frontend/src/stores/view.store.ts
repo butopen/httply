@@ -26,6 +26,7 @@ export interface ViewState {
     headers: { [h: string]: string };
     body: any;
   };
+  shareLink?: string;
 }
 
 const sections = {
@@ -48,6 +49,10 @@ export function updateViewResetDevtool() {
       sectionExpanded: sections
     };
   });
+}
+
+export function updateShareLink(shareLink: string) {
+  viewStore.update({ shareLink });
 }
 
 export function updateWithNewRequest(request: HttplyRequest) {

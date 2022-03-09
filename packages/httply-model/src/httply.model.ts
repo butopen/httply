@@ -21,6 +21,7 @@ export type HttplyMethod =
 export type HttplyResponse = {
   headers: { [header: string]: string };
   body: Json | string;
+  timestamp: number;
 };
 export type HttplyRequest = {
   url: string;
@@ -40,7 +41,7 @@ export type HttplyRequest = {
 
 export interface HttplyEvent {
   domain: string;
-  referer: string;
+  referer?: string;
   request: HttplyRequest;
   response: HttplyResponse;
 }
