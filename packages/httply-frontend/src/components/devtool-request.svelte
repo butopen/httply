@@ -12,10 +12,10 @@
   <div>
     <Icon class="button" on:click={(e) => play($inputStore.request)} name="play" tooltip="Send request" />
     {#if $inputStore.autoplay}
-      <Icon class="button" on:click={(e) => disableAutoplay()} name="autoflash" tooltip="Disable auto send request" />
+      <Icon class="button" on:click={(e) => disableAutoplay()} name="autoflash" tooltip="Disable auto send request on paste" />
     {/if}
     {#if !$inputStore.autoplay}
-      <Icon class="button" on:click={(e) => enableAutoplay()} name="flash" tooltip="Enable auto send request" />
+      <Icon class="button" on:click={(e) => enableAutoplay()} name="flash" tooltip="Enable auto send request on paste" />
     {/if}
   </div>
   <DevtoolSection open={$viewStore.sectionExpanded.General} section="General">
