@@ -5,11 +5,16 @@ import { updateHttpRequestHeaders, updateHttpRequestInformation, updateViewReset
 
 export const inputStore = loggedWritable<HttplyInput>({
   httpInput: '',
-  focused: false
+  focused: false,
+  autoplay: true
 });
 
 export function updateEditorFocused(focused: boolean) {
   inputStore.update({ focused });
+}
+
+export function updateAutoplay(autoplay: boolean) {
+  inputStore.update({ autoplay });
 }
 
 export function updateHttpInput(httpInput: string) {

@@ -5,6 +5,7 @@
 
   export let name: HttplyIcon;
 
+  export let tooltip;
   let clazz: string = '';
   let defaultClasses = '';
   export { clazz as class };
@@ -22,11 +23,17 @@
   });
 </script>
 
-<svg on:click class={(clazz || '') + defaultClasses} stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d={hlIcons[name]} stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
-</svg>
+<div class="hl-icon" title={tooltip}>
+  <svg on:click class={(clazz || '') + defaultClasses} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d={hlIcons[name]} stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+</div>
 
 <style lang="scss">
+  .hl-icon {
+    @apply inline-block;
+  }
+
   svg {
     @apply inline-block;
   }

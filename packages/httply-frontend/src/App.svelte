@@ -4,14 +4,14 @@
   import Httply from './components/httply-logo.svelte';
   import Devtool from './components/devtool.svelte';
   import Notification from './components/notification/notification.svelte';
-  import { inputStore, updateHttpInput } from './stores/input.store';
+  import { inputStore, updateAutoplay, updateHttpInput } from './stores/input.store';
   import { viewStore } from './stores/view.store';
   import { notificationStore, updateNotification } from './components/notification/notification.store';
   import { onDestroy, onMount } from 'svelte';
   import { pasteHotkey } from './shared/paste-hotkey.util';
   import { play } from './actions/play.action';
 
-  (window as any).svelteLogStores = true;
+  (window as any).svelteLogStores = window.location.href.indexOf('localhost') >= 0;
 
   let httpTextArea;
 
@@ -44,7 +44,8 @@
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key == 'v' && e.ctrlKey) {
-      updateNotification(`Press <b>space</b> to send the request`);
+      if (!$inputStore.autoplay) updateNotification(`Press <b>space</b> to send the request`);
+      else play($inputStore.request);
       httpTextArea.blur();
     }
     if (e.key == ' ') {
