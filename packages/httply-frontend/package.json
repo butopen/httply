@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "prod": "vite build --config vite.config.prod.ts",
     "preview": "vite preview",
     "format": "prettier --write src/**/*.{svelte,ts,scss}",
     "check": "svelte-check --tsconfig ./tsconfig.json",
@@ -42,3 +43,5 @@
     "vite": "^2.8.0"
   }
 }
+
+
