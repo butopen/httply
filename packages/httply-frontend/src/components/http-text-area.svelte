@@ -3,6 +3,8 @@
   import { javascript } from '@codemirror/lang-javascript';
   import { afterUpdate, onDestroy, onMount } from 'svelte';
   import { inputStore, updateEditorFocused as uef, updateHttpInput } from '../stores/input.store';
+  import { play } from '../actions/play.action';
+  import { viewStore } from '../stores/view.store';
 
   const updateEditorFocused = wrap(uef, (target, ...args) => {
     console.log('wrapped updateEditorFocused', target, args);
@@ -47,6 +49,7 @@
   let textareaContainer: HTMLDivElement;
 
   let lastContent: string;
+  let lastText: string;
 
   let cmView;
 
@@ -71,6 +74,14 @@
           EditorView.domEventHandlers({
             focus: (e) => onFocus(e),
             blur: (e) => onBlur(e)
+          }),
+          EditorView.updateListener.of((update) => {
+            const text = cmView.state.doc.toString();
+            if (text && text != lastText) {
+              updateHttpInput(text);
+              play($inputStore.request, $viewStore.request.information.Domain);
+            }
+            lastText = text;
           })
         ]
       }),
