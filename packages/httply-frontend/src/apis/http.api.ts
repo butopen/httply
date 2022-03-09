@@ -1,6 +1,6 @@
 import type { Json } from '../shared/json.model';
 
-const basePath = window.location.href.indexOf('localhost') >= 0 ? 'http://localhost:3001' : 'https://httply.com/be';
+const basePath = window.location.href.indexOf('localhost') >= 0 ? 'http://localhost:3001' : 'https://api.httply.com/be';
 
 export async function post(path: string, body: any) {
   const url = path.startsWith('http') ? path : basePath + path;
