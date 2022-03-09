@@ -57,7 +57,8 @@ export function updateShareLink(shareLink: string) {
 
 export function updateWithNewRequest(request: HttplyRequest) {
   updateViewResetDevtool();
-  if (request.options.headers) updateHttpRequestHeaders(request.options.headers);
+
+  if (request?.options.headers) updateHttpRequestHeaders(request.options.headers);
   updateHttpRequestInformation('Url', request.url);
   updateHttpRequestInformation('Method', request.options.method);
   try {

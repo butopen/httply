@@ -47,9 +47,10 @@
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key == 'v' && e.ctrlKey) {
-      if (!$inputStore.autoplay) updateNotification(`Press <b>space</b> to send the request`);
-      else play($inputStore.request, $viewStore.request.information.Domain);
-      httpTextArea.blur();
+      if (!$inputStore.autoplay) {
+        updateNotification(`Press <b>space</b> to send the request`);
+        httpTextArea.blur();
+      } else play($inputStore.request, $viewStore.request.information.Domain);
     }
     if (e.key == ' ') {
       if ($notificationStore.show || !$inputStore.focused) play($inputStore.request, $viewStore.request.information.Domain);
@@ -68,9 +69,9 @@
 <Notification />
 <div class="bo-header shadow">
   <div class="bo-header-container">
-    <div class="logo-text">
+    <a class="logo-text" href="/">
       <Httply />
-    </div>
+    </a>
     <div class="ml-auto">
       <a href="https://github.com/butopen/httply">github</a>
       <!-- 
@@ -116,7 +117,7 @@
   }
 
   .logo-text {
-    @apply inline-block h-8 text-2xl italic leading-8 text-gray-400;
+    @apply inline-block h-8 text-2xl lowercase italic leading-8 text-gray-400;
   }
 
   .request-ready {
