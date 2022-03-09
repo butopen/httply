@@ -36,6 +36,9 @@
 
   svg {
     @apply inline-block;
+    path {
+      stroke: none;
+    }
   }
 
   svg.button {

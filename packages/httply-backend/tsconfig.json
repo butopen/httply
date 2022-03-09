@@ -1,18 +1,21 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "lib": [
-      "esnext",
-      "webworker"
-    ],
-    "strict": true,
-    "noImplicitAny": false,
-    "moduleResolution": "node",
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
     "skipLibCheck": true,
-    "esModuleInterop": true,
-    "types": [
-      "@cloudflare/workers-types",
-      "jest"
-    ]
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false
   }
 }

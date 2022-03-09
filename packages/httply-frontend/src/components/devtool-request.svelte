@@ -4,18 +4,25 @@
   import DevtoolSection from './devtool-section.svelte';
   import JsonViewer from './json-viewer/json-viewer.svelte';
   import Icon from '../shared/components/icon.svelte';
-  import { play } from '../actions/play.action';
+  import { play, share } from '../actions/play.action';
   import { disableAutoplay, enableAutoplay } from '../stores/settings.storage';
+
+  function copy() {
+    share($viewStore.shareLink);
+  }
 </script>
 
 {#if $inputStore.request}
   <div>
-    <Icon class="button" on:click={(e) => play($inputStore.request)} name="play" tooltip="Send request" />
+    <Icon class="button" on:click={(e) => play($inputStore.request, $viewStore.request.information.Domain)} name="play" tooltip="Send request" />
     {#if $inputStore.autoplay}
-      <Icon class="button" on:click={(e) => disableAutoplay()} name="autoflash" tooltip="Disable auto send request on paste" />
+      <Icon class="button h-4 w-4" on:click={(e) => disableAutoplay()} name="autoflash" tooltip="Disable auto send request on paste" />
     {/if}
     {#if !$inputStore.autoplay}
-      <Icon class="button" on:click={(e) => enableAutoplay()} name="flash" tooltip="Enable auto send request on paste" />
+      <Icon class="button h-4 w-4" on:click={(e) => enableAutoplay()} name="flash" tooltip="Enable auto send request on paste" />
+    {/if}
+    {#if $viewStore.shareLink}
+      <Icon class="button h-4 w-4" on:click={(e) => copy()} name="share" tooltip="Copy link into clipboard" />
     {/if}
   </div>
   <DevtoolSection open={$viewStore.sectionExpanded.General} section="General">

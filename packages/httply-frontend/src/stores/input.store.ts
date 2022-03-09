@@ -2,6 +2,7 @@ import { loggedWritable } from '../shared/store.util';
 import { fetchParser } from '../shared/fetch-parser';
 import type { HttplyInput } from '../shared/httply.model';
 import { updateHttpRequestHeaders, updateHttpRequestInformation, updateViewResetDevtool, updateWithNewRequest } from './view.store';
+import type { HttplyRequest } from '@butopen/httply-model';
 
 export const inputStore = loggedWritable<HttplyInput>({
   httpInput: '',
@@ -20,5 +21,8 @@ export function updateAutoplay(autoplay: boolean) {
 export function updateHttpInput(httpInput: string) {
   const request = fetchParser(httpInput);
   updateWithNewRequest(request);
+  inputStore.update({ httpInput, request });
+}
+export function updateHttpInputWithoutParsing(httpInput: string, request: HttplyRequest) {
   inputStore.update({ httpInput, request });
 }

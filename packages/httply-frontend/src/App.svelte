@@ -10,8 +10,11 @@
   import { onDestroy, onMount } from 'svelte';
   import { pasteHotkey } from './shared/paste-hotkey.util';
   import { play } from './actions/play.action';
+  import { manageSharedUrl } from './apis/manage-shared-url.api';
 
   (window as any).svelteLogStores = window.location.href.indexOf('localhost') >= 0;
+
+  manageSharedUrl();
 
   let httpTextArea;
 
@@ -45,11 +48,11 @@
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key == 'v' && e.ctrlKey) {
       if (!$inputStore.autoplay) updateNotification(`Press <b>space</b> to send the request`);
-      else play($inputStore.request);
+      else play($inputStore.request, $viewStore.request.information.Domain);
       httpTextArea.blur();
     }
     if (e.key == ' ') {
-      if ($notificationStore.show || !$inputStore.focused) play($inputStore.request);
+      if ($notificationStore.show || !$inputStore.focused) play($inputStore.request, $viewStore.request.information.Domain);
     }
   };
 
@@ -70,12 +73,14 @@
     </div>
     <div class="ml-auto">
       <a href="https://github.com/butopen/httply">github</a>
+      <!-- 
       <a href="/docs">docs</a>
       <a href="/pricing" class="ml-0 md:ml-8">pricing</a>
       <a href="/about">about</a>
       <a href="/faqs">faqs</a>
       <a href="/login" class="ml-0 md:ml-8">login</a>
       <a href="/signup" class="font-black">signup</a>
+      -->
     </div>
   </div>
 </div>
@@ -116,5 +121,9 @@
 
   .request-ready {
     @apply grid grid-cols-1 items-start md:grid-cols-2;
+  }
+
+  .primary {
+    @apply text-green-400;
   }
 </style>
