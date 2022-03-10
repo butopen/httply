@@ -77,7 +77,7 @@
           }),
           EditorView.updateListener.of((update) => {
             const text = cmView.state.doc.toString();
-            if (text && text != lastText) {
+            if (text && text != lastText && text != lastContent) {
               updateHttpInput(text);
               play($inputStore.request, $viewStore.request.information.Domain);
             }
