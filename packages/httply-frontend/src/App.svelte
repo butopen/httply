@@ -40,7 +40,7 @@
   window.addEventListener('focus', updateInputArea);
 
   function onClick() {
-    updateHttpInput(`fetch("https://httply.com/example")`);
+    updateHttpInput(`fetch("https://httply.com/bs")`);
     updateNotification(`Press <b>space</b> to send the request. <br><small>Or use the play ▶ button</small>`);
     httpTextArea.blur();
   }
