@@ -12,7 +12,7 @@
   import { play } from './actions/play.action';
   import { manageSharedUrl } from './apis/manage-shared-url.api';
 
-  (window as any).svelteLogStores = window.location.href.indexOf('localhost') >= 0;
+  (window as any).svelteLogStores = window.location.href.startsWith('http://localhost:3000');
 
   manageSharedUrl();
 
