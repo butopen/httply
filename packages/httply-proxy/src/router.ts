@@ -5,17 +5,6 @@ import { cors } from "./services/cors-middleware";
 
 export const router = Router();
 
-router.get("/example*", async (r: HLRequest) => {
-  const body = JSON.stringify({
-    hello: "world"
-  });
-  return new Response(body, {
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      ...cors()
-    }
-  });
-});
 router.post("/api*", async (r: HLRequest) => {
   const requestInformation: HLRequestInformation = await r.json();
   const headers = {};
