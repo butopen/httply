@@ -2,49 +2,9 @@
   import { basicSetup, EditorState, EditorView } from '@codemirror/basic-setup';
   import { javascript } from '@codemirror/lang-javascript';
   import { afterUpdate, onDestroy, onMount } from 'svelte';
-  import { inputStore, updateEditorFocused as uef, updateHttpInput } from '../stores/input.store';
+  import { inputStore, updateEditorFocused, updateHttpInput } from '../stores/input.store';
   import { play } from '../actions/play.action';
   import { viewStore } from '../stores/view.store';
-
-  const updateEditorFocused = wrap(uef, (target, ...args) => {
-    console.log('wrapped updateEditorFocused', target, args);
-    let options = args[args.length - 1];
-    options.beforeReturn = (result) => {
-      console.log('result: ', result);
-      return result;
-    };
-  });
-
-  function wrap(f, observer) {
-    const original = f;
-    const wrapper = function (...args) {
-      let options = {
-        skipThrow: false,
-        override: null,
-        onError: (error) => {},
-        beforeReturn: (result) => {
-          return result;
-        },
-        executeOriginal: () => {
-          return original.apply(this, args);
-        }
-      };
-      observer.apply(this, [...args, options]);
-      if (options.override) {
-        // @ts-ignore
-        return options.override(args);
-      } else {
-        try {
-          let rv = options.executeOriginal();
-          return options.beforeReturn(rv);
-        } catch (e) {
-          options.onError(e);
-          if (!options.skipThrow) throw e;
-        }
-      }
-    };
-    return wrapper;
-  }
 
   let textareaContainer: HTMLDivElement;
 
