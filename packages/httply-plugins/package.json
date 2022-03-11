@@ -1,0 +1,24 @@
+{
+  "name": "@butopen/httply-plugins",
+  "version": "1.0.0",
+  "type": "module",
+  "types": "src/index.ts",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "node esbuild.cjs",
+    "types": "tsc --emitDeclarationOnly --outDir dist",
+    "build:watch": "node esbuild.cjs -w",
+    "prepare": "npm run build",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "@butopen/httply-model": "workspace:*",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^17.0.21",
+    "esbuild": "^0.14.25",
+    "typescript": "^4.6.2",
+    "jest": "^27.5.1",
+    "ts-jest": "^27.1.3"
+  }
+}

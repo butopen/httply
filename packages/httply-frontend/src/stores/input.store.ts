@@ -1,8 +1,9 @@
 import { loggedWritable } from '../shared/store.util';
-import { fetchParser } from '../shared/fetch-parser';
 import type { HttplyInput } from '../shared/httply.model';
-import { updateHttpRequestHeaders, updateHttpRequestInformation, updateViewResetDevtool, updateWithNewRequest } from './view.store';
+import { updateWithNewRequest } from './view.store';
 import type { HttplyRequest } from '@butopen/httply-model';
+import { httpParsers } from '../plugins.configuration';
+import type { HttplyParser } from '@butopen/httply-plugins';
 
 export const inputStore = loggedWritable<HttplyInput>({
   httpInput: '',
@@ -19,7 +20,12 @@ export function updateAutoplay(autoplay: boolean) {
 }
 
 export function updateHttpInput(httpInput: string) {
-  const request = fetchParser(httpInput);
+  let parser: HttplyParser;
+  for (let p of httpParsers) {
+    if (p.canApply(httpInput)) parser = p;
+  }
+  if (!parser) throw new Error('Input not supported');
+  const request = parser.parse(httpInput);
   updateWithNewRequest(request);
   inputStore.update({ httpInput, request });
 }
