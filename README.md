@@ -1,3 +1,5 @@
+Try it at [httply.com](https://httply.com) (BETA)
+
 # httply - the first shared network devtool 
 - open source
 - no install: paste any request and share it with your dev team
