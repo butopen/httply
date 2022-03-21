@@ -6,3 +6,4 @@
 dist
 node_modules
 packages/httply-frontend/public
+.env
