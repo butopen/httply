@@ -1,108 +1,122 @@
 import type { HttplyRequest } from "@butopen/httply-model";
 import { HttplyParser, ParseError } from "./parser";
 
-
 export class CurlParser implements HttplyParser {
+  private regexExpression: RegExp = /[\s|']-/;
 
-    private regexExpression:RegExp = /[\s|']-/ ;
+  parse(request: string): HttplyRequest {
+    if (this.canApply(request)) {
+      let parsedRequest = {
+        options: {},
+        url: "",
+        timestamp: new Date().getTime(),
+      };
+      if (this.hasParams(request)) {
+        this.preFilterRequest(request);
+        let params = request.split(this.regexExpression);
+        console.log(params);
+        params.forEach((element) => {
+          parsedRequest = { ...parsedRequest, ...this.handleParam(element) };
+        });
+      } else {
+        parsedRequest.url = request.split(" ")[1] || "";
+      }
+      parsedRequest.timestamp = new Date().getTime();
+      return parsedRequest as HttplyRequest;
+    } else {
+      throw new ParseError();
+    }
+  }
 
+  canApply(request: string): boolean {
+    return request.trim().startsWith("curl");
+  }
 
-    parse(request:string):HttplyRequest{
-        // la prima riga è sempre curl qualcosa
-        // la seconda devo controllare se c'è -X per leggere il tipo di richiesta http
-        // tutto il resto sono campi key value dell'header
-        // c'è da tener conto che devo ottenere i parametri anche se passo una richiesta con i parametri passati dopo il ?
-        let parsedRequest = {};
-        if (this.canApply(request)) {
-            parsedRequest['timestamp'] = new Date().getTime();  //da aggiungere sempre
-            parsedRequest['method'] = 'GET'
-            if(this.hasParams(request)){
-                this.preFilterRequest(request);
-                let params = request.split(this.regexExpression);
-                console.log(params);
-                params.forEach((element)=>{
-                    this.handleParam(parsedRequest,element)
-                });
-            }else{
-                parsedRequest['URL'] = request.split(" ")[1];
-            }
+  /**
+   * Check if there is some -Z -X -H -D params or we have an extended version
+   * @param request
+   */
+  hasParams(request: string): boolean {
+    return request.split(this.regexExpression).length != 1;
+  }
+
+  /**
+   * check if BASH or CMD
+   * @param request
+   */
+  preFilterRequest(request: string): void {
+    if (!request.includes("^"))
+      //Bash
+      request = request
+        .trim()
+        .replace(/[\r]/g, "")
+        .replace(/[\n]/g, "")
+        .replace(/[\\]/g, "")
+        .replace(/[']/g, "");
+    else {
+      //cmd
+      request = request
+        .trim()
+        .replace(/[\r]/g, "")
+        .replace(/[\n]/g, "")
+        .replace(/[\\]/g, "")
+        .replace(/[\^]/g, "")
+        .replace(/["]/g, "");
+    }
+  }
+
+  handleParam(param: string): HttplyRequest {
+    const options = { headers: [], method: "GET" } as HttplyRequest["options"] &
+      Required<{ headers }>;
+    let url = "";
+    let body: string | undefined;
+    let words = param.split(" ");
+    switch (param.trim().split(" ")[0]) {
+      case "X":
+      case "-request": {
+        options.method = words[1]
+          .replace("/", "")
+          .replace("^", "") as HttplyRequest["options"]["method"];
+        url = words[2];
+        break;
+      }
+      case "-header":
+      case "H": {
+        let aux = param
+          .replace(words[0] + " ", "")
+          .replace(":", "§")
+          .split("§");
+        options.headers[aux[0]] = aux[1].trim();
+        break;
+      }
+      case "d":
+      case "-data":
+      case "-data-raw": {
+        // has d flag and no X param so it's a  POST
+        options.method = "POST";
+
+        let data = {};
+        if (options.headers["Content-Type"] != "application/json") {
+          let aux = param.replace(words[0] + " ", "").split("&");
+          aux.forEach((element) => {
+            let el = element.replace(/["|']/g, "").split("=");
+            data[el[0]] = el[1].trim();
+          });
         } else {
-            throw new ParseError();
+          //parse the JSON string
+          let aux = param.replace(words[0] + " ", "");
+          data = JSON.parse(aux);
         }
-        return parsedRequest;
-    }
-
-
-    canApply(request:string):boolean {
-        // controllo semplicemente se contiene la keyword "curl", ripulisco da eventuali spazi all'inizio e alla fine
-        return request.trim().startsWith("curl");
-    }
-
-
-    hasParams(request:string):boolean{
-        //controllo se il comando copiato ha qualche parametro definito -Z -X -H -D (oppure nella versione estesa)
-        // altrimenti vuol dire che sta facendo una get con eventuali dati passati nel body
-        return request.split(this.regexExpression).length != 1;
-    }
-
-    preFilterRequest(request:string):void{
-        if(!request.includes('^'))
-            //curl Bash
-            request = request.trim().replace(/[\r]/g,"").replace(/[\n]/g,"").replace(/[\\]/g,"").replace(/[']/g,"");
-        else{
-            //curl cmd
-            // devo sostituire i doppi apici con i singoli apici
-            request = request.trim().replace(/[\r]/g,"").replace(/[\n]/g,"").replace(/[\\]/g,"").replace(/[\^]/g,"").replace(/["]/g,"");
+        body = JSON.stringify(data);
+        break;
+      }
+      default: {
+        if (param.includes("curl") && param.includes("http")) {
+          url = param.split(" ")[1];
         }
+        break;
+      }
     }
-
-    handleParam(json:{}, param:string):void{
-        let words = param.split(" ");
-        switch (param.trim().split(" ")[0]){
-            case 'X':
-            case '-request':{
-                json['method'] = words[1];
-                json['URL'] = words[2];
-                break;
-            }
-            case '-header':
-            case 'H':{
-                let aux = param.replace(words[0]+" ",'').replace(":","§").split('§');
-                json[aux[0]] = aux[1].trim()
-                break;
-            }
-            case 'd':
-            case '-data':
-            case '-data-raw':{
-                // se c'è il campo d nella richiesta curl e non c'è specificata l'opzione X
-                // allora sicuramente è una POST
-                json['method'] = 'POST';
-
-                let data = {}
-                if(json['Content-Type'] != 'application/json') {
-                    // elementi chiave valore
-                    let aux = param.replace(words[0] + " ", "").split("&");
-                    aux.forEach((element) => {
-                        let el = element.replace(/["|']/g, "").split("=");
-                        data[el[0]] = el[1].trim();
-                    })
-                }else{
-                    //parse diretto della stringa in json
-                    let aux = param.replace(words[0] + " ", "");
-                    data = JSON.parse(aux);
-                }
-                json['data'] = data;
-                break;
-            }
-            default: {
-                // questo perchè per come funziona il parser, se nella stessa stringa c'è sia curl che url, vuol dire che non
-                // era presente il parametro -X!
-                if(param.includes("curl") && param.includes("http")){
-                    json['URL'] = param.split(" ")[1];
-                }
-                break;
-            }
-        }
-    }
-    
+    return { options, url, body, timestamp: new Date().getTime() };
+  }
 }
