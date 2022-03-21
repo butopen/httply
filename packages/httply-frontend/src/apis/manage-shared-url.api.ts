@@ -3,6 +3,7 @@ import { updateHttpInputWithoutParsing } from '../stores/input.store';
 import { updateHttpRequestInformation, updateResponse, updateShareLink, updateWithNewRequest } from '../stores/view.store';
 import type { HttplyEvent } from '@butopen/httply-model';
 import { formatDate } from '../shared/time';
+import { FetchGenerator } from '@butopen/httply-plugins';
 
 export async function manageSharedUrl() {
   if (window.location.href.includes('/h/')) {
@@ -15,14 +16,7 @@ export async function manageSharedUrl() {
     updateHttpRequestInformation('Request Timestamp', formatDate(result.request.timestamp));
     updateHttpRequestInformation('Response Timestamp', formatDate(result.response.timestamp));
     updateHttpRequestInformation('Domain', result.domain);
-    updateHttpInputWithoutParsing(
-      `fetch("${result.request.url}", {
-    
-    ${JSON.stringify(result.request.options)}
-    
-    })`,
-      result.request
-    );
+    updateHttpInputWithoutParsing(new FetchGenerator().generate(result.request), result.request);
     updateShareLink(`https://httply.com/h/${meta}`);
   }
 }
