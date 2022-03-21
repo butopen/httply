@@ -1,5 +1,6 @@
 import type { HttplyRequest } from "@butopen/httply-model";
 import { HttplyParser, ParseError } from "./parser";
+import { HttplyMethod } from "@butopen/httply-model";
 
 export class CurlParser implements HttplyParser {
   private regexExpression: RegExp = /[\s|']-/;
@@ -11,15 +12,15 @@ export class CurlParser implements HttplyParser {
         url: "",
         timestamp: new Date().getTime(),
       };
+      const normalizedRequest = this.preFilterRequest(request);
       if (this.hasParams(request)) {
-        this.preFilterRequest(request);
-        let params = request.split(this.regexExpression);
+        let params = normalizedRequest.split(this.regexExpression);
         console.log(params);
         params.forEach((element) => {
           parsedRequest = { ...parsedRequest, ...this.handleParam(element) };
         });
       } else {
-        parsedRequest.url = request.split(" ")[1] || "";
+        parsedRequest.url = normalizedRequest.split(" ")[1] || "";
       }
       parsedRequest.timestamp = new Date().getTime();
       return parsedRequest as HttplyRequest;
@@ -44,10 +45,11 @@ export class CurlParser implements HttplyParser {
    * check if BASH or CMD
    * @param request
    */
-  preFilterRequest(request: string): void {
+  preFilterRequest(request: string): string {
+    let normalizedRequest = request;
     if (!request.includes("^"))
       //Bash
-      request = request
+      normalizedRequest = request
         .trim()
         .replace(/[\r]/g, "")
         .replace(/[\n]/g, "")
@@ -55,7 +57,7 @@ export class CurlParser implements HttplyParser {
         .replace(/[']/g, "");
     else {
       //cmd
-      request = request
+      normalizedRequest = request
         .trim()
         .replace(/[\r]/g, "")
         .replace(/[\n]/g, "")
@@ -63,6 +65,7 @@ export class CurlParser implements HttplyParser {
         .replace(/[\^]/g, "")
         .replace(/["]/g, "");
     }
+    return normalizedRequest;
   }
 
   handleParam(param: string): HttplyRequest {
@@ -74,9 +77,7 @@ export class CurlParser implements HttplyParser {
     switch (param.trim().split(" ")[0]) {
       case "X":
       case "-request": {
-        options.method = words[1]
-          .replace("/", "")
-          .replace("^", "") as HttplyRequest["options"]["method"];
+        options.method = words[1] as HttplyMethod;
         url = words[2];
         break;
       }
