@@ -1,20 +1,25 @@
+import {CurlGenerator} from "../../src/generator/curl.generator";
 import {CurlParser} from "../../src/parser/curl.parser";
 
-test("test curl bash ", async () => {
-  const h = new CurlParser();
-  const result = h.parse("curl -X POST/ https://ciao.com");
-  expect(result.options.method).toBe("POST");
+test("test curl generator 1", async ()=>{
+   const g = new CurlGenerator();
+   const h = new CurlParser();
+   const result = g.generate(h.parse(`curl 'https://dday.imgix.net/system/uploads/video/screenshot/388/Il_mio_post_6_.png?ar=27%3A21&fit=crop&auto=format%2Ccompress&w=100&s=0993de70debecd580cf3da30a29b53ee' \
+  -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="99"' \
+  -H 'Referer: https://dday.it/' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36' \
+  -H 'sec-ch-ua-platform: "Linux"' \
+  --compressed`));
+   console.log(result);
+   expect(result.includes("-H")).toBe(true)
 });
 
-test("test curl cmd ", async () => {
-  const h = new CurlParser();
-  const result = h.parse("curl -X POST^ https://ciao.com");
-  expect(result.options.method).toBe("POST");
-});
 
-test("test curl complex command 1 ", async () => {
-  const h = new CurlParser();
-  const result = h.parse(`curl "https://github.com/commits/badges" ^
+test("test curl generator 1", async ()=>{
+   const g = new CurlGenerator();
+   const h = new CurlParser();
+   const result = g.generate(h.parse(`curl "https://github.com/commits/badges" ^
   -H "authority: github.com" ^
   -H "pragma: no-cache" ^
   -H "cache-control: no-cache" ^
@@ -91,25 +96,7 @@ s^
 ------WebKitFormBoundary7fLB1AQP6tPVjfA3--^
 
 ^" ^
-  --compressed`);
-  expect(result.options.method).toBe("POST");
-  expect(result.options.headers!["authority"]).toBe("github.com");
-  expect(result.options.headers!["referer"]).toBe(
-    "https://github.com/butopen/httply/pull/1"
-  );
+  --compressed`));
+   console.log(result);
+   expect(result.includes("-d")).toBe(true)
 });
-
-test("test curl complex command 2 ", async () => {
-  const h = new CurlParser();
-  const result = h.parse(`curl 'https://dday.imgix.net/system/uploads/video/screenshot/388/Il_mio_post_6_.png?ar=27%3A21&fit=crop&auto=format%2Ccompress&w=100&s=0993de70debecd580cf3da30a29b53ee' \\
-  -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="99"' \\
-  -H 'Referer: https://dday.it/' \\
-  -H 'sec-ch-ua-mobile: ?0' \\
-  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36' \\
-  -H 'sec-ch-ua-platform: "Linux"' \\
-  --compressed`);
-  expect(result.options.method).toBe("GET");
-  expect(result.options.headers!["sec-ch-ua-platform"]).toBe('"Linux"');
-  expect(result.options.headers!["Referer"]).toBe("https://dday.it/");
-});
-

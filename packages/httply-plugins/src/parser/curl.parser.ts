@@ -9,14 +9,14 @@ export class CurlParser implements HttplyParser {
     parse(request: string): HttplyRequest {
         if (this.canApply(request)) {
             let parsedRequest = {
-                options: {headers: [], method: "GET"} as HttplyRequest["options"],
+                options: {headers: {}, method: "GET"} as HttplyRequest["options"],
                 url: "",
             } as HttplyRequest;
 
             const normalizedRequest = this.preFilterRequest(request);
             if (this.hasParams(normalizedRequest)) {
                 let params = normalizedRequest.split(this.regexExpression);
-                console.log(params)
+                // console.log(params)
                 params.forEach((element) => {
                     this.handleParam(element,parsedRequest) ;
                 });
@@ -88,12 +88,12 @@ export class CurlParser implements HttplyParser {
             }
             case "-header":
             case "H": {
-                let aux = param
+                const [headerKey,...headerValues] = param
                     .replace(words[0] + " ", "")
-                    .replace(":", "§")
-                    .split("§");
+                    .split(":");
+                let headerValue = headerValues.join(":")
 
-                httpRequest.options.headers![String(aux[0])] = aux[1].trim();
+                httpRequest.options.headers![headerKey] = headerValue.trim();
                 break;
             }
             case "d":
@@ -129,7 +129,6 @@ export class CurlParser implements HttplyParser {
                     url = param.split(" ")[1];
                     httpRequest.url  = url;
                 }
-                // @ts-ignore
                 if (!(httpRequest.body == undefined) && (httpRequest.body.includes('"-data-raw"}'))){
                     //the following param string overwrite body content
                     httpRequest.body = param;
