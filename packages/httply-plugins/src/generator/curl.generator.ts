@@ -23,15 +23,13 @@ export class CurlGenerator implements HttplyGenerator {
         // insert URL
         curlCommand.push(`${request.url}`);
 
+        //handle parameters
         if(request.options.headers) {
-            //handle parameters
             for (let headerKey in request.options.headers) {
                 let headerValue = request.options.headers[headerKey];
                 curlCommand.push(`-H '${headerKey}:${headerValue}'`)
             }
         }
-
-
 
         //handle data
         if(request.body){
