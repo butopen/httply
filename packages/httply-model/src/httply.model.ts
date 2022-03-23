@@ -30,10 +30,10 @@ export type HttplyRequest = {
     method: HttplyMethod;
     referrer?: string;
     headers?:
-      | {
+       {
           referer?: string;
           Referer?: string;
-        }
+       }
       | { [header: string]: string };
   };
   body?: string;
