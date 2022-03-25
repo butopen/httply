@@ -1,4 +1,16 @@
-import {CurlParser} from "../../src/parser/curl.parser";
+import { CurlParser } from "../../src/parser/curl.parser";
+
+test("should keep double wuote on header value", async () => {
+  const result2 = new CurlParser().parse(`curl u -H 'test:"x"'`);
+  expect(result2.options.headers!["test"]).toBe(`"x"`);
+  const result = new CurlParser().parse(`curl u -H "test:^\\^"x^\\^""`);
+  expect(result.options.headers!["test"]).toBe(`"x"`);
+});
+test("should keep dash on header value", async () => {
+  const result2 = new CurlParser().parse(`curl u -H 'test:"x -x"'`);
+});
+
+test("parse test", async () => {});
 
 test("test curl bash ", async () => {
   const h = new CurlParser();
@@ -101,7 +113,8 @@ s^
 
 test("test curl complex command 2 ", async () => {
   const h = new CurlParser();
-  const result = h.parse(`curl 'https://dday.imgix.net/system/uploads/video/screenshot/388/Il_mio_post_6_.png?ar=27%3A21&fit=crop&auto=format%2Ccompress&w=100&s=0993de70debecd580cf3da30a29b53ee' \\
+  const result =
+    h.parse(`curl 'https://dday.imgix.net/system/uploads/video/screenshot/388/Il_mio_post_6_.png?ar=27%3A21&fit=crop&auto=format%2Ccompress&w=100&s=0993de70debecd580cf3da30a29b53ee' \\
   -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="99"' \\
   -H 'Referer: https://dday.it/' \\
   -H 'sec-ch-ua-mobile: ?0' \\
@@ -112,4 +125,3 @@ test("test curl complex command 2 ", async () => {
   expect(result.options.headers!["sec-ch-ua-platform"]).toBe('"Linux"');
   expect(result.options.headers!["Referer"]).toBe("https://dday.it/");
 });
-

@@ -1,25 +1,44 @@
-import {CurlGenerator} from "../../src/generator/curl.generator";
-import {CurlParser} from "../../src/parser/curl.parser";
+import { HttplyRequest } from "@butopen/httply-model";
+import { CurlGenerator } from "../../src/generator/curl.generator";
+import { CurlParser } from "../../src/parser/curl.parser";
 
-test("test curl generator 1", async ()=>{
-   const g = new CurlGenerator();
-   const h = new CurlParser();
-   const result = g.generate(h.parse(`curl 'https://dday.imgix.net/system/uploads/video/screenshot/388/Il_mio_post_6_.png?ar=27%3A21&fit=crop&auto=format%2Ccompress&w=100&s=0993de70debecd580cf3da30a29b53ee' \
+test("test curl generator 1 using curl bash ", async () => {
+  const g = new CurlGenerator();
+  const h = new CurlParser();
+  const result = g.generate(
+    h.parse(`curl 'https://dday.imgix.net/system/uploads/video/screenshot/388/Il_mio_post_6_.png?ar=27%3A21&fit=crop&auto=format%2Ccompress&w=100&s=0993de70debecd580cf3da30a29b53ee' \
   -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="99"' \
   -H 'Referer: https://dday.it/' \
   -H 'sec-ch-ua-mobile: ?0' \
   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36' \
   -H 'sec-ch-ua-platform: "Linux"' \
-  --compressed`));
-   console.log(result);
-   expect(result.includes("-H")).toBe(true)
+  --compressed`)
+  );
+  console.log(result);
+  expect(result.includes("-H")).toBe(true);
 });
-
-
-test("test curl generator 1", async ()=>{
-   const g = new CurlGenerator();
-   const h = new CurlParser();
-   const result = g.generate(h.parse(`curl "https://github.com/commits/badges" ^
+test("test double quote header value", async () => {
+  const r: HttplyRequest = {
+    url: "u",
+    options: {
+      headers: {
+        test: `"x"`,
+      },
+      method: "GET",
+    },
+    timestamp: 1,
+  };
+  const responseCmd = new CurlGenerator().generate(r);
+  const responseBash = new CurlGenerator({ target: "bash" }).generate(r);
+  console.log("r: ", responseCmd, responseBash);
+  expect(responseCmd).toBe(`curl u -H "test:^\\^"x^\\^""`);
+  expect(responseBash).toBe(`curl u -H 'test:"x"'`);
+});
+test("test curl generator 1 using curl cmd", async () => {
+  const g = new CurlGenerator();
+  const h = new CurlParser();
+  const result = g.generate(
+    h.parse(`curl "https://github.com/commits/badges" ^
   -H "authority: github.com" ^
   -H "pragma: no-cache" ^
   -H "cache-control: no-cache" ^
@@ -96,7 +115,8 @@ s^
 ------WebKitFormBoundary7fLB1AQP6tPVjfA3--^
 
 ^" ^
-  --compressed`));
-   console.log(result);
-   expect(result.includes("-d")).toBe(true)
+  --compressed`)
+  );
+  console.log(result);
+  expect(result.includes("-d")).toBe(true);
 });
