@@ -2,13 +2,10 @@ import type { HttplyRequest } from "@butopen/httply-model";
 import { HttplyMethod } from "@butopen/httply-model";
 import { HttplyParser, ParseError } from "./parser";
 
-
 export class CurlParser implements HttplyParser {
-
-  private regexExpression:RegExp = /[\s]+/;
+  private regexExpression: RegExp = /[\s]+/;
   private curlParamDelimiter: `'` | `"`;
   private shellType: "bash" | "cmd";
-
 
   parse(request: string): HttplyRequest {
     if (this.canApply(request)) {
@@ -22,14 +19,14 @@ export class CurlParser implements HttplyParser {
       console.log(normalizedRequest);
 
       const tokenizedRequest = this.tokenizeRequest(normalizedRequest);
-      console.log(tokenizedRequest)
+      console.log(tokenizedRequest);
       if (this.hasParams(tokenizedRequest)) {
-        tokenizedRequest.forEach((element)=>{
-          this.handleParam(element,parsedRequest);
-        })
-
+        tokenizedRequest.forEach((element) => {
+          this.handleParam(element, parsedRequest);
+        });
       } else {
-        parsedRequest.url = normalizedRequest.split(this.regexExpression)[1] || "";
+        parsedRequest.url =
+          normalizedRequest.split(this.regexExpression)[1] || "";
       }
       parsedRequest.timestamp = new Date().getTime();
       return parsedRequest;
@@ -37,7 +34,6 @@ export class CurlParser implements HttplyParser {
       throw new ParseError();
     }
   }
-
 
   /**
    * Check if param request starts with curl keyword
@@ -55,7 +51,6 @@ export class CurlParser implements HttplyParser {
     return request.length > 2;
   }
 
-
   /**
    * cleaning request from escape's keywords
    * @param request
@@ -71,15 +66,14 @@ export class CurlParser implements HttplyParser {
         .replace(/[\n]/g, "")
         .replace(/[\\]/g, "");
       this.curlParamDelimiter = "'";
-
     } else {
       //cmd
       this.shellType = "cmd";
       normalizedRequest = request
         .trim()
         .replace(/[\r]/g, "")
-        .replace(/[\n]/g, "")
-        // .replace(/[ \^]/g, "");
+        .replace(/[\n]/g, "");
+      // .replace(/[ \^]/g, "");
       this.curlParamDelimiter = '"';
     }
 
@@ -87,25 +81,27 @@ export class CurlParser implements HttplyParser {
     return normalizedRequest;
   }
 
-
   /**
    * given a prefiltered curl request, splits it in substrings
    * @param request: normalizedRequest
    */
-  tokenizeRequest(request:string):string[] {
-
+  tokenizeRequest(request: string): string[] {
     const wordsFromRequest = request.split(this.regexExpression); // split by at least one space
-    let captureParam:boolean = false; //if true, current word will be concat with the previous
-    let tokenizedRequest:string[] = [];
+    let captureParam: boolean = false; //if true, current word will be concat with the previous
+    let tokenizedRequest: string[] = [];
 
-    wordsFromRequest.forEach((element,index)=>{
-      if(!captureParam) {
+    wordsFromRequest.forEach((element, index) => {
+      if (!captureParam) {
         //allora faccio cose
         switch (element) {
           case "-X":
           case "--request": {
-            tokenizedRequest.push(wordsFromRequest[index].trim().concat(" " + wordsFromRequest[index + 1].trim()));
-            wordsFromRequest.splice(index+1, 1);
+            tokenizedRequest.push(
+              wordsFromRequest[index]
+                .trim()
+                .concat(" " + wordsFromRequest[index + 1].trim())
+            );
+            wordsFromRequest.splice(index + 1, 1);
             break;
           }
 
@@ -119,25 +115,39 @@ export class CurlParser implements HttplyParser {
             break;
           }
           default: {
-            if(!(element =="^"))
-              tokenizedRequest.push(element);
+            if (!(element == "^")) tokenizedRequest.push(element);
             break;
           }
         }
-      }else{
+      } else {
         //  concatenate with previous word
-        tokenizedRequest[tokenizedRequest.length-1] = tokenizedRequest[tokenizedRequest.length-1].concat(" "+element);
+        tokenizedRequest[tokenizedRequest.length - 1] = tokenizedRequest[
+          tokenizedRequest.length - 1
+        ].concat(" " + element);
         //  concateno e basta. Al massimo rimetto a false capture Param!
 
-        if(element.startsWith(this.curlParamDelimiter) && !(element.startsWith(`\^\\^"`))){
+        if (
+          element.startsWith(this.curlParamDelimiter) &&
+          !element.startsWith(`\^\\^"`)
+        ) {
           //remove first quote
-          tokenizedRequest[tokenizedRequest.length-1] = tokenizedRequest[tokenizedRequest.length-1].replace(new RegExp(this.curlParamDelimiter),"");
+          tokenizedRequest[tokenizedRequest.length - 1] = tokenizedRequest[
+            tokenizedRequest.length - 1
+          ].replace(new RegExp(this.curlParamDelimiter), "");
         }
 
-        if(element.endsWith(this.curlParamDelimiter) && !(element.endsWith(`\^\\^"`))) {
+        if (
+          element.endsWith(this.curlParamDelimiter) &&
+          !element.endsWith(`\^\\^"`)
+        ) {
           captureParam = false;
-            //remove end quote
-            tokenizedRequest[tokenizedRequest.length-1] = tokenizedRequest[tokenizedRequest.length-1].substring(0,tokenizedRequest[tokenizedRequest.length-1].length-1);
+          //remove end quote
+          tokenizedRequest[tokenizedRequest.length - 1] = tokenizedRequest[
+            tokenizedRequest.length - 1
+          ].substring(
+            0,
+            tokenizedRequest[tokenizedRequest.length - 1].length - 1
+          );
         }
       }
     });
@@ -157,14 +167,13 @@ export class CurlParser implements HttplyParser {
       }
       case "--header":
       case "-H": {
-
         const [headerKey, ...headerValues] = param
           .replace(words[0] + " ", "")
           .split(":");
         let headerValue = headerValues.join(":");
 
-        if(this.shellType == "cmd"){
-          headerValue = headerValue.replace(/\^\\\^/g,"");
+        if (this.shellType == "cmd") {
+          headerValue = headerValue.replace(/\^\\\^/g, "");
         }
 
         httpRequest.options.headers![headerKey] = headerValue.trim();
@@ -178,10 +187,11 @@ export class CurlParser implements HttplyParser {
         let data = {};
         param = param.replace(words[0] + " ", "");
 
-        if (httpRequest.options.headers!["Content-Type"] != "application/json") {
-
-          if(this.shellType == "cmd"){
-            param = param.replace(/\^\\\^/g,"");
+        if (
+          httpRequest.options.headers!["Content-Type"] != "application/json"
+        ) {
+          if (this.shellType == "cmd") {
+            param = param.replace(/\^\\\^/g, "");
           }
 
           let aux = param.split("&");
@@ -191,7 +201,7 @@ export class CurlParser implements HttplyParser {
               data[el[0]] = el[1].trim();
             });
           } else {
-            data["data"] = param;
+            data = param;
           }
         } else {
           //parse the JSON string
@@ -202,8 +212,11 @@ export class CurlParser implements HttplyParser {
         break;
       }
       default: {
-        if (param.startsWith(this.curlParamDelimiter + "http") || (param != "--compressed") ) {
-          httpRequest.url = param.replace(/["|']/g,"");
+        if (
+          param.startsWith(this.curlParamDelimiter + "http") ||
+          param != "--compressed"
+        ) {
+          httpRequest.url = param.replace(/["|']/g, "");
         }
         break;
       }

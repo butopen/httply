@@ -30,7 +30,9 @@ export class CurlGenerator implements HttplyGenerator {
     }
 
     // insert URL
-    curlCommand.push(`${request.url}`);
+    curlCommand.push(
+      `${this.paramDelimiter}${request.url}${this.paramDelimiter}`
+    );
 
     //handle parameters
     if (request.options.headers) {

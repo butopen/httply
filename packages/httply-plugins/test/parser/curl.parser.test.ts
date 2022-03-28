@@ -8,19 +8,23 @@ test("should keep double wuote on header value", async () => {
 });
 
 test("curl bash: should keep dash on header value", async () => {
-  const result = new CurlParser().parse(`curl "https://ciao.com" -H 'test:"x -X"'`);
-  console.log(result)
+  const result = new CurlParser().parse(
+    `curl "https://ciao.com" -H 'test:"x -X"'`
+  );
+  console.log(result);
+  expect(result.url).toBe("https://ciao.com");
+  expect(result.options.headers!["test"]).toBe(`"x -X"`);
 });
 
 test("curl cmd: should keep dash on header value", async () => {
-  const result = new CurlParser().parse(`curl -X POST u -H "test:^\\^"x -X^\\^"" -H "ciao:^\\^"Andrea^\\^"  andrea"`);
-  console.log(result)
+  const result = new CurlParser().parse(
+    `curl -X POST u -H "test:^\\^"x -X^\\^"" -H "ciao:^\\^"Andrea^\\^"  andrea"`
+  );
+  console.log(result);
+  expect(result.url).toBe("u");
+  expect(result.options.headers!["test"]).toBe(`"x -X"`);
+  expect(result.options.headers!["ciao"]).toBe(`"Andrea" andrea`);
 });
-
-
-
-
-
 
 test("test curl complex command 1 ", async () => {
   const h = new CurlParser();
@@ -107,7 +111,7 @@ s^
   expect(result.options.headers!["referer"]).toBe(
     "https://github.com/butopen/httply/pull/1"
   );
-  console.log(result)
+  console.log(result);
 });
 
 test("test curl complex command 2 ", async () => {
@@ -124,4 +128,26 @@ test("test curl complex command 2 ", async () => {
   expect(result.options.method).toBe("GET");
   expect(result.options.headers!["sec-ch-ua-platform"]).toBe('"Linux"');
   expect(result.options.headers!["Referer"]).toBe("https://dday.it/");
+});
+
+test("test POST reuqest with body", async () => {
+  /*
+  curl "https://us6ikryakb-dsn.algolia.net/1/indexes/prod_c_900_categories/query?x-algolia-agent=Algolia^%^20for^%^20JavaScript^%^20(4.12.0)^%^3B^%^20Browser^%^20(lite)^%^3B^%^20instantsearch.js^%^20(4.37.2)^%^3B^%^20Vue^%^20(2.6.14)^%^3B^%^20Vue^%^20InstantSearch^%^20(3.8.1)^%^3B^%^20JS^%^20Helper^%^20(3.7.0)&x-algolia-api-key=2ec513d5d96ad975110cc68022f3627f&x-algolia-application-id=US6IKRYAKB" ^
+  -H "Connection: keep-alive" ^
+  -H "Pragma: no-cache" ^
+  -H "Cache-Control: no-cache" ^
+  -H "sec-ch-ua: ^\^" Not A;Brand^\^";v=^\^"99^\^", ^\^"Chromium^\^";v=^\^"99^\^", ^\^"Google Chrome^\^";v=^\^"99^\^"" ^
+  -H "sec-ch-ua-mobile: ?0" ^
+  -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36" ^
+  -H "sec-ch-ua-platform: ^\^"Windows^\^"" ^
+  -H "content-type: application/x-www-form-urlencoded" ^
+  -H "Accept: * /*" ^
+  -H "Origin: https://www.easycoop.com" ^
+  -H "Sec-Fetch-Site: cross-site" ^
+  -H "Sec-Fetch-Mode: cors" ^
+  -H "Sec-Fetch-Dest: empty" ^
+  -H "Accept-Language: it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7" ^
+  --data-raw "^{^\^"query^\^":^\^"^\^",^\^"attributesToRetrieve^\^":^[^\^"name^\^",^\^"url^\^",^\^"level^\^"^],^\^"facetFilters^\^":^[^[^\^"path:pasta, pane e farine^\^"^]^]^}" ^
+  --compressed
+  */
 });
