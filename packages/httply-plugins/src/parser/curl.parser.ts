@@ -186,29 +186,22 @@ export class CurlParser implements HttplyParser {
         httpRequest.options.method = "POST";
         let data = {};
         param = param.replace(words[0] + " ", "");
-
-        if (
-          httpRequest.options.headers!["Content-Type"] != "application/json"
-        ) {
-          if (this.shellType == "cmd") {
-            param = param.replace(/\^\\\^/g, "");
-          }
-
-          let aux = param.split("&");
-          if (aux.length != 1) {
-            aux.forEach((element) => {
-              let el = element.replace(/["|']/g, "").split("=");
-              data[el[0]] = el[1].trim();
-            });
-          } else {
-            data = param;
-          }
-        } else {
-          //parse the JSON string
-          let aux = param.replace(words[0] + " ", "");
-          data = JSON.parse(aux);
+        //
+        // if (httpRequest.options.headers!["Content-Type"] != "application/json") {
+        if (this.shellType == "cmd") {
+          console.log("before ",param);
+          param = param.replace(/\^\\\^/g, "");
+          console.log("after ",param);
         }
-        httpRequest.body = JSON.stringify(data);
+        httpRequest.body = param;
+        //   data = param;
+        //   // }
+        // } else {
+        //   //parse the JSON string
+        //   let aux = param.replace(words[0] + " ", "");
+        //   data = JSON.parse(aux);
+        // }
+        // httpRequest.body = JSON.stringify(data);
         break;
       }
       default: {
