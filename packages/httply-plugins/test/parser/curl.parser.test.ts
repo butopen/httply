@@ -12,30 +12,9 @@ test("curl bash: should keep dash on header value", async () => {
 });
 
 test("curl cmd: should keep dash on header value", async () => {
-  const result = new CurlParser().parse(`curl -X POST u -H "test:^\\^"x -X^\\^" sdlnclw"`);
+  const result = new CurlParser().parse(`curl -X POST u -H "test:^\\^"x -X^\\^"" -H "ciao:^\\^"Giada^\\^"  giada"`);
 });
 
-
-
-
-test("parse test", async () => {
-  //TODO
-});
-
-
-
-
-// test("test curl bash ", async () => {
-//   const h = new CurlParser();
-//   const result = h.parse("curl -X POST/ https://ciao.com");
-//   expect(result.options.method).toBe("POST");
-// });
-//
-// test("test curl cmd ", async () => {
-//   const h = new CurlParser();
-//   const result = h.parse("curl -X POST^ https://ciao.com");
-//   expect(result.options.method).toBe("POST");
-// });
 
 
 
@@ -121,24 +100,26 @@ s^
 
 ^" ^
   --compressed`);
-  // expect(result.options.method).toBe("POST");
-  // expect(result.options.headers!["authority"]).toBe("github.com");
-  // expect(result.options.headers!["referer"]).toBe(
-  //   "https://github.com/butopen/httply/pull/1"
-  // );
+  expect(result.options.method).toBe("POST");
+  expect(result.options.headers!["authority"]).toBe("github.com");
+  expect(result.options.headers!["referer"]).toBe(
+    "https://github.com/butopen/httply/pull/1"
+  );
+  console.log(result)
 });
 
 test("test curl complex command 2 ", async () => {
   const h = new CurlParser();
   const result =
-    h.parse(`curl 'https://dday.imgix.net/system/uploads/video/screenshot/388/Il_mio_post_6_.png?ar=27%3A21&fit=crop&auto=format%2Ccompress&w=100&s=0993de70debecd580cf3da30a29b53ee' \\
+    h.parse(`curl https://dday.imgix.net/system/uploads/video/screenshot/388/Il_mio_post_6_.png?ar=27%3A21&fit=crop&auto=format%2Ccompress&w=100&s=0993de70debecd580cf3da30a29b53ee \\
   -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="99"' \\
   -H 'Referer: https://dday.it/' \\
   -H 'sec-ch-ua-mobile: ?0' \\
   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36' \\
   -H 'sec-ch-ua-platform: "Linux"' \\
   --compressed`);
-  // expect(result.options.method).toBe("GET");
-  // expect(result.options.headers!["sec-ch-ua-platform"]).toBe('"Linux"');
-  // expect(result.options.headers!["Referer"]).toBe("https://dday.it/");
+  // console.log(result)
+  expect(result.options.method).toBe("GET");
+  expect(result.options.headers!["sec-ch-ua-platform"]).toBe('"Linux"');
+  expect(result.options.headers!["Referer"]).toBe("https://dday.it/");
 });

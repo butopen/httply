@@ -17,6 +17,7 @@ test("test curl generator 1 using curl bash ", async () => {
   console.log(result);
   expect(result.includes("-H")).toBe(true);
 });
+
 test("test double quote header value", async () => {
   const r: HttplyRequest = {
     url: "u",
@@ -30,12 +31,14 @@ test("test double quote header value", async () => {
   };
   const responseCmd = new CurlGenerator().generate(r);
   const responseBash = new CurlGenerator({ target: "bash" }).generate(r);
-  console.log("r: ", responseCmd, responseBash);
+  console.log("result cmd: ", responseCmd,"; result bash ", responseBash);
   expect(responseCmd).toBe(`curl u -H "test:^\\^"x^\\^""`);
   expect(responseBash).toBe(`curl u -H 'test:"x"'`);
 });
+
+
 test("test curl generator 1 using curl cmd", async () => {
-  const g = new CurlGenerator();
+  const g = new CurlGenerator({ target: "bash" });
   const h = new CurlParser();
   const result = g.generate(
     h.parse(`curl "https://github.com/commits/badges" ^
