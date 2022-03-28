@@ -5,7 +5,10 @@ import { copyToClipboard } from '../shared/clipboard.util';
 import { updateNotification } from '../components/notification/notification.store';
 
 export async function play(request: HttplyRequest, domain: string) {
-  const { url, options } = request;
+  const { url, options, body } = request;
+  if (body) {
+    options.body = body;
+  }
   const response = await playRequest(url, options);
   updateResponse(response);
   const savedResponse = await saveRequest(request, response as HttplyResponse, domain);

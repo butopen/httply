@@ -31,11 +31,10 @@ test("test double quote header value", async () => {
   };
   const responseCmd = new CurlGenerator().generate(r);
   const responseBash = new CurlGenerator({ target: "bash" }).generate(r);
-  console.log("result cmd: ", responseCmd,"; result bash ", responseBash);
-  expect(responseCmd).toBe(`curl u -H "test:^\\^"x^\\^""`);
-  expect(responseBash).toBe(`curl u -H 'test:"x"'`);
+  console.log("result cmd: ", responseCmd, "; result bash ", responseBash);
+  expect(responseCmd).toBe(`curl "u" -H "test:^\\^"x^\\^""`);
+  expect(responseBash).toBe(`curl 'u' -H 'test:"x"'`);
 });
-
 
 test("test curl generator 1 using curl cmd", async () => {
   const g = new CurlGenerator({ target: "bash" });

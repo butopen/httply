@@ -29,11 +29,12 @@ export type HttplyRequest = {
   options: {
     method: HttplyMethod;
     referrer?: string;
+    body?: any;
     headers?:
-       {
+      | {
           referer?: string;
           Referer?: string;
-       }
+        }
       | { [header: string]: string };
   };
   body?: string;
