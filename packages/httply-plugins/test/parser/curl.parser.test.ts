@@ -130,24 +130,51 @@ test("test curl complex command 2 ", async () => {
   expect(result.options.headers!["Referer"]).toBe("https://dday.it/");
 });
 
-test("test POST reuqest with body", async () => {
-  /*
+test("test curl-cmd POST reuqest with body", async () => {
+  const result = new CurlParser().parse(`
   curl "https://us6ikryakb-dsn.algolia.net/1/indexes/prod_c_900_categories/query?x-algolia-agent=Algolia^%^20for^%^20JavaScript^%^20(4.12.0)^%^3B^%^20Browser^%^20(lite)^%^3B^%^20instantsearch.js^%^20(4.37.2)^%^3B^%^20Vue^%^20(2.6.14)^%^3B^%^20Vue^%^20InstantSearch^%^20(3.8.1)^%^3B^%^20JS^%^20Helper^%^20(3.7.0)&x-algolia-api-key=2ec513d5d96ad975110cc68022f3627f&x-algolia-application-id=US6IKRYAKB" ^
   -H "Connection: keep-alive" ^
   -H "Pragma: no-cache" ^
   -H "Cache-Control: no-cache" ^
-  -H "sec-ch-ua: ^\^" Not A;Brand^\^";v=^\^"99^\^", ^\^"Chromium^\^";v=^\^"99^\^", ^\^"Google Chrome^\^";v=^\^"99^\^"" ^
+  -H "sec-ch-ua: ^\\^" Not A;Brand^\\^";v=^\\^"99^\\^", ^\\^"Chromium^\\^";v=^\\^"99^\\^", ^\\^"Google Chrome^\\^";v=^\\^"99^\\^"" ^
   -H "sec-ch-ua-mobile: ?0" ^
   -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36" ^
-  -H "sec-ch-ua-platform: ^\^"Windows^\^"" ^
+  -H "sec-ch-ua-platform: ^\\^"Windows^\\^"" ^
   -H "content-type: application/x-www-form-urlencoded" ^
-  -H "Accept: * /*" ^
+  -H "Accept: */*" ^
   -H "Origin: https://www.easycoop.com" ^
   -H "Sec-Fetch-Site: cross-site" ^
   -H "Sec-Fetch-Mode: cors" ^
   -H "Sec-Fetch-Dest: empty" ^
   -H "Accept-Language: it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7" ^
-  --data-raw "^{^\^"query^\^":^\^"^\^",^\^"attributesToRetrieve^\^":^[^\^"name^\^",^\^"url^\^",^\^"level^\^"^],^\^"facetFilters^\^":^[^[^\^"path:pasta, pane e farine^\^"^]^]^}" ^
+  --data-raw "{^\\^"query^\\^":^\\^"^\\^",^\^"attributesToRetrieve^\^":^[^\^"name^\^",^\^"url^\^",^\^"level^\^"^],^\^"facetFilters^\^":^[^[^\^"path:pasta, pane e farine^\^"^]^]^}" ^
   --compressed
-  */
+  `);
+  console.log(result)
 });
+
+test("",async ()=>{
+  const result = new CurlParser().parse(`curl 'https://substrate.office.com/search/api/v1/events?scenario=msb.ux.webserp' \\
+  -H 'Accept: application/json' \\
+  -H 'Accept-Language: it,it-IT;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6' \\
+  -H 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJub25jZSI6ImpOUmM3S1RUZUVmRW55Y2VyQ1ljcWN2UUpjSGdXVWJGOVVkdnhsaV94emMiLCJhbGciOiJSUzI1NiIsIng1dCI6ImpTMVhvMU9XRGpfNTJ2YndHTmd2UU8yVnpNYyIsImtpZCI6ImpTMVhvMU9XRGpfNTJ2YndHTmd2UU8yVnpNYyJ9.eyJhdWQiOiJodHRwczovL3N1YnN0cmF0ZS5vZmZpY2UuY29tL3NlYXJjaCIsImlzcyI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0LzA2N2U3ZDIwLWU3MGYtNDJjNi1hZTEwLThiMDdlOGM0YTAwMy8iLCJpYXQiOjE2NDg0NjAxOTMsIm5iZiI6MTY0ODQ2MDE5MywiZXhwIjoxNjQ4NDY1NzUwLCJhY2N0IjowLCJhY3IiOiIxIiwiYWlvIjoiQVRRQXkvOFRBQUFBd3lnbmxlNlo1N2U4MHJMTFVxdUg0YVZTUkU0eDJaRVBCQmpJcVJwLzJUdHR4RjdNWkIyMkU1c2JDMWVhWTg4RSIsImFtciI6WyJwd2QiXSwiYXBwaWQiOiI5ZWExYWQ3OS1mZGI2LTRmOWEtOGJjMy0yYjcwZjk2ZTM0YzciLCJhcHBpZGFjciI6IjIiLCJmYW1pbHlfbmFtZSI6IkJhbGRpbmVsbGkiLCJnaXZlbl9uYW1lIjoiQW5kcmVhIiwiaXBhZGRyIjoiNS4xNzkuMTUzLjEyMyIsIm5hbWUiOiJBbmRyZWEgQmFsZGluZWxsaSIsIm9pZCI6Ijg2NTFiOWIxLTczYmUtNDZlMy05YThkLWRjYzc5MTM1YTU4NCIsInB1aWQiOiIxMDAzN0ZGRUE0RjVDMzJDIiwicmgiOiIwLkFYTUFJSDEtQmdfbnhrS3VFSXNINk1TZ0ExZUhxR2FNSlhKTWlUdy1pLTFOYUpsekFGNC4iLCJzY3AiOiJTdWJzdHJhdGVTZWFyY2gtSW50ZXJuYWwuUmVhZFdyaXRlIiwic3ViIjoieGdDVHh1SmhYLTN1aTJXYU5SbU1UVmI1YllaWjJjZ3AwSVFQYlBPZ21jZyIsInRpZCI6IjA2N2U3ZDIwLWU3MGYtNDJjNi1hZTEwLThiMDdlOGM0YTAwMyIsInVuaXF1ZV9uYW1lIjoiYW5kcmVhLmJhbGRpbmVsbGlAc3R1ZGVudGkudW5pcGcuaXQiLCJ1cG4iOiJhbmRyZWEuYmFsZGluZWxsaUBzdHVkZW50aS51bmlwZy5pdCIsInV0aSI6IlA2OEJmVDNNV2tlbVhTUHE4X004QUEiLCJ2ZXIiOiIxLjAifQ.U2oOs9aAc4pGKVdvQof8xByj_iQwwA33tqHzSOWdY0YPK4DPGEJ8MLFA1pBu8sIuNNf2lIe7AiY8GehFaIidVxayCbH3Rk6cKAi3x-jiFqxXcfzAhFimydP2E0pOw0rIFERMfuJ2eW88cta3ywW1qRk6skXcAP0r71kPz0Qakc0MIQS-Hal6SSy7hIJnnTXFqdnHDccUEBtlLUcvO0_o8xYdX_tFYm7Ahjlyw4TyaKGOo2aU8-uipg6bRK-CLORyVgDvHpqanOvVTcblKXqZIVCvPZ9ci2aOcwd8ggVV8gvHGdKz4R4xG_4eB4KgqNEBdlTgAlSz6Tjyl_hIHQlLlg' \\
+  -H 'Client-Request-Id: 4d0b5eae-8885-a150-e35b-a70eae3d3e43' \\
+  -H 'Connection: keep-alive' \\
+  -H 'Content-Type: application/json' \\
+  -H 'Origin: https://substrate.office.com' \\
+  -H 'Referer: https://substrate.office.com/search/api/v2/resources' \\
+  -H 'Sec-Fetch-Dest: empty' \\
+  -H 'Sec-Fetch-Mode: cors' \\
+  -H 'Sec-Fetch-Site: same-origin' \\
+  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4911.0 Safari/537.36 Edg/101.0.1193.0' \\
+  -H 'X-Client-Language: it-it' \\
+  -H 'X-Client-LocalTime: 2022-03-28T12:49:33.588+02:00' \\
+  -H 'X-Client-Version: 1.20220321.2.0' \\
+  -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="101", "Microsoft Edge";v="101"' \\
+  -H 'sec-ch-ua-mobile: ?0' \\
+  -H 'sec-ch-ua-platform: "Linux"' \\
+  --data-raw '[{"Key":"ae39eaba-2077-4ab1-9077-c7ae909b25ca","Value":[{"Name":"SearchActions","Attributes":[{"Key":"EventType","Value":"VerticalClicked"},{"Key":"UserId","Value":"10037FFEA4F5C32C"},{"Key":"TenantId","Value":"067e7d20-e70f-42c6-ae10-8b07e8c4a003"},{"Key":"LogicalId","Value":"ae39eaba-2077-4ab1-9077-c7ae909b25ca"},{"Key":"Version","Value":"2"},{"Key":"LocalTime","Value":"2022-03-28T12:49:31.795+02:00"},{"Key":"Metadata","Value":"{\\"eventId\\":\\"OutsideMSB_Click\\",\\"scenario\\":\\"OutsideMSB\\",\\"ClientEnvironment\\":\\"PROD\\",\\"hasMsa\\":false,\\"formCode\\":\\"ANAB01\\",\\"canvas\\":\\"Serp\\",\\"muid\\":\\"1C21D1A0F89C6E2D256CC090F9AB6FF0\\",\\"dataCenter\\":\\"CoreUX-Prod-DUB02\\",\\"sessionId\\":\\"35952943BDA6677C06A63836BC9166DD\\",\\"deviceType\\":\\"DESKTOP\\",\\"browserName\\":\\"Edge\\",\\"browserVersion\\":\\"101.0.1193.0\\",\\"VerticalType\\":\\"custom\\",\\"VerticalId\\":\\"External\\"}"}]}]}]' \\
+  --compressed`)
+  console.log(result)
+
+})
