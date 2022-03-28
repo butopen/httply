@@ -8,11 +8,13 @@ test("should keep double wuote on header value", async () => {
 });
 
 test("curl bash: should keep dash on header value", async () => {
-  const result = new CurlParser().parse(`curl ciao.com -H 'test:"x -X"'`);
+  const result = new CurlParser().parse(`curl "https://ciao.com" -H 'test:"x -X"'`);
+  console.log(result)
 });
 
 test("curl cmd: should keep dash on header value", async () => {
-  const result = new CurlParser().parse(`curl -X POST u -H "test:^\\^"x -X^\\^"" -H "ciao:^\\^"Giada^\\^"  giada"`);
+  const result = new CurlParser().parse(`curl -X POST u -H "test:^\\^"x -X^\\^"" -H "ciao:^\\^"Andrea^\\^"  andrea"`);
+  console.log(result)
 });
 
 

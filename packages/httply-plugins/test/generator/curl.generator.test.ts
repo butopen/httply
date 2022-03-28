@@ -2,7 +2,7 @@ import { HttplyRequest } from "@butopen/httply-model";
 import { CurlGenerator } from "../../src/generator/curl.generator";
 import { CurlParser } from "../../src/parser/curl.parser";
 
-test("test curl generator 1 using curl bash ", async () => {
+test("test curl generator 1 using curl cmd ", async () => {
   const g = new CurlGenerator();
   const h = new CurlParser();
   const result = g.generate(
