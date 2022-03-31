@@ -16,10 +16,10 @@ export class CurlParser implements HttplyParser {
       } as HttplyRequest;
 
       const normalizedRequest = this.preFilterRequest(request);
-      console.log(normalizedRequest);
 
       const tokenizedRequest = this.tokenizeRequest(normalizedRequest);
-      console.log(tokenizedRequest);
+      // console.log(tokenizedRequest);
+
       if (this.hasParams(tokenizedRequest)) {
         tokenizedRequest.forEach((element) => {
           this.handleParam(element, parsedRequest);
@@ -57,7 +57,7 @@ export class CurlParser implements HttplyParser {
    */
   preFilterRequest(request: string): string {
     let normalizedRequest: string;
-    if (!request.includes("^\\^")) {
+    if (!request.includes("^\^")) {
       //Bash
       this.shellType = "bash";
       normalizedRequest = request
@@ -73,7 +73,7 @@ export class CurlParser implements HttplyParser {
         .trim()
         .replace(/[\r]/g, "")
         .replace(/[\n]/g, "");
-      // .replace(/[ \^]/g, "");
+
       this.curlParamDelimiter = '"';
     }
 
@@ -126,28 +126,17 @@ export class CurlParser implements HttplyParser {
         ].concat(" " + element);
         //  concateno e basta. Al massimo rimetto a false capture Param!
 
-        if (
-          element.startsWith(this.curlParamDelimiter) &&
-          !element.startsWith(`\^\\^"`)
-        ) {
+        if (element.startsWith(this.curlParamDelimiter)) {
           //remove first quote
-          tokenizedRequest[tokenizedRequest.length - 1] = tokenizedRequest[
-            tokenizedRequest.length - 1
-          ].replace(new RegExp(this.curlParamDelimiter), "");
+          tokenizedRequest[tokenizedRequest.length - 1] = tokenizedRequest[tokenizedRequest.length - 1]
+              .replace(new RegExp(this.curlParamDelimiter), "");
         }
 
-        if (
-          element.endsWith(this.curlParamDelimiter) &&
-          !element.endsWith(`\^\\^"`)
-        ) {
+        if (element.endsWith(this.curlParamDelimiter) && !element.endsWith(`^^"`)) {
           captureParam = false;
           //remove end quote
-          tokenizedRequest[tokenizedRequest.length - 1] = tokenizedRequest[
-            tokenizedRequest.length - 1
-          ].substring(
-            0,
-            tokenizedRequest[tokenizedRequest.length - 1].length - 1
-          );
+          tokenizedRequest[tokenizedRequest.length - 1] = tokenizedRequest[tokenizedRequest.length - 1].substring(
+            0, tokenizedRequest[tokenizedRequest.length - 1].length - 1);
         }
       }
     });
@@ -162,7 +151,11 @@ export class CurlParser implements HttplyParser {
       case "-X":
       case "--request": {
         httpRequest.options.method = words[1] as HttplyMethod;
-        httpRequest.url = words[2];
+
+        if(this.shellType == "cmd")
+          words[2] = words[2].replace(/(\^)/g,"");
+
+        httpRequest.url = words[2]
         break;
       }
       case "--header":
@@ -173,7 +166,7 @@ export class CurlParser implements HttplyParser {
         let headerValue = headerValues.join(":");
 
         if (this.shellType == "cmd") {
-          headerValue = headerValue.replace(/\^\\\^/g, "");
+          headerValue = headerValue.replace(/(\^\^)/g, "");
         }
 
         httpRequest.options.headers![headerKey] = headerValue.trim();
@@ -186,29 +179,14 @@ export class CurlParser implements HttplyParser {
         httpRequest.options.method = "POST";
         let data = {};
         param = param.replace(words[0] + " ", "");
-
-        if (
-          httpRequest.options.headers!["Content-Type"] != "application/json"
-        ) {
-          if (this.shellType == "cmd") {
-            param = param.replace(/\^\\\^/g, "");
-          }
-
-          let aux = param.split("&");
-          if (aux.length != 1) {
-            aux.forEach((element) => {
-              let el = element.replace(/["|']/g, "").split("=");
-              data[el[0]] = el[1].trim();
-            });
-          } else {
-            data = param;
-          }
-        } else {
-          //parse the JSON string
-          let aux = param.replace(words[0] + " ", "");
-          data = JSON.parse(aux);
+        //
+        // if (httpRequest.options.headers!["Content-Type"] != "application/json") {
+        if (this.shellType == "cmd") {
+          param = param.replace(/(\^\^)/g, "");
+          param = param.replace(/(\^)/g, "");
         }
-        httpRequest.body = JSON.stringify(data);
+        httpRequest.body = param;
+
         break;
       }
       default: {
@@ -216,6 +194,9 @@ export class CurlParser implements HttplyParser {
           param.startsWith(this.curlParamDelimiter + "http") ||
           param != "--compressed"
         ) {
+          if(this.shellType == "cmd"){
+            param = param.replace(/(\^)/g,"");
+          }
           httpRequest.url = param.replace(/["|']/g, "");
         }
         break;
