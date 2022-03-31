@@ -7,13 +7,8 @@ import type { HttplyParser } from '@butopen/httply-plugins';
 
 export const inputStore = loggedWritable<HttplyInput>({
   httpInput: '',
-  focused: false,
   autoplay: true
 });
-
-export function updateEditorFocused(focused: boolean) {
-  inputStore.update({ focused });
-}
 
 export function updateAutoplay(autoplay: boolean) {
   inputStore.update({ autoplay });

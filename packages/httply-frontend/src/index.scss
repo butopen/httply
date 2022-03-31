@@ -4,7 +4,8 @@
 @import 'node_modules/@butopen/design-system/src/index';
 
 :root {
-  --bo-theme-color: #65ec36;
+  --bo-theme-color: #36ec76;
+  --bo-primary-color: #36ec76;
 }
 
 .main-color {
@@ -36,4 +37,8 @@ body {
 
 i {
   @apply italic;
+}
+
+input {
+  @extend .bo-input
 }

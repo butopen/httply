@@ -11,14 +11,13 @@ export async function play(request: HttplyRequest, domain: string) {
   }
   const response = await playRequest(url, options);
   updateResponse(response);
-  const savedResponse = await saveRequest(request, response as HttplyResponse, domain);
-  const shareUrl = `https://httply.com/h/${savedResponse.meta}`;
-  updateShareLink(shareUrl);
-  share(shareUrl);
+  saveRequest(request, response as HttplyResponse, domain).then((savedResponse) => {
+    const shareUrl = `${savedResponse.meta}`;
+    updateShareLink(request, shareUrl);
+  });
 }
 
 export function share(url: string) {
   copyToClipboard(url);
-  updateNotification(`<div class="text-center truncate text-xs ">${url}<br>
-                                <b class="text-green-400">COPIED</b> - <b class="text-gray-700">Httply link copied. Share it now!</b></div>`);
+  updateNotification('Link copied into clipboard');
 }

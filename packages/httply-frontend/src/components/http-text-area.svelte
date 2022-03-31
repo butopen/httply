@@ -2,7 +2,7 @@
   import { basicSetup, EditorState, EditorView } from '@codemirror/basic-setup';
   import { javascript } from '@codemirror/lang-javascript';
   import { afterUpdate, onDestroy, onMount } from 'svelte';
-  import { inputStore, updateEditorFocused, updateHttpInput } from '../stores/input.store';
+  import { inputStore, updateHttpInput } from '../stores/input.store';
   import { play } from '../actions/play.action';
   import { viewStore } from '../stores/view.store';
 
@@ -17,24 +17,16 @@
     if (cmView) cmView.dom.blur();
   }
 
-  function onFocus(e: FocusEvent) {
-    updateEditorFocused(true);
-  }
-
-  function onBlur(e: FocusEvent) {
-    updateEditorFocused(false);
-  }
-
   function recreateView() {
     cmView = new EditorView({
       state: EditorState.create({
         extensions: [
           basicSetup,
-          javascript(),
+          javascript() /*
           EditorView.domEventHandlers({
             focus: (e) => onFocus(e),
             blur: (e) => onBlur(e)
-          }),
+          }),*/,
           EditorView.updateListener.of((update) => {
             const text = cmView.state.doc.toString();
             if (text && text != lastText && text != lastContent) {
@@ -58,6 +50,7 @@
 
   onMount(() => {
     recreateView();
+    cmView.focus();
     document.addEventListener('keyup', onKeyDown);
   });
 
@@ -85,11 +78,17 @@
     updateCMView(content.httpInput);
   });
 
+  export function hasFocus() {
+    console.log('focus', cmView.hasFocus);
+    return cmView.hasFocus;
+  }
+
   export function selectAll() {
-    cmView.focus();
+    console.log('selectAll: ');
     cmView.dispatch({
       selection: { anchor: 0, head: cmView.state.doc.length }
     });
+    cmView.focus();
   }
 </script>
 

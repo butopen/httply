@@ -51,8 +51,12 @@ export function updateViewResetDevtool() {
   });
 }
 
-export function updateShareLink(shareLink: string) {
-  viewStore.update({ shareLink });
+export function updateShareLink(request: HttplyRequest, meta: string) {
+  viewStore.update({
+    shareLink: `https://httply.com/h/${meta}/${request.options.method}-${request.url
+      .replace('https://', '')
+      .replace('http://', '')}`
+  });
 }
 
 export function updateWithNewRequest(request: HttplyRequest) {
@@ -62,7 +66,10 @@ export function updateWithNewRequest(request: HttplyRequest) {
   updateHttpRequestInformation('Url', request.url);
   updateHttpRequestInformation('Method', request.options.method);
   try {
-    const referer = request.options.referrer || (request.options.headers && (request.options.headers.referer || request.options.headers.Referer));
+    const referer =
+      request.options.referrer ||
+      (request.options.headers &&
+        (request.options.headers.referer || request.options.headers.Referer));
     if (referer) {
       updateHttpRequestInformation('Referrer', referer);
       updateHttpRequestInformation('Domain', referer);
@@ -78,7 +85,10 @@ export function updateHttpRequestHeaders(headers: { [h: string]: string }) {
   });
 }
 
-export function updateHttpRequestInformation(key: keyof ViewState['request']['information'], value: string) {
+export function updateHttpRequestInformation(
+  key: keyof ViewState['request']['information'],
+  value: string
+) {
   viewStore.update((s) => {
     const information = { ...s.request.information, [key]: value };
     s.request = { ...s.request, information };

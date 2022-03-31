@@ -3,7 +3,8 @@
   "singleQuote": true,
   "tabWidth": 2,
   "trailingComma": "none",
-  "printWidth": 150,
+  "printWidth": 90,
+  "bracketSameLine": true,
   "plugins": [
     "./node_modules/prettier-plugin-tailwindcss"
   ],
