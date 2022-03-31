@@ -23,7 +23,7 @@ content: [
 ]
 ```
 
-- add a `postcss.config.cjs` (not the .cjs extension!)
+- add a `postcss.config.cjs` (note the .cjs extension!)
 
 ```js
 module.exports = {
@@ -45,7 +45,8 @@ module.exports = {
 @tailwind components;
 @tailwind utilities;
 ```
-the import in `App.svelte`:
+
+then import in `App.svelte`:
 
 ```sveltehtml
 import "./index.scss";

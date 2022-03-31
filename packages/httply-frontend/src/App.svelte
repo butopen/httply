@@ -4,15 +4,21 @@
   import Httply from './components/httply-logo.svelte';
   import Devtool from './components/devtool.svelte';
   import Notification from './components/notification/notification.svelte';
-  import { inputStore, updateAutoplay, updateHttpInput } from './stores/input.store';
+  import { inputStore, updateHttpInput } from './stores/input.store';
   import { viewStore } from './stores/view.store';
-  import { notificationStore, updateNotification } from './components/notification/notification.store';
+  import {
+    notificationStore,
+    updateNotification
+  } from './components/notification/notification.store';
   import { onDestroy, onMount } from 'svelte';
   import { pasteHotkey } from './shared/paste-hotkey.util';
-  import { play } from './actions/play.action';
+  import { play, share } from './actions/play.action';
   import { manageSharedUrl } from './apis/manage-shared-url.api';
+  import { mainMessageStore } from './components/notification/notification.store';
 
-  (window as any).svelteLogStores = window.location.href.startsWith('http://localhost:3000');
+  (window as any).svelteLogStores = window.location.href.startsWith(
+    'http://localhost:3000'
+  );
 
   manageSharedUrl();
 
@@ -26,7 +32,8 @@
       if (timesAskedForPaste < 3) {
         timesAskedForPaste++;
         const hotkey = pasteHotkey();
-        if (hotkey) updateNotification(`Press <b>${hotkey}</b> to paste`);
+        if (hotkey)
+          updateNotification(`If you copied a request, press <b>${hotkey}</b> to paste`);
       }
     }
   }
@@ -37,11 +44,13 @@
     }
   };
 
-  window.addEventListener('focus', updateInputArea);
+  //window.addEventListener('focus', updateInputArea);
 
   function onClick() {
     updateHttpInput(`fetch("https://api.tvmaze.com/search/shows?q=billions")`);
-    updateNotification(`Press <b>space</b> to send the request. <br><small>Or use the play ▶ button</small>`);
+    updateNotification(
+      `Press <b>space</b> to send the request. <br><small>Or use the play ▶ button</small>`
+    );
     httpTextArea.blur();
   }
 
@@ -53,7 +62,8 @@
       } else play($inputStore.request, $viewStore.request.information.Domain);
     }
     if (e.key == ' ') {
-      if ($notificationStore.show || !$inputStore.focused) play($inputStore.request, $viewStore.request.information.Domain);
+      if ($notificationStore.show || !httpTextArea.hasFocus())
+        play($inputStore.request, $viewStore.request.information.Domain);
     }
   };
 
@@ -64,6 +74,10 @@
   onDestroy(() => {
     document.removeEventListener('keyup', onKeyDown);
   });
+
+  function onCopy() {
+    share($viewStore.shareLink);
+  }
 </script>
 
 <Notification />
@@ -86,20 +100,28 @@
   </div>
 </div>
 
-<p class="my-4 mx-auto max-w-xl px-2 text-center text-sm text-gray-500" class:opacity-10={$notificationStore.show}>
-  Use case #1: <b>you open a ticket to describe a bad request</b>
-  <br />
-  The
-  <Httply />
-  way → Paste the request here and use the
-  <Httply />
-  link instead: a complete overview of the request, the response, headers, cookies
-</p>
-<div class="mx-8 mt-12 leading-tight md:mt-2">
-  <span class="text-xs text-gray-400">Copy a network request (<b>Copy as Node.js fetch</b>) and paste it below</span>
-  <a class="cursor-pointer text-xs text-blue-300 hover:text-blue-400 hover:underline" on:click={onClick}>Try with an example</a>
+<div
+  class="my-4 mx-auto flex h-20 max-w-xl items-center px-2 text-center text-sm text-gray-500">
+  {#if $viewStore.shareLink}
+    <div class="w-full text-center">
+      <input type="text" bind:value={$viewStore.shareLink} />
+      <div class="mt-4">
+        Share this request:
+        <button class="bo-button ml-2" on:click={onCopy}>Copy shareable link</button>
+      </div>
+    </div>
+  {/if}
+  {#if $mainMessageStore.message}
+    <span class="truncate">{@html $mainMessageStore.message}</span>
+  {/if}
+  {#if !($mainMessageStore.message || $viewStore.shareLink)}
+    <span class="text-xs text-gray-500"
+      >Copy a network request (<b>Copy as Node.js fetch</b>) and paste it below</span>
+    <a
+      class="ml-2 cursor-pointer text-xs text-blue-300 hover:text-blue-400 hover:underline"
+      on:click={onClick}>Try with an example</a>
+  {/if}
 </div>
-
 <div class="ml-auto" class:request-ready={$viewStore.request.information.Url}>
   <HttpTextArea bind:this={httpTextArea} />
   {#if $viewStore.request.information.Url}
@@ -107,9 +129,24 @@
   {/if}
 </div>
 
+{#if !$viewStore.request.information.Url}
+  <p
+    class="my-4 mx-auto max-w-xl px-2 text-center text-xs text-gray-400"
+    class:opacity-10={$notificationStore.show}>
+    Use case #1: <b>you open a ticket to describe a bad request</b>
+    <br />
+    The
+    <Httply />
+    way → Paste the request here and use the
+    <Httply />
+    link instead: a complete overview of the request, the response, headers, cookies
+  </p>
+{/if}
+
 <style lang="scss">
   :root {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+      Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
   .logo {

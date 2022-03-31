@@ -6,6 +6,20 @@ export interface Notifications {
   valideUpTo: number;
 }
 
+export interface MainMessage {
+  message: string;
+}
+
+export const mainMessageStore = loggedWritable<MainMessage>({
+  message: ''
+});
+
+export function updateMainMessage(message) {
+  mainMessageStore.update({
+    message
+  });
+}
+
 export const notificationStore = loggedWritable<Notifications>({
   message: '',
   show: false,
