@@ -7,7 +7,7 @@ declare const module: any;
 async function bootstrap() {
   const app = await NestFactory.create(
     AppModule,
-    new FastifyAdapter({ logger: true }),
+    new FastifyAdapter({ logger: true, bodyLimit: 20 * 1024 * 1024 }),
     { cors: true },
   );
   app.setGlobalPrefix('be');

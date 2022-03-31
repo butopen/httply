@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { RequestsService } from './requests.service';
 import { ResponsesService } from './responses.service';
 import { RequestHitsService } from './request-hits.service';
@@ -16,6 +16,11 @@ import {
   responseHash,
 } from './requests.functions';
 
+function extractDomain(url: string) {
+  const u = new URL(url);
+  return u.origin;
+}
+
 @Controller('request')
 export class RequestsController {
   constructor(
@@ -25,8 +30,8 @@ export class RequestsController {
     private responseHitsService: ResponseHitsService,
   ) {}
 
-  @Get(':meta')
-  async loadRequest(@Param('meta') meta): Promise<HttplyEvent> {
+  @Get()
+  async loadRequest(@Query('meta') meta): Promise<HttplyEvent> {
     const reqMeta = requestFromMeta(meta);
     const rawRequest = await this.requestsService.findById(reqMeta.requestid);
     const request = rawRequest.content as HttplyRequest;
@@ -69,12 +74,16 @@ export class RequestsController {
       });
     } else responseid = foundResp.responseid;
     const respHitDate = await this.responseHitsService.save(requestid);
+    const domain =
+      requestEvent.domain ||
+      requestEvent.referer ||
+      extractDomain(requestEvent.request.url);
     const meta = requestMeta(
       requestid,
       responseid,
       reqHitDate,
       respHitDate,
-      requestEvent.domain,
+      domain,
     );
     return { meta };
   }
