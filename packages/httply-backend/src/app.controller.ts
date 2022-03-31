@@ -8,7 +8,7 @@ export class AppController {
   }
 
   @Get()
-  getHello(): string {
-    return 'ciao';
+  getHello() {
+    return { hello: 'world' };
   }
 }
