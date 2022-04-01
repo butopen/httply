@@ -23,10 +23,5 @@ const middleware: () => PluginOption = () => {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [svelte(), middleware()],
-  resolve: {
-    alias: {
-      '@butopen/httply-plugins': path.resolve(__dirname, '../httply-plugins/src')
-    }
-  }
+  plugins: [svelte(), middleware()]
 });
