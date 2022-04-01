@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "js-sha512": "^0.8.0",
-    "@butopen/httply-model": "workspace:*",
+    "@butopen/httply-model": "workspace:../httply-model",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.2.0",
     "@nestjs/core": "^8.0.0",

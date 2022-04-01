@@ -4,7 +4,7 @@ importers:
 
   packages/httply-backend:
     specifiers:
-      '@butopen/httply-model': ^1.0.4
+      '@butopen/httply-model': workspace:*
       '@nestjs/cli': ^8.0.0
       '@nestjs/common': ^8.0.0
       '@nestjs/config': ^1.2.0
@@ -74,8 +74,8 @@ importers:
   packages/httply-frontend:
     specifiers:
       '@butopen/design-system': ^1.0.2
-      '@butopen/httply-model': workspace:^1.0.4
-      '@butopen/httply-plugins': workspace:*
+      '@butopen/httply-model': workspace:../httply-model
+      '@butopen/httply-plugins': workspace:../httply-plugins
       '@codemirror/basic-setup': ^0.19.3
       '@codemirror/lang-javascript': ^0.19.7
       '@sveltejs/vite-plugin-svelte': ^1.0.0-next.40
