@@ -27,7 +27,7 @@ RUN npm i -g pnpm
 COPY --from=build-step /app/dist /app
 COPY ./packages/httply-backend/package.json . 
 COPY ./packages/httply-backend/pnpm-lock.yaml . 
-RUN pnpm i --no-frozen-lockfile --prod
+RUN pnpm i --prod
 
 EXPOSE 3001
 
