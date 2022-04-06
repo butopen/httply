@@ -125,6 +125,7 @@ test("test curl complex command 2 ", async () => {
   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36' \\
   -H 'sec-ch-ua-platform: "Linux"' \\
   --compressed`);
+  console.log(result)
   expect(result.options.method).toBe("GET");
   expect(result.options.headers!["sec-ch-ua-platform"]).toBe('"Linux"');
   expect(result.options.headers!["Referer"]).toBe("https://dday.it/");
@@ -150,6 +151,7 @@ test("test curl-cmd POST reuqest with body", async () => {
   --data-raw "{^\^"query^\^":^\^"^\^",^\^"attributesToRetrieve^\^":^[^\^"name^\^",^\^"url^\^",^\^"level^\^"^],^\^"facetFilters^\^":^[^[^\^"path:pasta, pane e farine^\^"^]^]^}" ^
   --compressed
   `);
+  console.log(result)
   expect(result.body).toBe('{"query":"","attributesToRetrieve":["name","url","level"],"facetFilters":[["path:pasta, pane e farine"]]}')
 });
 
