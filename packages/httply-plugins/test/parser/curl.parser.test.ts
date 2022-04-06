@@ -1,4 +1,4 @@
-import { CurlParser } from "../../src";
+import {CurlGenerator, CurlParser} from "../../src";
 
 test("should keep double wuote on header value", async () => {
   const result2 = new CurlParser().parse(`curl u -H 'test:"x"'`);
@@ -156,69 +156,28 @@ test("test curl-cmd POST reuqest with body", async () => {
 });
 
 
-test("complex curl cmd with correct syntax", async () =>{
-    const request = `
-       curl "https://www.bing.com/web/xls.aspx" ^
-      -H "authority: www.bing.com" ^
-      -H "sec-ch-ua: ^^" Not A;Brand^^";v=^^"99^^", ^^"Chromium^^";v=^^"99^^", ^^"Microsoft Edge^^";v=^^"99^^"" ^
-      -H "sec-ch-ua-bitness: ^^"64^^"" ^
-      -H "dnt: 1" ^
-      -H "sec-ch-ua-mobile: ?0" ^
-      -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.52" ^
-      -H "sec-ch-ua-arch: ^^"x86^^"" ^
-      -H "sec-ch-ua-full-version: ^^"99.0.1150.52^^"" ^
-      -H "sec-ch-ua-platform-version: ^^"10.0.0^^"" ^
-      -H "x-msedge-externalexptype: JointCoord" ^
-      -H "x-msedge-externalexp: null" ^
-      -H "content-type: text/xml" ^
-      -H "sec-ch-ua-model: " ^
-      -H "sec-ch-ua-platform: ^^"Windows^^"" ^
-      -H "accept: */*" ^
-      -H "origin: https://www.bing.com" ^
-      -H "sec-fetch-site: same-origin" ^
-      -H "sec-fetch-mode: cors" ^
-      -H "sec-fetch-dest: empty" ^
-      -H "referer: https://www.bing.com/search?q=ciao&form=QBLH&sp=-1&pq=ciao&sc=7-4&qs=n&sk=&cvid=40C4C6EFCD9B4702884398CE10C147EE" ^
-      -H "accept-language: it,it-IT;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6" ^
-      -H "cookie: MUID=02F0910FA00161822466807AA1366013; MUIDB=02F0910FA00161822466807AA1366013; _EDGE_V=1; SRCHD=AF=NOFORM; SRCHUID=V=2&GUID=8718C8D73C2A4FA3A19DCBC58D64D5B8&dmnchg=1; WLS=C=fd07549518d5219d&N=Andrea; _U=1yTlbQZqJw52p5KiZPYq8girHpap4t79OSt6b5HZkvM2q1AoQZXODDD1lesZoGsFROHVakzi8cweYR61ssR_WVH-ThgFzdo0rzqvqS1NuETiSlTpMA2UjFGZIvSFCT7p1MrDNwL9Oru8hF6r-3Sse4Gj9dUHwXPjIwBhfteBnMXYeJ2RKf4kKVFE-xAfgzJzjiTrXdUeKkhTdKajFjQJ3Iw; ANON=A=FEFF1AFCD4427930FFD03498FFFFFFFF; BCP=AD=1&AL=1&SM=1&CS=M; SUID=A; _EDGE_S=F=1&SID=14F5953E5AF56E301C24844B5BC26F51&mkt=it-it; USRLOC=; _HPVN=CS=eyJQbiI6eyJDbiI6MSwiU3QiOjAsIlFzIjowLCJQcm9kIjoiUCJ9LCJTYyI6eyJDbiI6MSwiU3QiOjAsIlFzIjowLCJQcm9kIjoiSCJ9LCJReiI6eyJDbiI6MSwiU3QiOjAsIlFzIjowLCJQcm9kIjoiVCJ9LCJBcCI6dHJ1ZSwiTXV0ZSI6dHJ1ZSwiTGFkIjoiMjAyMi0wMy0yOFQwMDowMDowMFoiLCJJb3RkIjowLCJHd2IiOjAsIkRmdCI6bnVsbCwiTXZzIjowLCJGbHQiOjAsIkltcCI6Mn0=; SRCHUSR=DOB=20220328&T=1648471489000; ipv6=hit=1648467891043&t=4; BFBUSR=BAWAS=1&BAWFS=1; BFB=AhAS-tPokHj0FYwlh1CtTHkMKdfie0b3qZDBNOr19hz6T_CclOe7H3YIGaX6tFzrNYUh8juGzPCZVPCplHWsRNKmPQwuM24kdTsF6RowaNzqqefzhnUwFIjjdLoZvDHzbJqtIAcsGgoVrrWwGaUL1Kpd9TjnbczU_pyd410ZdU1JfA; OID=AhDYzS80AaITg9UbT5Y-GZ687ZZetqInv75kNbepLCzUHC7xdPE401YyzQGRoPRUb_lfSyMw9efKjWle8HNuQZZ1; OIDI=AhAr95lyQ1QUkWeqjOWUPM8WdzdSDhP-hImQn5KoBuJC8w; _RwBf=mta=0&rc=685&rb=685&gb=0&rg=5000&pc=682&mtu=0&rbb=0&g=0&cid=&clo=0&v=2&l=2022-03-28T07:00:00.0000000Z&lft=00010101&aof=0&o=0&p=MULTIWSBACQ201910&c=MY019H&t=5398&s=2020-04-18T12:33:10.3235331+00:00&ts=2022-03-28T12:44:53.6476406+00:00&rwred=0&e=DNy7duj8XL-hqiVq1AP_9yaIR77f8Y5nDzgwWi4PLqY8HUqieYe-Yu_A7V_HWbbW1oeP8G0O-XKq4Ldzso7rFzO3skkmt3n0sdAc6gQ_N7k; _SS=SID=14F5953E5AF56E301C24844B5BC26F51&R=685&RB=685&GB=0&RG=5000&RP=682; dsc=order=News; SRCHHPGUSR=SRCHLANG=it&BRW=N&BRH=M&CW=1206&CH=828&SW=1746&SH=982&DPR=1.100000023841858&UTC=120&DM=1&HV=1648464294&EXLTT=1" ^
-      --data-raw "^<ClientInstRequest^>^<CID^>02F0910FA00161822466807AA1366013^</CID^>^<Events^>^<E^>^<T^>Event.ClientInst^</T^>^<IG^>30782D535F4047F59DA8579E0C903BD8^</IG^>^<D^>^<^!^[CDATA^[^{^^"width^^":^^"1206^^",^^"T^^":^^"CI.Info^^",^^"TS^^":1648464297179,^^"RTS^^":4383,^^"SEQ^^":23,^^"Name^^":^^"N^^",^^"FID^^":^^"BRW^^",^^"CurUrl^^":^^"https://www.bing.com/search^^",^^"UTS^^":1648464299179^}^]^]^>^</D^>^<TS^>1648464292796^</TS^>^</E^>^<E^>^<T^>Event.ClientInst^</T^>^<IG^>30782D535F4047F59DA8579E0C903BD8^</IG^>^<D^>^<^!^[CDATA^[^{^^"height^^":^^"828^^",^^"T^^":^^"CI.Info^^",^^"TS^^":1648464297184,^^"RTS^^":4388,^^"SEQ^^":24,^^"Name^^":^^"M^^",^^"FID^^":^^"BRH^^",^^"CurUrl^^":^^"https://www.bing.com/search^^",^^"UTS^^":1648464299179^}^]^]^>^</D^>^<TS^>1648464292796^</TS^>^</E^>^<E^>^<T^>Event.ClientInst^</T^>^<IG^>30782D535F4047F59DA8579E0C903BD8^</IG^>^<D^>^<^!^[CDATA^[^{^^"T^^":^^"CI.Info^^",^^"TS^^":1648464297190,^^"RTS^^":4394,^^"SEQ^^":25,^^"Name^^":^^"W^^",^^"FID^^":^^"BRResize^^",^^"CurUrl^^":^^"https://www.bing.com/search^^",^^"UTS^^":1648464299179^}^]^]^>^</D^>^<TS^>1648464292796^</TS^>^</E^>^<E^>^<T^>Event.ClientInst^</T^>^<IG^>30782D535F4047F59DA8579E0C903BD8^</IG^>^<D^>^<^!^[CDATA^[^{^^"T^^":^^"CI.Info^^",^^"TS^^":1648464297192,^^"RTS^^":4396,^^"SEQ^^":26,^^"Name^^":^^"WN^^",^^"FID^^":^^"TPResize^^",^^"CurUrl^^":^^"https://www.bing.com/search^^",^^"UTS^^":1648464299179^}^]^]^>^</D^>^<TS^>1648464292796^</TS^>^</E^>^<E^>^<T^>Event.ClientInst^</T^>^<IG^>30782D535F4047F59DA8579E0C903BD8^</IG^>^<D^>^<^!^[CDATA^[^{^^"BFB_EXT^^":^^"0^^",^^"BFB_T^^":^^"DIS^^",^^"BFB_S^^":^^"UNSP^^",^^"BFB_SC^^":^^"UserNotification^^",^^"T^^":^^"CI.DHTMLClick^^",^^"TS^^":1648464298849,^^"RTS^^":6053,^^"SEQ^^":27,^^"Name^^":^^"BAW^^",^^"FID^^":^^"BfbClick^^",^^"CurUrl^^":^^"https://www.bing.com/search^^",^^"UTS^^":1648464299179^}^]^]^>^</D^>^<TS^>1648464292796^</TS^>^</E^>^</Events^>^</ClientInstRequest^>" ^
-      --compressed`;
-    const result = new CurlParser().parse(request);
-    console.log(result)
-    expect(result.options.headers!["sec-ch-ua"]).toBe('\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"99\", \"Microsoft Edge\";v=\"99\"');
 
-});
-
-
-
-test("complex curl bash with correct syntax", async () =>{
-    const request = `curl 'https://www.bing.com/web/xls.aspx' \
-    -H 'authority: www.bing.com' \
-    -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="99", "Microsoft Edge";v="99"' \
-    -H 'sec-ch-ua-bitness: "64"' \
-    -H 'dnt: 1' \
-    -H 'sec-ch-ua-mobile: ?0' \
-    -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.52' \
-    -H 'sec-ch-ua-arch: "x86"' \
-    -H 'sec-ch-ua-full-version: "99.0.1150.52"' \
-    -H 'sec-ch-ua-platform-version: "10.0.0"' \
-    -H 'x-msedge-externalexptype: JointCoord' \
-    -H 'x-msedge-externalexp: null' \
-    -H 'content-type: text/xml' \
-    -H 'sec-ch-ua-model: ' \
-    -H 'sec-ch-ua-platform: "Windows"' \
-    -H 'accept: */*' \
-    -H 'origin: https://www.bing.com' \
-      -H 'sec-fetch-site: same-origin' \
-    -H 'sec-fetch-mode: cors' \
-    -H 'sec-fetch-dest: empty' \
-    -H 'referer: https://www.bing.com/search?q=ciao&form=QBLH&sp=-1&pq=ciao&sc=7-4&qs=n&sk=&cvid=40C4C6EFCD9B4702884398CE10C147EE' \
-    -H 'accept-language: it,it-IT;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6' \
-    -H 'cookie: MUID=02F0910FA00161822466807AA1366013; MUIDB=02F0910FA00161822466807AA1366013; _EDGE_V=1; SRCHD=AF=NOFORM; SRCHUID=V=2&GUID=8718C8D73C2A4FA3A19DCBC58D64D5B8&dmnchg=1; WLS=C=fd07549518d5219d&N=Andrea; _U=1yTlbQZqJw52p5KiZPYq8girHpap4t79OSt6b5HZkvM2q1AoQZXODDD1lesZoGsFROHVakzi8cweYR61ssR_WVH-ThgFzdo0rzqvqS1NuETiSlTpMA2UjFGZIvSFCT7p1MrDNwL9Oru8hF6r-3Sse4Gj9dUHwXPjIwBhfteBnMXYeJ2RKf4kKVFE-xAfgzJzjiTrXdUeKkhTdKajFjQJ3Iw; ANON=A=FEFF1AFCD4427930FFD03498FFFFFFFF; BCP=AD=1&AL=1&SM=1&CS=M; SUID=A; _EDGE_S=F=1&SID=14F5953E5AF56E301C24844B5BC26F51&mkt=it-it; USRLOC=; _HPVN=CS=eyJQbiI6eyJDbiI6MSwiU3QiOjAsIlFzIjowLCJQcm9kIjoiUCJ9LCJTYyI6eyJDbiI6MSwiU3QiOjAsIlFzIjowLCJQcm9kIjoiSCJ9LCJReiI6eyJDbiI6MSwiU3QiOjAsIlFzIjowLCJQcm9kIjoiVCJ9LCJBcCI6dHJ1ZSwiTXV0ZSI6dHJ1ZSwiTGFkIjoiMjAyMi0wMy0yOFQwMDowMDowMFoiLCJJb3RkIjowLCJHd2IiOjAsIkRmdCI6bnVsbCwiTXZzIjowLCJGbHQiOjAsIkltcCI6Mn0=; SRCHUSR=DOB=20220328&T=1648471489000; ipv6=hit=1648467891043&t=4; BFBUSR=BAWAS=1&BAWFS=1; BFB=AhAS-tPokHj0FYwlh1CtTHkMKdfie0b3qZDBNOr19hz6T_CclOe7H3YIGaX6tFzrNYUh8juGzPCZVPCplHWsRNKmPQwuM24kdTsF6RowaNzqqefzhnUwFIjjdLoZvDHzbJqtIAcsGgoVrrWwGaUL1Kpd9TjnbczU_pyd410ZdU1JfA; OID=AhDYzS80AaITg9UbT5Y-GZ687ZZetqInv75kNbepLCzUHC7xdPE401YyzQGRoPRUb_lfSyMw9efKjWle8HNuQZZ1; OIDI=AhAr95lyQ1QUkWeqjOWUPM8WdzdSDhP-hImQn5KoBuJC8w; _RwBf=mta=0&rc=685&rb=685&gb=0&rg=5000&pc=682&mtu=0&rbb=0&g=0&cid=&clo=0&v=2&l=2022-03-28T07:00:00.0000000Z&lft=00010101&aof=0&o=0&p=MULTIWSBACQ201910&c=MY019H&t=5398&s=2020-04-18T12:33:10.3235331+00:00&ts=2022-03-28T12:44:53.6476406+00:00&rwred=0&e=DNy7duj8XL-hqiVq1AP_9yaIR77f8Y5nDzgwWi4PLqY8HUqieYe-Yu_A7V_HWbbW1oeP8G0O-XKq4Ldzso7rFzO3skkmt3n0sdAc6gQ_N7k; _SS=SID=14F5953E5AF56E301C24844B5BC26F51&R=685&RB=685&GB=0&RG=5000&RP=682; dsc=order=News; SRCHHPGUSR=SRCHLANG=it&BRW=N&BRH=M&CW=1206&CH=828&SW=1746&SH=982&DPR=1.100000023841858&UTC=120&DM=1&HV=1648464294&EXLTT=1' \
-    --data-raw $'<ClientInstRequest><CID>02F0910FA00161822466807AA1366013</CID><Events><E><T>Event.ClientInst</T><IG>30782D535F4047F59DA8579E0C903BD8</IG><D><\u0021[CDATA[{"width":"1206","T":"CI.Info","TS":1648464297179,"RTS":4383,"SEQ":23,"Name":"N","FID":"BRW","CurUrl":"https://www.bing.com/search","UTS":1648464299179}]]></D><TS>1648464292796</TS></E><E><T>Event.ClientInst</T><IG>30782D535F4047F59DA8579E0C903BD8</IG><D><\u0021[CDATA[{"height":"828","T":"CI.Info","TS":1648464297184,"RTS":4388,"SEQ":24,"Name":"M","FID":"BRH","CurUrl":"https://www.bing.com/search","UTS":1648464299179}]]></D><TS>1648464292796</TS></E><E><T>Event.ClientInst</T><IG>30782D535F4047F59DA8579E0C903BD8</IG><D><\u0021[CDATA[{"T":"CI.Info","TS":1648464297190,"RTS":4394,"SEQ":25,"Name":"W","FID":"BRResize","CurUrl":"https://www.bing.com/search","UTS":1648464299179}]]></D><TS>1648464292796</TS></E><E><T>Event.ClientInst</T><IG>30782D535F4047F59DA8579E0C903BD8</IG><D><\u0021[CDATA[{"T":"CI.Info","TS":1648464297192,"RTS":4396,"SEQ":26,"Name":"WN","FID":"TPResize","CurUrl":"https://www.bing.com/search","UTS":1648464299179}]]></D><TS>1648464292796</TS></E><E><T>Event.ClientInst</T><IG>30782D535F4047F59DA8579E0C903BD8</IG><D><\u0021[CDATA[{"BFB_EXT":"0","BFB_T":"DIS","BFB_S":"UNSP","BFB_SC":"UserNotification","T":"CI.DHTMLClick","TS":1648464298849,"RTS":6053,"SEQ":27,"Name":"BAW","FID":"BfbClick","CurUrl":"https://www.bing.com/search","UTS":1648464299179}]]></D><TS>1648464292796</TS></E></Events></ClientInstRequest>' \
-    --compressed` ;
-    const result = new CurlParser().parse(request);
-    expect(result.options.headers!["sec-ch-ua"]).toBe('\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"99\", \"Microsoft Edge\";v=\"99\"');
-
+test("test curl-cmd reuqest ",async ()=>{
+  const result = new CurlParser().parse(`curl "https://www.oracle.com/webfolder/technetwork/tutorials/obe/cloud/objectstorage/restrict_rw_accs_cntainers_REST_API/files/installing_curl_command_line_tool_on_windows.html" ^
+  -H "authority: www.oracle.com" ^
+  -H "accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9" ^
+  -H "accept-language: it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7" ^
+  -H "cache-control: max-age=0" ^
+  -H "cookie: s_fid=2FB53E554068C1BB-39D87842CE52F946; notice_gdpr_prefs=0,1,2:cb8350a2759273dccf1e483791e6f8fd; notice_preferences=2:cb8350a2759273dccf1e483791e6f8fd; cmapi_gtm_bl=; cmapi_cookie_privacy=permit 1,2,3; akaas_aud-seg-ocom-prod=2147483647~rv=3~id=ba6bff046d52734afef89bc393a3ff49; ak_bmsc=2EF89A0D83D80A9DE154E264A8508D6A~000000000000000000000000000000~YAAQNF96XEYR49F/AQAAxDHQ/g+4kAHfW6ZNObuxtuW0w3cn9Aqzk8TpaJHwPUnOZYix090qdV4c+FqR+APFeGAPRAViFU3pbTiKdvK9WEH7LoIUZm4sr37DOToEB65cV4JDXhK/rk2J1D0n8LFeIoDR1fNjCz2vclTw9uChj6wtUpS0fufeV4lHphKObREJm6XpaEMISoSoqiBobOxGHkiE4jMIo4vTXKVDY5HkyaYBRMWfsLz4lknZawqdSu1fELIbx7Cr4yqyMTSeLvrSawUYjkvHYlxE9GZnfEhVide/n99Tc46qmK/MkmsZwwyJVYTEij00rheEZZMiIQqH2yYxQsq+GAMwfa9Y8v5Wl3sdmhXnYzmKnMR2ctD860n5/EIrU6B3WKt6DiPhZ2ya3HTGyTAnuYQavB7EPFtDxrLU2BvsRJv0+tg5PXfV56wLIDd5wzdam+lGHX3wpRWZCaGCXbdUXZfs/vGFFx2QfC8=; X-Oracle-BMC-LBS-Route=2af63722b49b0cf7a70fc08e7a7691310be64043; JSESSIONID=uhL-0DQOlD0N6KrVECYUHLC7k__IXj-JMLGwcqTzq4hMm_4BPsnk^!1007305902^!-1005676203" ^
+  -H "dnt: 1" ^
+  -H "referer: https://www.google.com/" ^
+  -H "sec-ch-ua: ^\^" Not A;Brand^\^";v=^\^"99^\^", ^\^"Chromium^\^";v=^\^"100^\^", ^\^"Google Chrome^\^";v=^\^"100^\^"" ^
+  -H "sec-ch-ua-mobile: ?0" ^
+  -H "sec-ch-ua-platform: ^\^"Windows^\^"" ^
+  -H "sec-fetch-dest: document" ^
+  -H "sec-fetch-mode: navigate" ^
+  -H "sec-fetch-site: cross-site" ^
+  -H "sec-fetch-user: ?1" ^
+  -H "upgrade-insecure-requests: 1" ^
+  -H "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36" ^
+  --compressed`)
+  console.log(result);
+  expect(result.options.method).toBe('GET');
+  expect(result.options.headers!['sec-ch-ua']).toBe('" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"' );
 });
 

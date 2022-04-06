@@ -50,7 +50,20 @@ export class CurlGenerator implements HttplyGenerator {
 
     //handle data
     if (request.body) {
-      curlCommand.push(`-d '${request.body}'`);
+      if(this.options.target == "cmd")
+        curlCommand.push(`-d ${this.paramDelimiter}${request.body.replace(/"/g,'^\\^"')
+            .replace(/\[/g,"^[")
+            .replace(/]/g,"^]")
+            .replace(/{/g,"^{")
+            .replace(/}/g,"^}")
+        }${this.paramDelimiter}`);
+      else
+        curlCommand.push(`-d ${this.paramDelimiter}${request.body
+            .replace(/\[/g,"\[")
+            .replace(/]/g,"\]")
+            .replace(/{/g,"\{")
+            .replace(/}/g,"\}")
+        }${this.paramDelimiter}`);
     }
 
     return curlCommand.join(" ");
