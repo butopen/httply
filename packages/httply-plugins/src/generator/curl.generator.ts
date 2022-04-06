@@ -5,11 +5,6 @@ export class CurlGenerator implements HttplyGenerator {
   paramDelimiter: "'" | '"' = "'";
   quoteDelimiter: "" | "^\\^" = "";
 
-
-  /*TODO introdurre un dizionario di elementi che, se presenti, vanno accompagnati o da "\"(bash) oppure da "^"(cmd)
-     come % o [ o {
-   */
-
   constructor(private options: { target: "cmd" | "bash" } = { target: "cmd" }) {
     if (options.target == "cmd") {
       this.quoteDelimiter = "^\\^";
@@ -55,7 +50,7 @@ export class CurlGenerator implements HttplyGenerator {
 
     //handle data
     if (request.body) {
-      curlCommand.push(`-d ${request.body}`);
+      curlCommand.push(`-d '${request.body}'`);
     }
 
     return curlCommand.join(" ");
