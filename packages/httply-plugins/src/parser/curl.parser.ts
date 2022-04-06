@@ -18,7 +18,6 @@ export class CurlParser implements HttplyParser {
       const normalizedRequest = this.preFilterRequest(request);
 
       const tokenizedRequest = this.tokenizeRequest(normalizedRequest);
-      // console.log(tokenizedRequest);
 
       if (this.hasParams(tokenizedRequest)) {
         tokenizedRequest.forEach((element) => {
