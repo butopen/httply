@@ -1,9 +1,27 @@
 <script lang="ts">
   import type { Json } from '../../shared/json.model';
   import { JsonViewerLogic, RenderedJsonRow } from './json-viewer.logic';
+  import { createEventDispatcher } from 'svelte';
 
+  let dispatch = createEventDispatcher();
   export let json: Json = {};
+  export let masterJson: Json = {};
   export let isMaster: boolean = true;
+
+  if (isMaster) masterJson = json;
+
+  interface JsonViewerEvent {
+    type: 'mouseleave' | 'mouseenter' | 'json-viewer';
+    json: Json;
+    key: string;
+    value: string;
+    mouseEvent?: MouseEvent;
+    expanded?: boolean;
+    jsonPath: string;
+    masterJson: Json;
+  }
+
+  export let jsonPath = '';
 
   const jsonViewer = new JsonViewerLogic();
 
@@ -20,23 +38,65 @@
     }
     rendered = [...rendered];
   }
+
+  function onChildJsonValueEvent(jsonViewerEvent: { detail: JsonViewerEvent }) {
+    dispatch('json-viewer', jsonViewerEvent.detail);
+  }
+
+  function onValueMouseEnter(e: MouseEvent, r: { key: string; value: Json }) {
+    dispatch('json-viewer', {
+      type: 'mouseenter',
+      json: json[r.key],
+      key: r.key,
+      value: r.value,
+      mouseEvent: e,
+      jsonPath,
+      masterJson
+    });
+  }
+
+  function onValueMouseLeave(
+    e: MouseEvent,
+    r: { key: string; value: Json; expanded: boolean }
+  ) {
+    dispatch('json-viewer', {
+      type: 'mouseleave',
+      json: json[r.key],
+      key: r.key,
+      value: r.value,
+      mouseEvent: e,
+      jsonPath,
+      masterJson,
+      expanded: r.expanded
+    });
+  }
 </script>
 
 <div class="hl-json-viewer">
   <ul class:master={isMaster}>
     {#each rendered as r}
       <li class:expanded={r.expanded}>
-        <div on:click={(e) => onToggle(e, r)} class="json-viewer-row {r.jsonType}">
+        <div
+          on:click={(e) => onToggle(e, r)}
+          class="json-viewer-row {r.jsonType}"
+          on:mouseenter={(e) => onValueMouseEnter(e, r)}
+          on:mouseleave={(e) => onValueMouseLeave(e, r)}>
           <span class="json-viewer-key">{r.key}</span>
           {#if r.key}
             <span class="json-viewer-ddots">:</span>
           {/if}
           {#if !r.expanded}
-            <span title={r.tooltip} class="json-viewer-value collapsed {r.jsonType}">{r.value}</span>
+            <span title={r.tooltip} class="json-viewer-value collapsed {r.jsonType}"
+              >{r.value}</span>
           {/if}
         </div>
         {#if r.expanded}
-          <svelte:self isMaster={false} json={r.json} />
+          <svelte:self
+            jsonPath={jsonPath + '.' + r.key}
+            isMaster={false}
+            {masterJson}
+            json={r.json}
+            on:json-viewer={onChildJsonValueEvent} />
         {/if}
       </li>
     {/each}
