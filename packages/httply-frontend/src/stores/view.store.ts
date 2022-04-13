@@ -5,6 +5,7 @@ import { formatDate } from '../shared/time';
 export interface ViewState {
   sectionExpanded: {
     General: boolean;
+    Payload: boolean;
     RequestHeaders: boolean;
     ResponseHeaders: boolean;
     Request: boolean;
@@ -21,6 +22,7 @@ export interface ViewState {
       Referrer?: string;
     };
     headers?: { [h: string]: string };
+    body?: any;
   };
   response?: {
     headers: { [h: string]: string };
@@ -31,6 +33,7 @@ export interface ViewState {
 
 const sections = {
   General: true,
+  Payload: false,
   Request: false,
   RequestHeaders: false,
   ResponseHeaders: false,
@@ -76,6 +79,33 @@ export function updateWithNewRequest(request: HttplyRequest) {
     }
   } catch (e) {}
   updateHttpRequestInformation('Request Timestamp', formatDate(request.timestamp));
+
+  if (['POST', 'PUT'].includes(request?.options.method)) {
+    if (request?.options.body) {
+      try {
+        const parsedBody = JSON.parse(request?.options.body);
+        updateRequestBody(parsedBody);
+      } catch {
+        updateRequestBody({ body: request?.options.body });
+      }
+    }
+  } else {
+    try {
+      const urlParams = new URL(request.url).searchParams.entries();
+      const body = {};
+      for (const [key, value] of urlParams) {
+        body[key] = value;
+      }
+      updateRequestBody(body);
+    } catch {}
+  }
+}
+
+export function updateRequestBody(body) {
+  viewStore.update((s) => {
+    s.request = { ...s.request, body };
+    return s;
+  });
 }
 
 export function updateHttpRequestHeaders(headers: { [h: string]: string }) {
