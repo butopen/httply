@@ -12,7 +12,7 @@
   const px = (p) => Math.round(p) + 'px';
   let top = px(0);
   let left = px(0);
-
+  let visible = false;
   function copy() {
     share($viewStore.shareLink);
   }
@@ -22,13 +22,18 @@
   }
 
   function onResponseValueEvent(jsonEvent: { detail: JsonViewerEvent }) {
-    console.log('click on', jsonEvent.detail);
-    const targetBox = jsonEvent.detail.target.getBoundingClientRect();
-    const expanded = jsonEvent.detail.expanded;
-    console.log('expanded: ', expanded);
-    console.log(targetBox.x + targetBox.width, targetBox.y);
-    top = px(targetBox.y - 5);
-    left = px(targetBox.x + targetBox.width + 10);
+    if(jsonEvent.detail.expanded) {
+      visible = true;
+      console.log('click on', jsonEvent.detail);
+      const targetBox = jsonEvent.detail.target.getBoundingClientRect();
+      const expanded = jsonEvent.detail.expanded;
+      console.log('expanded: ', expanded);
+      console.log(targetBox.x + targetBox.width, targetBox.y);
+      top = px(targetBox.y - 5);
+      left = px(targetBox.x + targetBox.width + 10);
+    }else{
+      visible = false;
+    }
   }
 </script>
 
@@ -87,10 +92,11 @@
     </DevtoolSection>
   {/if}
 {/if}
-
+{#if visible}
 <div style="top: {top}; left: {left}; position: fixed;" id="ciao">
   <JsonActions />
 </div>
+{/if}
 
 <style lang="scss">
   .hl-devtool-request {

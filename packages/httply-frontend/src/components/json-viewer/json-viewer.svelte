@@ -91,10 +91,7 @@
     });
   }
 
-  function onValueMouseLeave(
-    e: MouseEvent,
-    r: { key: string; value: Json; expanded: boolean }
-  ) {
+  function onValueMouseLeave(e: MouseEvent, r: { key: string; value: Json; expanded: boolean }) {
     dispatch('json-viewer', {
       type: 'mouseleave',
       json: json[r.key],
@@ -116,14 +113,16 @@
           on:click={(e) => onToggle(e, r)}
           class="json-viewer-row {r.jsonType}"
           on:mouseenter={(e) => onValueMouseEnter(e, r)}
-          on:mouseleave={(e) => onValueMouseLeave(e, r)}>
+          on:mouseleave={(e) => onValueMouseLeave(e, r)}
+        >
           <span class="json-viewer-key">{r.key}</span>
           {#if r.key}
             <span class="json-viewer-ddots">:</span>
           {/if}
           {#if !r.expanded}
-            <span title={r.tooltip} class="json-viewer-value collapsed {r.jsonType}"
-              >{r.value}</span>
+            <span title={r.tooltip} class="json-viewer-value collapsed {r.jsonType}">
+              {r.value}
+            </span>
           {/if}
         </div>
         {#if r.expanded}
