@@ -1,3 +1,25 @@
+<script lang="ts" context="module">
+  import { Json } from '../../shared/json.model';
+
+  export interface JsonViewerEvent {
+    expanded: boolean;
+    target: Element;
+    json: Json;
+    masterJson: Json;
+    jsonPath: string;
+    type:
+      | string
+      | 'undefined'
+      | 'object'
+      | 'boolean'
+      | 'number'
+      | 'string'
+      | 'function'
+      | 'symbol'
+      | 'bigint';
+  }
+</script>
+
 <script lang="ts">
   import type { Json } from '../../shared/json.model';
   import { JsonViewerLogic, RenderedJsonRow } from './json-viewer.logic';
@@ -33,10 +55,24 @@
 
   function onToggle(e: MouseEvent, r: RenderedJsonRow) {
     e.stopPropagation();
-    if (['object', 'array'].includes(r.jsonType)) {
+    const isObjectOrArray = ['object', 'array'].includes(r.jsonType);
+    if (isObjectOrArray) {
       r.expanded = !r.expanded;
     }
+    const target = (e.target as Element).querySelector('span') || e.target;
+    dispatch('json-toggle', {
+      expanded: r.expanded,
+      target,
+      json: json[r.key],
+      jsonPath,
+      masterJson,
+      type: r.jsonType
+    });
     rendered = [...rendered];
+  }
+
+  function onChildJsonToggleEvent(jsonViewerToggle: { detail: JsonViewerEvent }) {
+    dispatch('json-toggle', jsonViewerToggle.detail);
   }
 
   function onChildJsonValueEvent(jsonViewerEvent: { detail: JsonViewerEvent }) {
@@ -96,6 +132,7 @@
             isMaster={false}
             {masterJson}
             json={r.json}
+            on:json-toggle={onChildJsonToggleEvent}
             on:json-viewer={onChildJsonValueEvent} />
         {/if}
       </li>

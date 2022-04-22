@@ -10,7 +10,8 @@
     "format": "prettier --write src/**/*.{svelte,ts,scss}",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "test": "jest src",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "new:c": "npx t6e templates/$name.svelte src/components "
   },
   "dependencies": {
     "@butopen/design-system": "^1.0.2",

@@ -2,10 +2,16 @@
   import { inputStore } from '../stores/input.store';
   import { viewStore } from '../stores/view.store';
   import DevtoolSection from './devtool-section.svelte';
-  import JsonViewer from './json-viewer/json-viewer.svelte';
+  import JsonActions from './json-actions.svelte';
+  import JsonViewer, { JsonViewerEvent } from './json-viewer/json-viewer.svelte';
   import Icon from '../shared/components/icon.svelte';
   import { play, share } from '../actions/play.action';
   import { disableAutoplay, enableAutoplay } from '../stores/settings.storage';
+  import type { Json } from '../shared/json.model';
+
+  const px = (p) => Math.round(p) + 'px';
+  let top = px(0);
+  let left = px(0);
 
   function copy() {
     share($viewStore.shareLink);
@@ -15,8 +21,14 @@
     console.log('request', jsonViewerEvent.detail);
   }
 
-  function onResponseValueEvent(jsonViewerEvent) {
-    console.log('response', jsonViewerEvent.detail);
+  function onResponseValueEvent(jsonEvent: { detail: JsonViewerEvent }) {
+    console.log('click on', jsonEvent.detail);
+    const targetBox = jsonEvent.detail.target.getBoundingClientRect();
+    const expanded = jsonEvent.detail.expanded;
+    console.log('expanded: ', expanded);
+    console.log(targetBox.x + targetBox.width, targetBox.y);
+    top = px(targetBox.y - 5);
+    left = px(targetBox.x + targetBox.width + 10);
   }
 </script>
 
@@ -71,10 +83,14 @@
       <JsonViewer json={$viewStore.response.headers} />
     </DevtoolSection>
     <DevtoolSection section="Response" open={$viewStore.sectionExpanded.Response}>
-      <JsonViewer json={$viewStore.response.body} on:json-viewer={onResponseValueEvent} />
+      <JsonViewer json={$viewStore.response.body} on:json-toggle={onResponseValueEvent} />
     </DevtoolSection>
   {/if}
 {/if}
+
+<div style="top: {top}; left: {left}; position: fixed;" id="ciao">
+  <JsonActions />
+</div>
 
 <style lang="scss">
   .hl-devtool-request {

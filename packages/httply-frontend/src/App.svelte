@@ -52,6 +52,7 @@
       `Press <b>space</b> to send the request. <br><small>Or use the play ▶ button</small>`
     );
     httpTextArea.blur();
+    play($inputStore.request, $viewStore.request.information.Domain);
   }
 
   const onKeyDown = (e: KeyboardEvent) => {

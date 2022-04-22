@@ -39,6 +39,16 @@
       }),
       parent: textareaContainer
     });
+    const state = cmView.state;
+    /*
+    this.decorations = state.doc.length
+      ? Decoration.none
+      : Decoration.set(
+          Decoration.widget({ widget: new PlaceholderWidget(text), side: 1 }).range(0)
+        );
+        
+     */
+    //cmView.placeholder(`Press <b>${pasteHotkey()}</b> to paste`);
     updateCMView(lastContent);
   }
 
