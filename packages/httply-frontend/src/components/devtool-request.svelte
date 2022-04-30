@@ -8,33 +8,53 @@
   import { play, share } from '../actions/play.action';
   import { disableAutoplay, enableAutoplay } from '../stores/settings.storage';
   import type { Json } from '../shared/json.model';
+  import {onMount} from "svelte";
 
   const px = (p) => Math.round(p) + 'px';
   let top = px(0);
   let left = px(0);
-  let visible = false;
+  let isVisible = false;
+  let scrollY = 0;
+  let scrollX = 0;
+  let targetBox;
+
   function copy() {
     share($viewStore.shareLink);
   }
 
+  onMount(()=>{
+    window.addEventListener('scroll', (e)=>{
+      scrollY = window.scrollY;
+      scrollX = window.scrollX;
+      updatePosition()
+    })
+  })
+
   function onRequestValueEvent(jsonViewerEvent) {
-    console.log('request', jsonViewerEvent.detail);
+    if(jsonViewerEvent.detail.type === "mouseenter") {
+      targetBox = jsonViewerEvent.detail.mouseEvent.target.getBoundingClientRect();
+      updatePosition();
+    }else{
+      isVisible = false;
+    }
   }
 
   function onResponseValueEvent(jsonEvent: { detail: JsonViewerEvent }) {
     if(jsonEvent.detail.expanded) {
-      visible = true;
-      console.log('click on', jsonEvent.detail);
-      const targetBox = jsonEvent.detail.target.getBoundingClientRect();
+      isVisible = true;
+      targetBox = jsonEvent.detail.target.getBoundingClientRect();
       const expanded = jsonEvent.detail.expanded;
-      console.log('expanded: ', expanded);
-      console.log(targetBox.x + targetBox.width, targetBox.y);
-      top = px(targetBox.y - 5);
-      left = px(targetBox.x + targetBox.width + 10);
-    }else{
-      visible = false;
+      updatePosition();
+      }else{
+      isVisible = false;
     }
   }
+
+  function updatePosition(){
+    top = px(targetBox.y - 5 - scrollY);
+    left = px(targetBox.x + targetBox.width + 10 - scrollX);
+  }
+
 </script>
 
 {#if $inputStore.request}
@@ -72,13 +92,13 @@
       on:json-viewer={onRequestValueEvent} />
   </DevtoolSection>
   <DevtoolSection open={$viewStore.sectionExpanded.Payload} section="Payload">
-    <JsonViewer json={$viewStore.request.body} />
+    <JsonViewer json={$viewStore.request.body} on:json-viewer={onRequestValueEvent} />
   </DevtoolSection>
   {#if $viewStore.request.headers}
     <DevtoolSection
       open={$viewStore.sectionExpanded.RequestHeaders}
       section="Request Headers">
-      <JsonViewer json={$viewStore.request.headers} />
+      <JsonViewer json={$viewStore.request.headers} on:json-viewer={onRequestValueEvent}/>
     </DevtoolSection>
   {/if}
   {#if $viewStore.response}
@@ -92,11 +112,15 @@
     </DevtoolSection>
   {/if}
 {/if}
-{#if visible}
-<div style="top: {top}; left: {left}; position: fixed;" id="ciao">
+
+{#if isVisible}
+<div style="position: fixed; top: {top}; left: {left}; " id="edit_button">
+  <!-- TODO: create component wrapper for this DIV element-->
   <JsonActions />
 </div>
 {/if}
+
+
 
 <style lang="scss">
   .hl-devtool-request {
