@@ -25,12 +25,12 @@ body {
   }
 }
 
-.http-paste-textarea-container .cm-editor {
+.http-paste-textarea-container .cm-editor, .json-editor .cm-editor {
   height: 150px;
 }
 
 @media (min-width: 480px) {
-  .http-paste-textarea-container .cm-editor {
+  .http-paste-textarea-container .cm-editor, .json-editor .cm-editor {
     height: 450px;
   }
 }

@@ -15,6 +15,7 @@
   import { play, share } from './actions/play.action';
   import { manageSharedUrl } from './apis/manage-shared-url.api';
   import { mainMessageStore } from './components/notification/notification.store';
+  import JsonEditor from './components/json-editor.svelte';
 
   (window as any).svelteLogStores = window.location.href.startsWith(
     'http://localhost:3000'
@@ -143,6 +144,11 @@
     link instead: a complete overview of the request, the response, headers, cookies
   </p>
 {/if}
+
+<JsonEditor />
+<div class="mt-4">
+  <JsonEditor />
+</div>
 
 <style lang="scss">
   :root {
