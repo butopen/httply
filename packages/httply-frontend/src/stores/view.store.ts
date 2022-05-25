@@ -27,6 +27,7 @@ export interface ViewState {
   response?: {
     headers: { [h: string]: string };
     body: any;
+    bodyType: "json" | "string";
   };
   shareLink?: string;
 }
@@ -134,7 +135,13 @@ export function updateSection(key: keyof ViewState['sectionExpanded'], open: boo
 }
 
 export function updateResponse(response: ViewState['response']) {
-  viewStore.update({ response: response });
+  const isString = s => typeof s === "string" || s instanceof String
+
+  viewStore.update((s) => {
+    s.response = { ...s.response,...response, ...{bodyType: isString(response.body)? "string":"json"}};
+    return s;
+  });
+
   updateHttpRequestInformation('Response Timestamp', formatDate(new Date()));
   updateSection('Response', true);
 }

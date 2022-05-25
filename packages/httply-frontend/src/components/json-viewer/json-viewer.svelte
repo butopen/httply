@@ -64,7 +64,7 @@
       expanded: r.expanded,
       target,
       json: json[r.key],
-      jsonPath,
+      jsonPath:jsonPath + "."+ r.key,
       masterJson,
       type: r.jsonType
     });

@@ -2,21 +2,25 @@
   import { inputStore } from '../stores/input.store';
   import { viewStore } from '../stores/view.store';
   import DevtoolSection from './devtool-section.svelte';
-  import JsonActions from './json-actions.svelte';
+  import JsonActions from './json-action/json-actions.svelte';
   import JsonViewer, { JsonViewerEvent } from './json-viewer/json-viewer.svelte';
   import Icon from '../shared/components/icon.svelte';
   import { play, share } from '../actions/play.action';
   import { disableAutoplay, enableAutoplay } from '../stores/settings.storage';
   import type { Json } from '../shared/json.model';
-  import {onMount} from "svelte";
+  import {onMount, setContext} from "svelte";
+  import JsonEdit, {lastText} from './json-action/json-edit.svelte';
 
   const px = (p) => Math.round(p) + 'px';
   let top = px(0);
   let left = px(0);
   let isVisible = false;
-  let scrollY = 0;
-  let scrollX = 0;
+  let showEditPopUp = false;
+  let scrollY=0;
+  let scrollX=0;
   let targetBox;
+  let jsonCatched;
+
 
   function copy() {
     share($viewStore.shareLink);
@@ -26,9 +30,15 @@
     window.addEventListener('scroll', (e)=>{
       scrollY = window.scrollY;
       scrollX = window.scrollX;
-      updatePosition()
+      updatePosition();
     })
-  })
+  });
+
+  onMount(()=>{
+    window.addEventListener('show-edit-popup',(e)=>{
+      showEditPopUp = !showEditPopUp;
+    });
+  });
 
   function onRequestValueEvent(jsonViewerEvent) {
     if(jsonViewerEvent.detail.type === "mouseenter") {
@@ -40,19 +50,34 @@
   }
 
   function onResponseValueEvent(jsonEvent: { detail: JsonViewerEvent }) {
+    console.log(jsonEvent.detail)
     if(jsonEvent.detail.expanded) {
+      jsonCatched = jsonEvent.detail.json;
       isVisible = true;
       targetBox = jsonEvent.detail.target.getBoundingClientRect();
-      const expanded = jsonEvent.detail.expanded;
-      updatePosition();
-      }else{
+      // const expanded = jsonEvent.detail.expanded;
+      top = px(targetBox.y - 5 - scrollY);
+      left = px(targetBox.x + targetBox.width + 20 - scrollX);
+      updatePosition()
+    }else{
       isVisible = false;
     }
   }
 
   function updatePosition(){
-    top = px(targetBox.y - 5 - scrollY);
-    left = px(targetBox.x + targetBox.width + 10 - scrollX);
+    let y = targetBox.y;
+    let x = targetBox.x;
+    top = px(y - 5 - scrollY);
+    left = px(x + targetBox.width + 20 - scrollX);
+  }
+
+  function onPopupClick(){
+    showEditPopUp =! showEditPopUp;
+  }
+
+  function save(){
+    //TBD
+    console.log(lastText)
   }
 
 </script>
@@ -94,6 +119,7 @@
   <DevtoolSection open={$viewStore.sectionExpanded.Payload} section="Payload">
     <JsonViewer json={$viewStore.request.body} on:json-viewer={onRequestValueEvent} />
   </DevtoolSection>
+
   {#if $viewStore.request.headers}
     <DevtoolSection
       open={$viewStore.sectionExpanded.RequestHeaders}
@@ -101,23 +127,43 @@
       <JsonViewer json={$viewStore.request.headers} on:json-viewer={onRequestValueEvent}/>
     </DevtoolSection>
   {/if}
+
   {#if $viewStore.response}
     <DevtoolSection
       open={$viewStore.sectionExpanded.ResponseHeaders}
       section="Response Headers">
       <JsonViewer json={$viewStore.response.headers} />
     </DevtoolSection>
-    <DevtoolSection section="Response" open={$viewStore.sectionExpanded.Response}>
+
+  <DevtoolSection section="Response" open={$viewStore.sectionExpanded.Response}>
+    {#if $viewStore.response.bodyType === "json"}
       <JsonViewer json={$viewStore.response.body} on:json-toggle={onResponseValueEvent} />
-    </DevtoolSection>
+    {:else}
+      <p>{$viewStore.response.body}</p>
+    {/if}
+  </DevtoolSection>
+
   {/if}
+
 {/if}
 
 {#if isVisible}
-<div style="position: fixed; top: {top}; left: {left}; " id="edit_button">
-  <!-- TODO: create component wrapper for this DIV element-->
-  <JsonActions />
-</div>
+  <div style="position: fixed; top: {top}; left: {left}; " id="edit_buttons">
+    <JsonActions jsonCatched={jsonCatched}/>
+  </div>
+{/if}
+
+{#if showEditPopUp}
+  <div class='bo-popup'>
+    <div class='bo-popup-content'>
+      <JsonEdit jsonToEdit={jsonCatched}/>
+<!--      <div class='bo-popup-close' on:click={(e)=>{onPopupClick()}}></div>-->
+      <div class="buttons">
+        <div class="bo-button" id="abort" on:click={(e)=>{onPopupClick()}}>DISCARD</div>
+        <div class="bo-button" id="save" on:click={(e)=>{save()}}>SAVE</div>
+      </div>
+    </div>
+  </div>
 {/if}
 
 
@@ -126,4 +172,14 @@
   .hl-devtool-request {
     @apply bg-gray-50;
   }
+
+  .buttons{
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 0;
+    padding: 5px;
+    text-align: center;
+    @apply bg-gray-50;
+  }
+
 </style>
