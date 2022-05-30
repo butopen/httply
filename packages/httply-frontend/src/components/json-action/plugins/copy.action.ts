@@ -1,5 +1,6 @@
 import type {Action} from "./action";
 import {copyToClipboard} from "../../../shared/clipboard.util";
+import {updateNotification} from "../../notification/notification.store";
 
 export class CopyAction implements Action{
     name: string;
@@ -16,6 +17,7 @@ export class CopyAction implements Action{
     onClick(json:{}): void {
         this.jsonCatched = json;
         copyToClipboard(JSON.stringify(this.jsonCatched));
+        updateNotification("json copied to clipboard!");
     }
 
 }

@@ -10,6 +10,7 @@
   import type { Json } from '../shared/json.model';
   import {onMount, setContext} from "svelte";
   import JsonEdit, {lastText} from './json-action/json-edit.svelte';
+  import {doc} from "prettier";
 
   const px = (p) => Math.round(p) + 'px';
   let top = px(0);
@@ -18,7 +19,9 @@
   let showEditPopUp = false;
   let scrollY=0;
   let scrollX=0;
-  let targetBox;
+  let lastScrollX=0;
+  let lastScrollY=0;
+  let targetBox:DOMRect;
   let jsonCatched;
 
 
@@ -28,10 +31,10 @@
 
   onMount(()=>{
     window.addEventListener('scroll', (e)=>{
-      scrollY = window.scrollY;
-      scrollX = window.scrollX;
-      updatePosition();
-    })
+        scrollY = window.scrollY;
+        scrollX = window.scrollX;
+        updatePosition();
+      })
   });
 
   onMount(()=>{
@@ -43,7 +46,7 @@
   function onRequestValueEvent(jsonViewerEvent) {
     if(jsonViewerEvent.detail.type === "mouseenter") {
       targetBox = jsonViewerEvent.detail.mouseEvent.target.getBoundingClientRect();
-      updatePosition();
+      // updatePosition();
     }else{
       isVisible = false;
     }
@@ -55,9 +58,8 @@
       jsonCatched = jsonEvent.detail.json;
       isVisible = true;
       targetBox = jsonEvent.detail.target.getBoundingClientRect();
-      // const expanded = jsonEvent.detail.expanded;
-      top = px(targetBox.y - 5 - scrollY);
-      left = px(targetBox.x + targetBox.width + 20 - scrollX);
+      lastScrollX = scrollX;
+      lastScrollY = scrollY;
       updatePosition()
     }else{
       isVisible = false;
@@ -67,8 +69,9 @@
   function updatePosition(){
     let y = targetBox.y;
     let x = targetBox.x;
-    top = px(y - 5 - scrollY);
-    left = px(x + targetBox.width + 20 - scrollX);
+    top = px(y - 5 - scrollY + lastScrollY);
+    left = px(x + targetBox.width + 20 - scrollX + lastScrollX);
+    console.log("top", top," left",left)
   }
 
   function onPopupClick(){
