@@ -17,8 +17,13 @@
     "@butopen/design-system": "^1.0.9",
     "@butopen/httply-plugins": "workspace:../httply-plugins",
     "@codemirror/basic-setup": "^0.19.3",
+    "@codemirror/commands": "^0.20.0",
     "@codemirror/lang-javascript": "^0.19.7",
     "@codemirror/lang-json": "^0.20.0",
+    "@codemirror/lint": "^0.20.3",
+    "@codemirror/search": "^0.20.1",
+    "@codemirror/state": "^0.20.0",
+    "@codemirror/view": "^0.20.7",
     "dayjs": "^1.11.0"
   },
   "devDependencies": {

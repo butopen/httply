@@ -11,6 +11,7 @@ export interface ViewState {
     Request: boolean;
     Response: boolean;
     Authorization: boolean;
+    Notes:boolean
   };
   request: {
     information: {
@@ -30,6 +31,7 @@ export interface ViewState {
     bodyType: "json" | "string";
   };
   shareLink?: string;
+  notes?: string;
 }
 
 const sections = {
@@ -39,7 +41,8 @@ const sections = {
   RequestHeaders: false,
   ResponseHeaders: false,
   Response: false,
-  Authorization: false
+  Authorization: false,
+  Notes: false,
 };
 export const viewStore = loggedWritable<ViewState>({
   request: { information: {} },

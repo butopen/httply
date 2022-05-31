@@ -3,6 +3,7 @@
   import HttpTextArea from './components/http-text-area.svelte';
   import Httply from './components/httply-logo.svelte';
   import Devtool from './components/devtool.svelte';
+  import Notes from './components/notes.svelte';
   import Notification from './components/notification/notification.svelte';
   import { inputStore, updateHttpInput } from './stores/input.store';
   import { viewStore } from './stores/view.store';
@@ -63,7 +64,7 @@
       } else play($inputStore.request, $viewStore.request.information.Domain);
     }
     if (e.key == ' ') {
-      if ($notificationStore.show || !httpTextArea.hasFocus())
+      if ($notificationStore.show && httpTextArea.hasFocus())
         play($inputStore.request, $viewStore.request.information.Domain);
     }
   };
@@ -128,6 +129,7 @@
   {#if $viewStore.request.information.Url}
     <Devtool />
   {/if}
+  <Notes/>
 </div>
 
 {#if !$viewStore.request.information.Url}

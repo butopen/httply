@@ -23,15 +23,13 @@
     import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands';
     import { searchKeymap, highlightSelectionMatches } from '@codemirror/search';
     import {autocompletion, completionKeymap, closeBrackets, closeBracketsKeymap} from '@codemirror/autocomplete';
-    import { lintGutter, linter, openLintPanel } from "@codemirror/lint";
-    import { json, jsonLanguage, jsonParseLinter} from '@codemirror/lang-json';
     import { afterUpdate, onDestroy, onMount } from 'svelte';
-    import {loggedWritable} from "../../shared/store.util";
+    import {loggedWritable} from "../shared/store.util";
 
-    export let jsonToEdit: string;
+    export let text: string;
 
     const store = loggedWritable({
-        content: JSON.stringify(jsonToEdit, null, 4),
+        content: text
     });
 
     let textareaContainer: HTMLDivElement;
@@ -46,10 +44,8 @@
         cmView = new EditorView({
             state: EditorState.create({
                 extensions: [
-                    json(),
                     syntaxHighlighting(defaultHighlightStyle),
                     lineNumbers(),
-                    linter(jsonParseLinter()),
                     highlightActiveLineGutter(),
                     highlightSpecialChars(),
                     history(),

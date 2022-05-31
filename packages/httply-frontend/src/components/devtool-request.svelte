@@ -11,6 +11,7 @@
   import {onMount, setContext} from "svelte";
   import JsonEdit, {lastText} from './json-action/json-edit.svelte';
   import {doc} from "prettier";
+  import {updateNotification} from "./notification/notification.store";
 
   const px = (p) => Math.round(p) + 'px';
   let top = px(0);
@@ -22,7 +23,10 @@
   let lastScrollX=0;
   let lastScrollY=0;
   let targetBox:DOMRect;
+  let targetBoxClassName;
   let jsonCatched;
+  let jsonPath;
+  let masterJson;
 
 
   function copy() {
@@ -31,9 +35,11 @@
 
   onMount(()=>{
     window.addEventListener('scroll', (e)=>{
+      if(isVisible) {
         scrollY = window.scrollY;
         scrollX = window.scrollX;
         updatePosition();
+      }
       })
   });
 
@@ -43,13 +49,13 @@
     });
   });
 
+  // onMount(()=>{
+  //   document.addEventListener('change', (e) => {
+  //     console.log(e)
+  //   })
+  // })
+
   function onRequestValueEvent(jsonViewerEvent) {
-    if(jsonViewerEvent.detail.type === "mouseenter") {
-      targetBox = jsonViewerEvent.detail.mouseEvent.target.getBoundingClientRect();
-      // updatePosition();
-    }else{
-      isVisible = false;
-    }
   }
 
   function onResponseValueEvent(jsonEvent: { detail: JsonViewerEvent }) {
@@ -57,7 +63,10 @@
     if(jsonEvent.detail.expanded) {
       jsonCatched = jsonEvent.detail.json;
       isVisible = true;
-      targetBox = jsonEvent.detail.target.getBoundingClientRect();
+      targetBox = jsonEvent.detail.target.getBoundingClientRect()
+      targetBoxClassName = jsonEvent.detail.target.className;
+      jsonPath = jsonEvent.detail.jsonPath;
+      masterJson = jsonEvent.detail.masterJson;
       lastScrollX = scrollX;
       lastScrollY = scrollY;
       updatePosition()
@@ -69,21 +78,41 @@
   function updatePosition(){
     let y = targetBox.y;
     let x = targetBox.x;
+    let width = targetBox.width;
     top = px(y - 5 - scrollY + lastScrollY);
-    left = px(x + targetBox.width + 20 - scrollX + lastScrollX);
-    console.log("top", top," left",left)
+    if(targetBoxClassName.startsWith("json-viewer-value")) width = 0;
+    left = px(x + width + 20 - scrollX + lastScrollX);
   }
 
   function onPopupClick(){
     showEditPopUp =! showEditPopUp;
   }
 
-  function save(){
-    //TBD
-    console.log(lastText)
+  function setValue(obj, path, value) {
+    console.log(obj);
+    console.log(path);
+    let i
+    for (i = 1; i < path.length -1; i++) {
+      obj = obj[path[i]];
+    }
+    obj[path[i]] = value;
+  }
+
+
+  function saveEditing(){
+    const path = jsonPath.split(".");
+    const jsonEdited = JSON.parse(lastText);
+    setValue(masterJson, path, jsonEdited);
+    $viewStore.response.body = masterJson;
+    console.log($viewStore.response.body);
+    onPopupClick();
+    isVisible = false;
+    updateNotification("done!")
   }
 
 </script>
+
+
 
 {#if $inputStore.request}
   <div>
@@ -116,18 +145,17 @@
   </div>
   <DevtoolSection open={$viewStore.sectionExpanded.General} section="General">
     <JsonViewer
-      json={$viewStore.request.information}
-      on:json-viewer={onRequestValueEvent} />
+      json={$viewStore.request.information}/>
   </DevtoolSection>
   <DevtoolSection open={$viewStore.sectionExpanded.Payload} section="Payload">
-    <JsonViewer json={$viewStore.request.body} on:json-viewer={onRequestValueEvent} />
+    <JsonViewer json={$viewStore.request.body}/>
   </DevtoolSection>
 
   {#if $viewStore.request.headers}
     <DevtoolSection
       open={$viewStore.sectionExpanded.RequestHeaders}
       section="Request Headers">
-      <JsonViewer json={$viewStore.request.headers} on:json-viewer={onRequestValueEvent}/>
+      <JsonViewer json={$viewStore.request.headers}/>
     </DevtoolSection>
   {/if}
 
@@ -163,7 +191,7 @@
 <!--      <div class='bo-popup-close' on:click={(e)=>{onPopupClick()}}></div>-->
       <div class="buttons">
         <div class="bo-button" id="abort" on:click={(e)=>{onPopupClick()}}>DISCARD</div>
-        <div class="bo-button" id="save" on:click={(e)=>{save()}}>SAVE</div>
+        <div class="bo-button" id="save" on:click={(e)=>{saveEditing()}}>SAVE</div>
       </div>
     </div>
   </div>
