@@ -11,7 +11,7 @@ async function bootstrap() {
     { cors: true },
   );
   app.setGlobalPrefix('be');
-  await app.listen(3001, '0.0.0.0');
+  await app.listen(3002, '0.0.0.0');
 
   if (module.hot) {
     module.hot.accept();

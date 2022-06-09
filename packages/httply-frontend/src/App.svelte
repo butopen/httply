@@ -17,7 +17,7 @@
   import { mainMessageStore } from './components/notification/notification.store';
 
   (window as any).svelteLogStores = window.location.href.startsWith(
-    'http://localhost:3000'
+    'http://localhost:3001'
   );
 
   manageSharedUrl();
