@@ -1,4 +1,3 @@
-import {instrument_updateShareLink,useInstrumented_updateShareLink} from './instrumentation/view.store'
 import { loggedWritable } from '../shared/store.util';
 import type { HttplyRequest } from '@butopen/httply-model';
 import { formatDate } from '../shared/time';
@@ -139,5 +138,3 @@ export function updateResponse(response: ViewState['response']) {
   updateHttpRequestInformation('Response Timestamp', formatDate(new Date()));
   updateSection('Response', true);
 }
-/* decorated by notest... just ignore -> */if(useInstrumented_updateShareLink()){(updateShareLink as any) =  instrument_updateShareLink()}
-
