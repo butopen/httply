@@ -4,6 +4,7 @@
   "description": "",
   "author": "",
   "scripts": {
+    "instrument": "node C:\\Users\\Emanuele\\Desktop\\UNI\\Tesi\\Progetto-BitBucket\\unitstory\\packages\\notest-monitor\\dist\\index.js",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "generate-db-types": "npx pg2ts",
@@ -62,7 +63,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": "./test",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
