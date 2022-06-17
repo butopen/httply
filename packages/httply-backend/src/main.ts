@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
-
+import './instrumentLogic'
 declare const module: any;
 
 async function bootstrap() {

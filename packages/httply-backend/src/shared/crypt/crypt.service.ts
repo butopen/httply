@@ -35,7 +35,7 @@ export class CryptService {
    * Encodes a number to string. Ex. to hide the id of users
    * @param input
    */
-  encode(input: number): string {
+  encode(input: number): string {//changes
     return this.hashid.encode(input);
   }
 
@@ -57,7 +57,7 @@ export class CryptService {
    * // returns the hashed password
    * const hash = cryptService.hash("my-pwd")
    */
-  hash(rawPassword: string, secret: string = ''): string {
+  hash(rawPassword: string, secret: string = ''): string {//chan ges
     const s = secret || this.secret;
     return sha512(rawPassword + s);
   }

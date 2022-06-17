@@ -1,0 +1,17 @@
+{
+  "src/requests/requests.functions": {
+    "requestHash": true,
+    "responseHash": true,
+    "requestMeta": true,
+    "requestFromMeta": true
+  },
+  "src/shared/crypt/crypt.service": {
+    "CryptService.encode": true,
+    "CryptService.hash": true
+  },
+  "src/requests/requests.service": {
+    "RequestsService.save": true,
+    "RequestsService.findById": true,
+    "RequestsService.findByHash": true
+  }
+}

@@ -23,16 +23,16 @@ export class RequestsService {
   }
 
   async save(r: Partial<Hlrequest>) {
-    const result = await this.db.query<{ requestid: number }>(
+    const result = await this.db.query(
       `insert into ${this.tableName} values(DEFAULT,$1,$2,$3,$4,$5,$6) returning requestid`,
       [r.path, r.method, r.domain, r.hash, r.content, new Date()],
     );
-    return result[0].requestid;
+    return result[0]['requestid'];
   }
 
   async findById(requestid: number) {
     const { hlrequest } = GdbTablesData;
-    const found = await this.db.query<Hlrequest>(
+    const found = await this.db.query(
       `select * from ${hlrequest.tableName} where ${hlrequest.requestid} = $1`,
       [requestid],
     );
@@ -41,7 +41,7 @@ export class RequestsService {
 
   async findByHash(hash: string) {
     const { hlrequest } = GdbTablesData;
-    const found = await this.db.query<Hlrequest>(
+    const found = await this.db.query(
       `select * from ${hlrequest.tableName} where ${hlrequest.hash} = $1`,
       [hash],
     );

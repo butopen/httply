@@ -34,7 +34,7 @@ export class RequestsController {
   async loadRequest(@Query('meta') meta): Promise<HttplyEvent> {
     const reqMeta = requestFromMeta(meta);
     const rawRequest = await this.requestsService.findById(reqMeta.requestid);
-    const request = rawRequest.content as HttplyRequest;
+    const request = rawRequest['content'] as HttplyRequest;
     request.timestamp = reqMeta.requestDate.getTime();
     const rawResponse = await this.responsesService.findById(
       reqMeta.responseid,
@@ -60,7 +60,7 @@ export class RequestsController {
         method: req.options.method,
         path: url.pathname,
       });
-    } else requestid = foundReq.requestid;
+    } else requestid = foundReq['requestid'];
     const reqHitDate = await this.requestHitsService.save(requestid);
     const resp = requestEvent.response;
     const respHash = responseHash(resp);

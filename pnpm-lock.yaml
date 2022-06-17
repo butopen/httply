@@ -4,8 +4,7 @@ importers:
 
   packages/httply-backend:
     specifiers:
-      '@butopen/httply-model': workspace:^1.0.4
-      '@butopen/notest-collector': 1.0.1
+      '@butopen/httply-model': 1.0.5
       '@nestjs/cli': ^8.2.4
       '@nestjs/common': ^8.4.3
       '@nestjs/config': ^1.2.1
@@ -38,8 +37,7 @@ importers:
       tsconfig-paths: ^3.14.1
       typescript: ^4.6.3
     dependencies:
-      '@butopen/httply-model': link:../httply-model
-      '@butopen/notest-collector': 1.0.1
+      '@butopen/httply-model': 1.0.5
       '@nestjs/common': 8.4.3_e7ea248743279784063e3708d703abc5
       '@nestjs/config': 1.2.1_00edab75de3d00160109b98add317aa9
       '@nestjs/core': 8.4.3_c2aa74453c5108161d7d668927d51cc5
@@ -856,6 +854,10 @@ packages:
 
   /@butopen/design-system/1.0.2:
     resolution: {integrity: sha512-ULepQXcjnYpipZtOuX0C2fc4assAemRdJZatEpdRgBaHA2l1bDDxgh2mMEiDWsKqb5xxX+RnlXSIG1Hx7FrICQ==}
+    dev: false
+
+  /@butopen/httply-model/1.0.5:
+    resolution: {integrity: sha512-oL9KpomLtA3SnVsQvGhyPZPa/tc85061W2H2Me70tSBGX5FiRVJzQcTvkrY2B7hSRKZWosLRrYCw4ZVy8sMpyg==}
     dev: false
 
   /@butopen/notest-collector/1.0.1:
