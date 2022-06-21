@@ -1,6 +1,6 @@
 {
   "name": "@butopen/httply-model",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "Model for the butopen httply project",
   "types": "./src/httply.model.ts",
   "private": false,
