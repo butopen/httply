@@ -1,5 +1,7 @@
 Try it at [httply.com](https://httply.com) (BETA)
 
+
+
 # httply - the first shared network devtool 
 - open source
 - no install: paste any request and share it with your dev team
@@ -31,14 +33,19 @@ Try it at [httply.com](https://httply.com) (BETA)
 
 ### Optional integration with your localhost 
 - easily capture requests from localhost
-- mock requests on localhost to speed up development or test a previous response 
+- mock requests on localhost to speed up development or test a previous response
 
 ### Stats to help you see what works, what not, what is used, or not
+
 - get stats for the request
-- get stats about a group of APIs 
+- get stats about a group of APIs
 - get stats on your whole domain
 
 ### Driven by a community of devs (browse or propose your own extensions)
+
 - open source
 - extend with plugins from the community
 
+## Development
+
+WIP
