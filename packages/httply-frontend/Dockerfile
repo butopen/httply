@@ -11,7 +11,7 @@ WORKDIR /app
 COPY . . 
 
 #pnpm
-RUN pnpm i
+RUN pnpm i --no-frozen-lockfile
 RUN pnpm build
 
 
