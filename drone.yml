@@ -1,0 +1,40 @@
+kind: pipeline
+type: kubernetes
+name: httply-build
+
+steps:
+
+- name: backend-build
+  image: plugins/docker
+  settings:
+    registry: docker.bazuel.com
+    repo: docker.bazuel.com/httply-backend
+    tags:
+      - latest
+      - ${DRONE_BUILD_STARTED}
+      - ${DRONE_COMMIT_BRANCH}
+    context: .
+    dockerfile: Dockerfile
+    username: 
+      from_secret: registry_username
+    password: 
+      from_secret: registry_password
+    when:
+      branch: main
+
+- name: backend-deploy
+  image: appleboy/drone-ssh
+  settings:
+    host:
+      - 185.196.20.82
+    username:
+      from_secret: ssh_username
+    password:
+      from_secret: ssh_password
+    port: 22
+    command_timeout: 2m
+    script:
+      - helm delete httply-backend --namespace httply
+      - helm --debug --namespace httply upgrade --install --force --cleanup-on-fail --values /ht/httply-backend/values.yaml --history-max=10 httply-backend /ht/httply-backend
+  depends_on:
+    - backend-build
